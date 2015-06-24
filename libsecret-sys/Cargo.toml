@@ -1,0 +1,13 @@
+[package]
+name = "libsecret-sys"
+version = "0.1.0"
+authors = ["Nicolas Koch <nioko1337@gmail.com>"]
+build = "build.rs"
+
+[dependencies]
+libc = "*"
+glib-sys = "*"
+bitflags = "*"
+
+[build-dependencies]
+pkg-config = "0.3"
