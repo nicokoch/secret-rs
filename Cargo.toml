@@ -1,0 +1,4 @@
+[package]
+name = "secret"
+version = "0.1.0"
+authors = ["Nicolas Koch <nioko1337@gmail.com>"]
