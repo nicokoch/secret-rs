@@ -8,12 +8,12 @@ extern crate libsecret_sys;
 pub use libsecret_sys as ffi;
 
 pub mod secret_service;
-
-use glib::Error;
+pub mod secret_collection;
 
 #[test]
 fn it_works() {
     use self::secret_service::SecretService;
     let ss = SecretService::get().unwrap();
-    println!("Session algorithms: {}", ss.get_session_algorithms());
+    println!("Session algorithms: {}", ss.get_session_algorithms().unwrap());
+    println!("No collections: {}", ss.get_collections().unwrap().len());
 }
