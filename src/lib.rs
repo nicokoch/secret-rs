@@ -14,5 +14,6 @@ use glib::Error;
 #[test]
 fn it_works() {
     use self::secret_service::SecretService;
-    let ss = SecretService::get().ok().unwrap();
+    let ss = SecretService::get().unwrap();
+    println!("Session algorithms: {}", ss.get_session_algorithms());
 }
