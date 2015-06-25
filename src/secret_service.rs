@@ -9,9 +9,18 @@ use ffi;
 
 bitflags! {
     flags SecretServiceFlags: c_int {
-        const SECRET_SERVICE_NONE               = 0,
-        const SECRET_SERVICE_OPEN_SESSION       = 1 << 1,
-        const SECRET_SERVICE_LOAD_COLLECTIONS   = 1 << 2,
+        const SECRET_SERVICE_NONE              = 0,
+        const SECRET_SERVICE_OPEN_SESSION      = 1 << 1,
+        const SECRET_SERVICE_LOAD_COLLECTIONS  = 1 << 2,
+    }
+}
+
+bitflags! {
+    flags SecretSearchFlags: c_int {
+        const SECRET_SEARCH_NONE               = 0,
+	    const SECRET_SEARCH_ALL                = 1 << 1,
+	    const SECRET_SEARCH_UNLOCK             = 1 << 2,
+	    const SECRET_SEARCH_LOAD_SECRETS       = 1 << 3,
     }
 }
 
@@ -73,6 +82,48 @@ impl SecretService {
             }
         }
     }
+
+    /*
+    pub fn search() -> Vec<SecretItem> {
+        unimplemented!()
+    }
+    */
+
+    /*
+    pub fn lock () -> Vec<SecretItem> {
+
+    }
+    */
+
+    /*
+    pub fn unlock () -> Vec<SecretItem> {
+
+    }
+    */
+
+    /*
+    pub fn store () -> bool {
+
+    }
+    */
+
+    /*
+    pub fn lookup () -> SecretValue {
+
+    }
+    */
+
+    /*
+    pub fn clear () -> bool {
+
+    }
+    */
+
+    /*
+    pub fn set_alias(&str alias, ) -> bool {
+        //FIXME: actually we should put this into SecretCollection
+    }
+    */
 
     /// Ensures that a session is established.
     /// This function should rarely be needed. Construct a SecretService with the `SECRET_SERVICE_OPEN_SESSION` flag instead.
