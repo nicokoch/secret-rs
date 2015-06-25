@@ -7,7 +7,6 @@ build = "build.rs"
 [dependencies]
 libc = "*"
 glib-sys = "*"
-bitflags = "*"
 
 [build-dependencies]
 pkg-config = "0.3"

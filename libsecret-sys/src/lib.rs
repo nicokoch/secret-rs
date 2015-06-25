@@ -1,7 +1,5 @@
 extern crate libc;
 extern crate glib_sys;
-#[macro_use]
-extern crate bitflags;
 
 pub mod glib_sys_ext;
 
@@ -14,14 +12,6 @@ use glib_sys_ext::{GHashTable, gchar, gint, guint64, GCancellable, gssize};
 #[repr(C)] pub struct SecretCollectionFFI;
 #[repr(C)] pub struct SecretItemFFI;
 #[repr(C)] pub struct SecretValueFFI;
-
-bitflags! {
-    flags SecretServiceFlags: c_int {
-        const SECRET_SERVICE_NONE               = 0,
-        const SECRET_SERVICE_OPEN_SESSION       = 1 << 1,
-        const SECRET_SERVICE_LOAD_COLLECTIONS   = 1 << 2,
-    }
-}
 
 #[link(name="secret-1")]
 extern "C" {
