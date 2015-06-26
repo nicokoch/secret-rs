@@ -91,6 +91,8 @@ impl SecretCollection {
             FromGlib::from_glib(loaded)
         }
     }
+    
+    //TODO set_alias from ss
 }
 
 impl StaticType for SecretCollection {
