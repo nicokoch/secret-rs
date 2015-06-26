@@ -1,7 +1,8 @@
 use std::ptr;
 use libc::{c_int};
 use glib::{Error};
-use glib::object::{Ref};
+use glib::object::{Ref, Wrapper};
+use glib::types::{StaticType, Type};
 use glib::translate::{FromGlib, FromGlibPtr, FromGlibPtrContainer};
 use glib_sys::{GObject};
 use secret_collection::SecretCollection;
@@ -67,7 +68,7 @@ impl SecretService {
             if res_c.is_null(){
                 None
             } else {
-                Some(FromGlibPtr::from_glib_none(res_c))
+                Some(FromGlibPtr::from_glib_full(res_c))
             }
         }
     }
@@ -144,5 +145,28 @@ impl SecretService {
             FromGlib::from_glib(loaded)
         }
     }
+}
 
+impl StaticType for SecretService {
+    fn static_type() -> Type{
+        Type::BaseObject //TODO get this from libsecret
+    }
+}
+
+impl Wrapper for SecretService {
+    type GlibType = ffi::SecretServiceFFI;
+
+    /// Wraps a `Ref`.
+    unsafe fn wrap(r: Ref) -> Self{
+        SecretService(r)
+    }
+
+    /// Returns a reference to the inner `Ref`.
+    fn as_ref(&self) -> &Ref{
+        &self.0
+    }
+    /// Transforms into the inner `Ref`.
+    fn unwrap(self) -> Ref{
+        self.0
+    }
 }
