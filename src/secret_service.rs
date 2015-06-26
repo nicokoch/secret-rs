@@ -156,16 +156,14 @@ impl StaticType for SecretService {
 impl Wrapper for SecretService {
     type GlibType = ffi::SecretServiceFFI;
 
-    /// Wraps a `Ref`.
     unsafe fn wrap(r: Ref) -> Self{
         SecretService(r)
     }
 
-    /// Returns a reference to the inner `Ref`.
     fn as_ref(&self) -> &Ref{
         &self.0
     }
-    /// Transforms into the inner `Ref`.
+
     fn unwrap(self) -> Ref{
         self.0
     }

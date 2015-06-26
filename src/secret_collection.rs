@@ -18,6 +18,9 @@ pub struct SecretCollection(Ref);
 
 impl SecretCollection {
 
+    /// Lookup which collection is assigned to this alias.
+    /// Aliases help determine well known collections, such as 'default'.
+    /// Returns the collection, or NULL if none assigned to the alias.
     pub fn for_alias(alias: &str, flags: SecretCollectionFlags) -> Option<SecretCollection>{
         let ptr = unsafe{ffi::secret_collection_for_alias_sync(ptr::null_mut(), alias.to_glib_none().0, flags.bits(), ptr::null_mut(), ptr::null_mut())};
         if ptr.is_null(){
@@ -27,6 +30,9 @@ impl SecretCollection {
         }
     }
 
+    /// Create a new collection in the secret service.
+    /// If you specify an alias and a collection with that alias already exists, then a new collection will not be created. The previous one will be returned instead.
+    /// Return the creates Collection.
     pub fn create(label: &str, alias: Option<&str>) -> SecretCollection {
         let ptr = unsafe{ffi::secret_collection_create_sync(ptr::null_mut(), label.to_glib_none().0, alias.to_glib_none().0, 0 as c_int, ptr::null_mut(), ptr::null_mut())};
         SecretCollection(Ref::from_glib_full(ptr as *mut GObject))
@@ -95,17 +101,14 @@ impl StaticType for SecretCollection {
 
 impl Wrapper for SecretCollection {
     type GlibType = ffi::SecretCollectionFFI;
-
-    /// Wraps a `Ref`.
     unsafe fn wrap(r: Ref) -> Self{
         SecretCollection(r)
     }
 
-    /// Returns a reference to the inner `Ref`.
     fn as_ref(&self) -> &Ref{
         &self.0
     }
-    /// Transforms into the inner `Ref`.
+
     fn unwrap(self) -> Ref{
         self.0
     }
