@@ -2,7 +2,6 @@ extern crate libc;
 #[macro_use]
 extern crate bitflags;
 extern crate glib;
-extern crate glib_sys;
 extern crate libsecret_sys;
 
 pub use libsecret_sys as ffi;

@@ -1,6 +1,6 @@
 use std::ptr;
 use libc::{c_int};
-use glib_sys::{GObject};
+use glib::ffi::{GObject};
 use glib::object::{Wrapper, Ref};
 use glib::types::{StaticType, Type};
 use glib::translate::{ToGlibPtr, FromGlib, FromGlibPtr};
@@ -91,7 +91,7 @@ impl SecretCollection {
             FromGlib::from_glib(loaded)
         }
     }
-    
+
     //TODO set_alias from ss
 }
 

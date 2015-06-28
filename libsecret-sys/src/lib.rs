@@ -1,11 +1,19 @@
+#![allow(non_camel_case_types)]
 extern crate libc;
-extern crate glib_sys;
+extern crate glib;
 
-pub mod glib_sys_ext;
+use libc::{c_uint, c_char, c_int, c_ulong, c_long};
+use glib::ffi::{GError, GType, GList, gboolean, gsize, gpointer, GHashTable};
 
-use libc::{c_int};
-use glib_sys::{GError, GType, GList, gboolean, gsize, gpointer};
-use glib_sys_ext::{GHashTable, gchar, gint, guint64, GCancellable, gssize};
+//glib stuff not provided by glib-rs
+pub type gchar = c_char;
+pub type gint = c_int;
+pub type guint = c_uint;
+pub type guint64 = c_ulong;
+pub type gssize = c_long;
+#[repr(C)] pub struct GCancellable;
+
+//libsecret
 
 #[repr(C)] pub struct SecretServiceFFI;
 #[repr(C)] pub struct SecretSchemaFFI;

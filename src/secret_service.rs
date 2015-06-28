@@ -4,7 +4,7 @@ use glib::{Error};
 use glib::object::{Ref, Wrapper};
 use glib::types::{StaticType, Type};
 use glib::translate::{FromGlib, FromGlibPtr, FromGlibPtrContainer};
-use glib_sys::{GObject};
+use glib::ffi::{GObject};
 use secret_collection::SecretCollection;
 use ffi;
 
