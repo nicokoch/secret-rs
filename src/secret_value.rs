@@ -9,7 +9,7 @@ pub struct SecretValue {
 impl SecretValue{
 
     /// Create a SecretValue for the secret data passed in.
-    /// This method will create the actual secret in the backing Secret Service.
+    /// This method will *NOT* create the actual secret in the backing Secret Service. (see SecretService.store() for that)
     /// The secret data is copied into non-pageable 'secure' memory.
     pub fn new(secret: &str) -> SecretValue {
         let content_type = "text/plain";
