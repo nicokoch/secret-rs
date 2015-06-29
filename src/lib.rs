@@ -9,6 +9,7 @@ pub use libsecret_sys as ffi;
 pub mod secret_service;
 pub mod secret_collection;
 pub mod secret_item;
+pub mod secret_value;
 
 #[test]
 fn it_works() {
