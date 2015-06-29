@@ -24,11 +24,11 @@ impl SecretValue{
     /// Get the secret data in the SecretValue.
     /// For now, this method only supports String values.
     /// Returns None, if the content type is npt text/plain
-    pub fn get_secret(&self) -> Option<String> {
+    pub fn get(&self) -> Option<String> {
         if self.get_content_type() == "text/plain" {
             unsafe{
                 let secret = ffi::secret_value_get_text(self.ptr);
-                Some(String::from_glib_full(secret))
+                Some(String::from_glib_none(secret))
             }
         } else {
             None
@@ -39,7 +39,14 @@ impl SecretValue{
     pub fn get_content_type(&self) -> String {
         unsafe {
             let ptr = ffi::secret_value_get_content_type(self.ptr);
-            String::from_glib_full(ptr)
+            String::from_glib_none(ptr)
+        }
+    }
+
+    /// Workaround method, do not use :-)
+    pub unsafe fn wrap(ptr: *mut ffi::SecretValueFFI) -> Self{
+        SecretValue {
+            ptr: ptr,
         }
     }
 }

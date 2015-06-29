@@ -3,8 +3,9 @@ use libc::{c_int};
 use glib::ffi::{GObject};
 use glib::object::{Wrapper, Ref};
 use glib::types::{StaticType, Type};
-use glib::translate::{ToGlibPtr, FromGlib, FromGlibPtr};
+use glib::translate::{ToGlibPtr, FromGlib, FromGlibPtr, FromGlibPtrContainer};
 use secret_service::SecretService;
+use secret_item::SecretItem;
 use ffi;
 
 bitflags! {
@@ -26,7 +27,7 @@ impl SecretCollection {
         if ptr.is_null(){
             None
         } else {
-            Some(SecretCollection(Ref::from_glib_full(ptr as *mut GObject)))
+            Some(SecretCollection(Ref::from_glib_none(ptr as *mut GObject)))
         }
     }
 
@@ -35,7 +36,7 @@ impl SecretCollection {
     /// Return the creates Collection.
     pub fn create(label: &str, alias: Option<&str>) -> SecretCollection {
         let ptr = unsafe{ffi::secret_collection_create_sync(ptr::null_mut(), label.to_glib_none().0, alias.to_glib_none().0, 0 as c_int, ptr::null_mut(), ptr::null_mut())};
-        SecretCollection(Ref::from_glib_full(ptr as *mut GObject))
+        SecretCollection(Ref::from_glib_none(ptr as *mut GObject))
     }
 
     /// Get the created date and time of the collection.
@@ -54,7 +55,7 @@ impl SecretCollection {
     pub fn get_service(&self) -> SecretService { //TODO find out if this can return null
         unsafe {
             let ptr = ffi::secret_collection_get_service(self.raw());
-            SecretService::wrap(Ref::from_glib_full(ptr as *mut GObject))
+            SecretService::wrap(Ref::from_glib_none(ptr as *mut GObject))
         }
     }
 
@@ -68,14 +69,27 @@ impl SecretCollection {
     pub fn get_label(&self) -> String {
         unsafe{
             let ptr = ffi::secret_collection_get_label(self.raw());
-            FromGlibPtr::from_glib_full(ptr)
+            FromGlibPtr::from_glib_none(ptr)
         }
     }
 
     /// Get whether the collection is locked or not.
     pub fn get_locked(&self) -> bool {
-        let gbool = unsafe{ffi:: secret_collection_get_locked(self.raw())};
+        let gbool = unsafe{ffi::secret_collection_get_locked(self.raw())};
         FromGlib::from_glib(gbool)
+    }
+
+    /// Returns None, if the items have not yet been loaded.
+    pub fn get_items(&self) -> Option<Vec<SecretItem>> {
+        unsafe {
+            let glist = ffi::secret_collection_get_items(self.raw());
+            if glist.is_null(){
+                None
+            } else {
+                Some(FromGlibPtrContainer::from_glib_none(glist))
+            }
+        }
+
     }
 
 

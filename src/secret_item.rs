@@ -5,6 +5,7 @@ use glib::object::{Wrapper, Ref};
 use glib::types::{StaticType, Type};
 use glib::translate::{ToGlibPtr, FromGlib, FromGlibPtr};
 use secret_service::SecretService;
+use secret_value::SecretValue;
 use ffi;
 
 pub struct SecretItem(Ref);
@@ -20,7 +21,7 @@ impl SecretItem {
     pub fn get_schema_name(&self) -> String {
         unsafe {
             let ptr = ffi::secret_item_get_schema_name(self.raw());
-            FromGlibPtr::from_glib_full(ptr)
+            FromGlibPtr::from_glib_none(ptr)
         }
     }
 
@@ -41,7 +42,7 @@ impl SecretItem {
     pub fn get_label(&self) -> String {
         unsafe {
             let ptr = ffi::secret_item_get_label(self.raw());
-            FromGlibPtr::from_glib_full(ptr)
+            FromGlibPtr::from_glib_none(ptr)
         }
     }
 
@@ -53,13 +54,24 @@ impl SecretItem {
     pub fn get_service(&self) -> SecretService {
         unsafe {
             let ptr = ffi::secret_item_get_service(self.raw());
-            SecretService::wrap(Ref::from_glib_full(ptr as *mut GObject))
+            SecretService::wrap(Ref::from_glib_none(ptr as *mut GObject))
         }
     }
 
     pub fn load_secret(&self) -> bool {
         let gbool = unsafe{ffi::secret_item_load_secret_sync(self.raw(), ptr::null_mut(), ptr::null_mut())};
         FromGlib::from_glib(gbool)
+    }
+
+    pub fn get_secret(&self) -> Option<SecretValue> {
+        unsafe {
+            let ptr = ffi::secret_item_get_secret(self.raw());
+            if ptr.is_null() {
+                None
+            } else {
+                Some(SecretValue::wrap(ptr))
+            }
+        }
     }
 
     #[inline]

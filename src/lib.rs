@@ -14,7 +14,29 @@ pub mod secret_value;
 #[test]
 fn it_works() {
     use self::secret_service::SecretService;
-    let ss = SecretService::get().unwrap();
-    println!("Session algorithms: {}", ss.get_session_algorithms().unwrap());
-    println!("No collections: {}", ss.get_collections().unwrap().len());
+    let secret_service = SecretService::get().unwrap();
+    println!("Session algorithms: {}", secret_service.get_session_algorithms().unwrap());
+    println!("No collections: {}", secret_service.get_collections().unwrap().len());
+    for secret_collection in secret_service.get_collections().unwrap() {
+        println!("Label for collection: {}", secret_collection.get_label());
+        if secret_collection.get_locked() {
+            println!("Collection is locked");
+        }
+
+        if secret_collection.load_items(){
+            println!("loaded items");
+            let all_items = match secret_collection.get_items(){
+                Some(items) => items,
+                None => continue
+            };
+
+            for secret_item in all_items {
+                println!("Label for item: {}", secret_item.get_label());
+                secret_item.load_secret();
+                let secret_value = secret_item.get_secret().unwrap();
+                println!("CT for item: {}", secret_value.get_content_type());
+                println!("SecretValue for item: {}", secret_value.get().unwrap());
+            }
+        }
+    }
 }

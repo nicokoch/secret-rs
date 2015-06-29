@@ -44,7 +44,7 @@ impl SecretService {
         if ptr.is_null(){
             None
         } else {
-            Some(SecretService(Ref::from_glib_full(ptr as *mut GObject)))
+            Some(SecretService(Ref::from_glib_none(ptr as *mut GObject)))
         }
     }
 
@@ -68,7 +68,7 @@ impl SecretService {
             if res_c.is_null(){
                 None
             } else {
-                Some(FromGlibPtr::from_glib_full(res_c))
+                Some(FromGlibPtr::from_glib_none(res_c))
             }
         }
     }
