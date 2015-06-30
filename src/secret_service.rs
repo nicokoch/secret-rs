@@ -1,46 +1,33 @@
+
+//=========================================================================
+// public imports
+//=========================================================================
+pub use secret_collection::*;
+pub use secret_item::*;
+pub use secret_value::*;
+
+//=========================================================================
+// private imports
+//=========================================================================
 use std::ptr;
-use libc::{c_int};
-use glib::{Error};
 use glib::object::{Ref, Wrapper};
 use glib::types::{StaticType, Type};
 use glib::translate::{FromGlib, FromGlibPtr, FromGlibPtrContainer};
 use glib::ffi::{GObject};
-use secret_collection::SecretCollection;
 use ffi;
-
-bitflags! {
-    flags SecretServiceFlags: c_int {
-        const SECRET_SERVICE_NONE              = 0,
-        const SECRET_SERVICE_OPEN_SESSION      = 1 << 1,
-        const SECRET_SERVICE_LOAD_COLLECTIONS  = 1 << 2,
-    }
-}
-
-bitflags! {
-    flags SecretSearchFlags: c_int {
-        const SECRET_SEARCH_NONE               = 0,
-	    const SECRET_SEARCH_ALL                = 1 << 1,
-	    const SECRET_SEARCH_UNLOCK             = 1 << 2,
-	    const SECRET_SEARCH_LOAD_SECRETS       = 1 << 3,
-    }
-}
-
-pub type SecretResult<T> = Result<T, Error>;
 
 pub struct SecretService(Ref);
 
 impl SecretService {
 
     /// Constructs a new SecretService which has established a session and whose collections are loaded.
+    /// The underlying FFI object might be identical for multiple instances of this struct.
     pub fn get() -> Option<Self>{
         SecretService::with_flags(SECRET_SERVICE_OPEN_SESSION | SECRET_SERVICE_LOAD_COLLECTIONS)
     }
 
-    /// Constructs a new SecretService.
-    /// The underlying FFI object might be identical for multiple instances of this struct.
-    /// `flags` specifies which features will be enabled after construction.
-    pub fn with_flags(flags: SecretServiceFlags) -> Option<Self> {
-        let ptr = unsafe {ffi::secret_service_get_sync(flags.bits(), ptr::null_mut(), ptr::null_mut())};
+    fn with_flags(flags: i32) -> Option<Self> {
+        let ptr = unsafe {ffi::secret_service_get_sync(flags, ptr::null_mut(), ptr::null_mut())};
         if ptr.is_null(){
             None
         } else {
@@ -53,10 +40,14 @@ impl SecretService {
         self.0.to_glib_none() as *mut ffi::SecretServiceFFI
     }
 
-    /// Get the flags representing what features of the SecretService have been initialized.
-    pub fn get_flags(&self) -> SecretServiceFlags {
+    pub fn is_session_established(&self) -> bool {
         let flags = unsafe {ffi::secret_service_get_flags(self.raw())};
-        SecretServiceFlags::from_bits(flags).unwrap()
+        flags & SECRET_SERVICE_OPEN_SESSION != 0
+    }
+
+    pub fn are_collections_loaded(&self) -> bool {
+        let flags = unsafe {ffi::secret_service_get_flags(self.raw())};
+        flags & SECRET_SERVICE_LOAD_COLLECTIONS != 0
     }
 
     /// Get the set of algorithms being used to transfer secrets between this secret service proxy and the Secret Service itself.
@@ -168,3 +159,17 @@ impl Wrapper for SecretService {
         self.0
     }
 }
+
+#[allow(dead_code)]
+const SECRET_SERVICE_NONE: i32              = 0;
+const SECRET_SERVICE_OPEN_SESSION: i32      = 1 << 1;
+const SECRET_SERVICE_LOAD_COLLECTIONS: i32  = 1 << 2;
+
+#[allow(dead_code)]
+const SECRET_SEARCH_NONE: i32               = 0;
+#[allow(dead_code)]
+const SECRET_SEARCH_ALL: i32                = 1 << 1;
+#[allow(dead_code)]
+const SECRET_SEARCH_UNLOCK: i32             = 1 << 2;
+#[allow(dead_code)]
+const SECRET_SEARCH_LOAD_SECRETS: i32       = 1 << 3;

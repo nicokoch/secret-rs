@@ -8,12 +8,6 @@ use secret_service::SecretService;
 use secret_item::SecretItem;
 use ffi;
 
-bitflags! {
-    flags SecretCollectionFlags: c_int {
-        const SECRET_COLLECTION_NONE        = 0,
-        const SECRET_COLLECTION_LOAD_ITEMS  = 1 << 1,
-    }
-}
 
 pub struct SecretCollection(Ref);
 
@@ -22,8 +16,8 @@ impl SecretCollection {
     /// Lookup which collection is assigned to this alias.
     /// Aliases help determine well known collections, such as 'default'.
     /// Returns the collection, or NULL if none assigned to the alias.
-    pub fn for_alias(alias: &str, flags: SecretCollectionFlags) -> Option<SecretCollection>{
-        let ptr = unsafe{ffi::secret_collection_for_alias_sync(ptr::null_mut(), alias.to_glib_none().0, flags.bits(), ptr::null_mut(), ptr::null_mut())};
+    pub fn for_alias(alias: &str) -> Option<SecretCollection>{
+        let ptr = unsafe{ffi::secret_collection_for_alias_sync(ptr::null_mut(), alias.to_glib_none().0, SECRET_COLLECTION_LOAD_ITEMS, ptr::null_mut(), ptr::null_mut())};
         if ptr.is_null(){
             None
         } else {
@@ -33,7 +27,7 @@ impl SecretCollection {
 
     /// Create a new collection in the secret service.
     /// If you specify an alias and a collection with that alias already exists, then a new collection will not be created. The previous one will be returned instead.
-    /// Return the creates Collection.
+    /// Returns the created Collection.
     pub fn create(label: &str, alias: Option<&str>) -> SecretCollection {
         let ptr = unsafe{ffi::secret_collection_create_sync(ptr::null_mut(), label.to_glib_none().0, alias.to_glib_none().0, 0 as c_int, ptr::null_mut(), ptr::null_mut())};
         SecretCollection(Ref::from_glib_none(ptr as *mut GObject))
@@ -59,10 +53,9 @@ impl SecretCollection {
         }
     }
 
-    /// Get the flags representing what features of the SecretCollection have been initialized.
-    pub fn get_flags(&self) -> SecretCollectionFlags {
+    pub fn are_items_loaded(&self) -> bool {
         let flags = unsafe {ffi::secret_collection_get_flags(self.raw())};
-        SecretCollectionFlags::from_bits(flags).unwrap()
+        flags & SECRET_COLLECTION_LOAD_ITEMS != 0
     }
 
     /// Get the label of this collection.
@@ -129,3 +122,7 @@ impl Wrapper for SecretCollection {
         self.0
     }
 }
+
+#[allow(dead_code)]
+const SECRET_COLLECTION_NONE: i32        = 0;
+const SECRET_COLLECTION_LOAD_ITEMS: i32  = 1 << 1;

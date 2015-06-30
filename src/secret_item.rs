@@ -1,5 +1,4 @@
 use std::ptr;
-use libc::{c_int};
 use glib::ffi::{GObject};
 use glib::object::{Wrapper, Ref};
 use glib::types::{StaticType, Type};

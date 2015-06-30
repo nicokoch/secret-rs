@@ -5,7 +5,6 @@ authors = ["Nicolas Koch <nioko1337@gmail.com>"]
 
 [dependencies]
 libc = "*"
-bitflags = "*"
 
 [dependencies.glib]
 git = "https://github.com/rust-gnome/glib"

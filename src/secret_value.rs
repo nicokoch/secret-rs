@@ -1,5 +1,4 @@
-use std::marker::PhantomData;
-use glib::translate::{ToGlibPtr, FromGlib, FromGlibPtr};
+use glib::translate::{ToGlibPtr, FromGlibPtr};
 use ffi;
 
 pub struct SecretValue {
