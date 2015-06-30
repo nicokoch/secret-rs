@@ -18,7 +18,7 @@ fn main() {
 
         for secret_item in all_items {
             println!("Label for item: {}", secret_item.get_label());
-            secret_item.load_secret();
+            secret_item.load_secret().ok().unwrap();
             let secret_value = secret_item.get_secret().unwrap();
             println!("ContentType for item: {}", secret_value.get_content_type());
             println!("SecretValue for item: {}\n", secret_value.get().unwrap());
