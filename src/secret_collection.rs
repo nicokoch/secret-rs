@@ -102,6 +102,20 @@ impl SecretCollection {
     //TODO set_alias from ss
 }
 
+/*
+impl Lock for SecretCollection{
+    fn lock(&self) -> Option<Vec<Self>>{
+        let arr = vec![self];
+        unsafe {
+            ffi::secret_service_lock_sync();
+        }
+    }
+
+    fn unlock(&self) -> Option<Vec<Self>>{
+
+    }
+}*/
+
 impl StaticType for SecretCollection {
     fn static_type() -> Type{
         Type::BaseObject

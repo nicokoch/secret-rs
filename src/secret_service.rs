@@ -10,11 +10,15 @@ pub use secret_value::*;
 // private imports
 //=========================================================================
 use std::ptr;
+use glib::Error;
+use glib::glib_container::GlibContainer;
 use glib::object::{Ref, Wrapper};
 use glib::types::{StaticType, Type};
 use glib::translate::{FromGlib, FromGlibPtr, FromGlibPtrContainer};
 use glib::ffi::{GObject};
 use ffi;
+
+pub type SecretResult<T> = Result<T, Error>;
 
 pub struct SecretService(Ref);
 
@@ -22,16 +26,19 @@ impl SecretService {
 
     /// Constructs a new SecretService which has established a session and whose collections are loaded.
     /// The underlying FFI object might be identical for multiple instances of this struct.
-    pub fn get() -> Option<Self>{
+    pub fn get() -> SecretResult<Self>{
         SecretService::with_flags(SECRET_SERVICE_OPEN_SESSION | SECRET_SERVICE_LOAD_COLLECTIONS)
     }
 
-    fn with_flags(flags: i32) -> Option<Self> {
-        let ptr = unsafe {ffi::secret_service_get_sync(flags, ptr::null_mut(), ptr::null_mut())};
-        if ptr.is_null(){
-            None
-        } else {
-            Some(SecretService(Ref::from_glib_none(ptr as *mut GObject)))
+    fn with_flags(flags: i32) -> SecretResult<Self> {
+        unsafe {
+            let mut err = ptr::null_mut();
+            let ptr = ffi::secret_service_get_sync(flags, ptr::null_mut(), &mut err);
+            if err.is_null() {
+                Ok(SecretService(Ref::from_glib_none(ptr as *mut GObject)))
+            } else {
+                Err(Error::wrap(err))
+            }
         }
     }
 
