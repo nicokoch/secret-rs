@@ -13,7 +13,11 @@ pub use self::secret_collection::SecretCollection;
 pub use self::secret_item::SecretItem;
 pub use self::secret_value::SecretValue;
 
-
+/// This Trait is implemented by objects which can be locked and unlocked
+pub trait Lock {
+    fn lock(&self) -> Option<Vec<Self>>;
+    fn unlock(&self) -> Option<Vec<Self>>;
+}
 
 #[test]
 fn it_works() {}
