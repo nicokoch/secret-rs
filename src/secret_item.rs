@@ -1,10 +1,13 @@
 use std::ptr;
+use glib::Error;
+use glib::glib_container::GlibContainer;
 use glib::ffi::{GObject};
 use glib::object::{Wrapper, Ref};
 use glib::types::{StaticType, Type};
 use glib::translate::{ToGlibPtr, FromGlib, FromGlibPtr};
 use secret_service::SecretService;
 use secret_value::SecretValue;
+use SecretResult;
 use ffi;
 
 pub struct SecretItem(Ref);
@@ -12,9 +15,14 @@ pub struct SecretItem(Ref);
 impl SecretItem {
 
     /// Delete this secret item.
-    pub fn delete(&self) -> bool {
-        let gbool = unsafe{ffi::secret_item_delete_sync(self.raw(), ptr::null_mut(), ptr::null_mut())};
-        FromGlib::from_glib(gbool)
+    pub fn delete(&self) -> SecretResult<()> {
+        let mut err = ptr::null_mut();
+        unsafe{ffi::secret_item_delete_sync(self.raw(), ptr::null_mut(), &mut err)};
+        if err.is_null() {
+            Ok(())
+        } else {
+            Err(Error::wrap(err))
+        }
     }
 
     pub fn get_schema_name(&self) -> String {
@@ -57,9 +65,14 @@ impl SecretItem {
         }
     }
 
-    pub fn load_secret(&self) -> bool {
-        let gbool = unsafe{ffi::secret_item_load_secret_sync(self.raw(), ptr::null_mut(), ptr::null_mut())};
-        FromGlib::from_glib(gbool)
+    pub fn load_secret(&self) -> SecretResult<()> {
+        let mut err = ptr::null_mut();
+        unsafe{ffi::secret_item_load_secret_sync(self.raw(), ptr::null_mut(), &mut err)};
+        if err.is_null() {
+            Ok(())
+        } else {
+            Err(Error::wrap(err))
+        }
     }
 
     pub fn get_secret(&self) -> Option<SecretValue> {

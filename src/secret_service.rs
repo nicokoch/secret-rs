@@ -1,4 +1,3 @@
-
 //=========================================================================
 // public imports
 //=========================================================================
@@ -14,11 +13,10 @@ use glib::Error;
 use glib::glib_container::GlibContainer;
 use glib::object::{Ref, Wrapper};
 use glib::types::{StaticType, Type};
-use glib::translate::{FromGlib, FromGlibPtr, FromGlibPtrContainer};
+use glib::translate::{FromGlibPtr, FromGlibPtrContainer};
 use glib::ffi::{GObject};
+use SecretResult;
 use ffi;
-
-pub type SecretResult<T> = Result<T, Error>;
 
 pub struct SecretService(Ref);
 
@@ -31,15 +29,13 @@ impl SecretService {
     }
 
     fn with_flags(flags: i32) -> SecretResult<Self> {
-        unsafe {
             let mut err = ptr::null_mut();
-            let ptr = ffi::secret_service_get_sync(flags, ptr::null_mut(), &mut err);
+            let ptr = unsafe{ffi::secret_service_get_sync(flags, ptr::null_mut(), &mut err)};
             if err.is_null() {
                 Ok(SecretService(Ref::from_glib_none(ptr as *mut GObject)))
             } else {
                 Err(Error::wrap(err))
             }
-        }
     }
 
     #[inline]
@@ -127,20 +123,30 @@ impl SecretService {
     /// Ensures that a session is established.
     /// This function should rarely be needed. Construct a SecretService with the `SECRET_SERVICE_OPEN_SESSION` flag instead.
     /// Returns true if a session has been established, false otherwise.
-    pub fn ensure_session(&self) -> bool {
+    pub fn ensure_session(&self) -> SecretResult<()> {
         unsafe {
-            let established = ffi::secret_service_ensure_session_sync(self.raw(), ptr::null_mut(), ptr::null_mut());
-            FromGlib::from_glib(established)
+            let mut err = ptr::null_mut();
+            ffi::secret_service_ensure_session_sync(self.raw(), ptr::null_mut(), &mut err);
+            if err.is_null() {
+                Ok(())
+            } else {
+                Err(Error::wrap(err))
+            }
         }
     }
 
     /// Ensures that the collections are loaded.
     /// This function should rarely be needed. Construct a SecretService with the `SECRET_SERVICE_LOAD_COLLECTIONS` flag instead.
     /// Returns true if a session has been established, false otherwise.
-    pub fn load_collections(&self) -> bool {
+    pub fn load_collections(&self) -> SecretResult<()> {
         unsafe {
-            let loaded = ffi::secret_service_load_collections_sync(self.raw(), ptr::null_mut(), ptr::null_mut());
-            FromGlib::from_glib(loaded)
+            let mut err = ptr::null_mut();
+            ffi::secret_service_load_collections_sync(self.raw(), ptr::null_mut(), &mut err);
+            if err.is_null() {
+                Ok(())
+            } else {
+                Err(Error::wrap(err))
+            }
         }
     }
 }

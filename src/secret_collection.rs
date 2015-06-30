@@ -1,11 +1,14 @@
 use std::ptr;
 use libc::{c_int};
+use glib::Error;
 use glib::ffi::{GObject};
 use glib::object::{Wrapper, Ref};
 use glib::types::{StaticType, Type};
 use glib::translate::{ToGlibPtr, FromGlib, FromGlibPtr, FromGlibPtrContainer};
+use glib::glib_container::GlibContainer;
 use secret_service::SecretService;
 use secret_item::SecretItem;
+use SecretResult;
 use ffi;
 
 
@@ -16,21 +19,27 @@ impl SecretCollection {
     /// Lookup which collection is assigned to this alias.
     /// Aliases help determine well known collections, such as 'default'.
     /// Returns the collection, or NULL if none assigned to the alias.
-    pub fn for_alias(alias: &str) -> Option<SecretCollection>{
-        let ptr = unsafe{ffi::secret_collection_for_alias_sync(ptr::null_mut(), alias.to_glib_none().0, SECRET_COLLECTION_LOAD_ITEMS, ptr::null_mut(), ptr::null_mut())};
-        if ptr.is_null(){
-            None
+    pub fn for_alias(alias: &str) -> SecretResult<SecretCollection>{
+        let mut err = ptr::null_mut();
+        let ptr = unsafe{ffi::secret_collection_for_alias_sync(ptr::null_mut(), alias.to_glib_none().0, SECRET_COLLECTION_LOAD_ITEMS, ptr::null_mut(), &mut err)};
+        if err.is_null(){
+            Ok(SecretCollection(Ref::from_glib_none(ptr as *mut GObject)))
         } else {
-            Some(SecretCollection(Ref::from_glib_none(ptr as *mut GObject)))
+            Err(Error::wrap(err))
         }
     }
 
     /// Create a new collection in the secret service.
     /// If you specify an alias and a collection with that alias already exists, then a new collection will not be created. The previous one will be returned instead.
     /// Returns the created Collection.
-    pub fn create(label: &str, alias: Option<&str>) -> SecretCollection {
-        let ptr = unsafe{ffi::secret_collection_create_sync(ptr::null_mut(), label.to_glib_none().0, alias.to_glib_none().0, 0 as c_int, ptr::null_mut(), ptr::null_mut())};
-        SecretCollection(Ref::from_glib_none(ptr as *mut GObject))
+    pub fn create(label: &str, alias: Option<&str>) -> SecretResult<SecretCollection> {
+        let mut err = ptr::null_mut();
+        let ptr = unsafe{ffi::secret_collection_create_sync(ptr::null_mut(), label.to_glib_none().0, alias.to_glib_none().0, 0 as c_int, ptr::null_mut(), &mut err)};
+        if err.is_null(){
+            Ok(SecretCollection(Ref::from_glib_none(ptr as *mut GObject)))
+        } else {
+            Err(Error::wrap(err))
+        }
     }
 
     /// Get the created date and time of the collection.
@@ -92,10 +101,15 @@ impl SecretCollection {
     }
 
     /// Ensure that the SecretCollection proxy has loaded all the items present in the Secret Service.
-    pub fn load_items(&self) -> bool {
+    pub fn load_items(&self) -> SecretResult<()>{
         unsafe {
-            let loaded = ffi::secret_collection_load_items_sync(self.raw(), ptr::null_mut(), ptr::null_mut());
-            FromGlib::from_glib(loaded)
+            let mut err = ptr::null_mut();
+            ffi::secret_collection_load_items_sync(self.raw(), ptr::null_mut(), &mut err);
+            if err.is_null() {
+                Ok(())
+            } else {
+                Err(Error::wrap(err))
+            }
         }
     }
 
