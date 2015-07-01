@@ -2,7 +2,7 @@
 extern crate libc;
 extern crate glib;
 
-use libc::{c_uint, c_char, c_int, c_ulong, c_long};
+use libc::{c_uint, c_char, c_int, c_ulong, c_long, c_void};
 use glib::ffi::{GError, GType, GList, gboolean, gsize, gpointer, GHashTable};
 
 //glib stuff not provided by glib-rs
@@ -35,7 +35,7 @@ extern "C" {
     pub fn secret_service_ensure_session_sync   (secret_service: *mut SecretServiceFFI, cancellable: *mut GCancellable, error: *mut *mut GError) -> gboolean;
     pub fn secret_service_load_collections_sync (secret_service: *mut SecretServiceFFI, cancellable: *mut GCancellable, error: *mut *mut GError) -> gboolean;
     pub fn secret_service_search_sync           (secret_service: *mut SecretServiceFFI, secret_schema: *const SecretSchemaFFI, attributes: *mut GHashTable, flags: c_int, cancellable: *mut GCancellable, error: *mut *mut GError) -> *mut GList;
-    pub fn secret_service_lock_sync             (secret_service: *mut SecretServiceFFI, objects: *mut GList, cancellable: *mut GCancellable, locked: *mut *mut GList, error: *mut *mut GError);
+    pub fn secret_service_lock_sync             (secret_service: *mut SecretServiceFFI, objects: *mut GList, cancellable: *mut GCancellable, locked: *mut *mut GList, error: *mut *mut GError) -> gint;
     pub fn secret_service_unlock_sync           (secret_service: *mut SecretServiceFFI, objects: *mut GList, cancellable: *mut GCancellable, unlocked: *mut *mut GList, error: *mut *mut GError) -> gint;
     pub fn secret_service_store_sync            (secret_service: *mut SecretServiceFFI, schema: *const SecretSchemaFFI, attributes: *mut GHashTable, collection: *const gchar, label: *const gchar, value: *mut SecretValueFFI, cancellable: *mut GCancellable, error: *mut *mut GError);
     pub fn secret_service_lookup_sync           (secret_service: *mut SecretServiceFFI, schema: *const SecretSchemaFFI, attributes: *mut GHashTable, cancellable: *mut GCancellable, error: *mut *mut GError) -> *mut SecretValueFFI;

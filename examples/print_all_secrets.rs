@@ -1,6 +1,6 @@
 extern crate secret;
 
-use secret::SecretService;
+use secret::{SecretService, Lock};
 
 fn main() {
     let secret_service = SecretService::get().ok().unwrap();
@@ -10,6 +10,7 @@ fn main() {
         println!("Label for collection: {}\n", secret_collection.get_label());
         if secret_collection.get_locked() {
             println!("Collection is locked");
+            secret_collection.unlock().ok().unwrap();
         }
         let all_items = match secret_collection.get_items(){
             Some(items) => items,

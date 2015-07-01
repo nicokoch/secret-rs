@@ -1,14 +1,15 @@
 use std::ptr;
-use libc::{c_int};
+use libc::{c_int, c_void};
 use glib::Error;
-use glib::ffi::{GObject};
+use glib::ffi::{GObject, GList};
 use glib::object::{Wrapper, Ref};
 use glib::types::{StaticType, Type};
-use glib::translate::{ToGlibPtr, FromGlib, FromGlibPtr, FromGlibPtrContainer};
+use glib::translate::{ToGlibPtr, FromGlib, FromGlibPtr, FromGlibPtrContainer, IterToGlibPtr};
 use glib::glib_container::GlibContainer;
 use secret_service::SecretService;
 use secret_item::SecretItem;
 use SecretResult;
+use Lock;
 use ffi;
 
 
@@ -115,20 +116,6 @@ impl SecretCollection {
 
     //TODO set_alias from ss
 }
-
-/*
-impl Lock for SecretCollection{
-    fn lock(&self) -> Option<Vec<Self>>{
-        let arr = vec![self];
-        unsafe {
-            ffi::secret_service_lock_sync();
-        }
-    }
-
-    fn unlock(&self) -> Option<Vec<Self>>{
-
-    }
-}*/
 
 impl StaticType for SecretCollection {
     fn static_type() -> Type{
