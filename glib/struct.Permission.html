@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Permission` struct in crate `glib`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Permission">
+
+    <title>glib::Permission - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        
+        <p class='location'><a href='index.html'>glib</a></p><script>window.sidebarCurrent = {name: 'Permission', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>glib</a>::<wbr><a class='struct' href=''>Permission</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-1635' class='srclink' href='../src/glib/permission.rs.html#10-12' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Permission {
+    // some fields omitted
+}</pre><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../glib/struct.Permission.html' title='glib::Permission'>Permission</a></code></h3><div class='impl-items'><h4 id='method.get_allowed' class='method'><code>fn <a href='#method.get_allowed' class='fnname'>get_allowed</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>Gets the value of the &#39;allowed&#39; property. This property is true if the caller
+currently has permission to perform the action that permission represents the
+permission to perform.</p>
+</div><h4 id='method.get_can_acquire' class='method'><code>fn <a href='#method.get_can_acquire' class='fnname'>get_can_acquire</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>Gets the value of the &#39;can-acquire&#39; property. This property is true if it is
+generally possible to acquire the permission by calling g_permission_acquire().</p>
+</div><h4 id='method.get_can_release' class='method'><code>fn <a href='#method.get_can_release' class='fnname'>get_can_release</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>Gets the value of the &#39;can-release&#39; property. This property is true if it is
+generally possible to release the permission by calling g_permission_release().</p>
+</div><h4 id='method.impl_update' class='method'><code>fn <a href='#method.impl_update' class='fnname'>impl_update</a>(&amp;self, allowed: <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>, can_acquire: <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>, can_release: <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>)</code></h4>
+<div class='docblock'><p>This function is called by the GPermission implementation to update the properties
+of the permission. You should never call this function except from a GPermission
+implementation.</p>
+
+<p>GObject notify signals are generated, as appropriate.</p>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='../glib/glib_container/trait.GlibContainer.html' title='glib::glib_container::GlibContainer'>GlibContainer</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut <a class='struct' href='../glib/ffi/struct.GPermission.html' title='glib::ffi::GPermission'>GPermission</a></a>&gt; for <a class='struct' href='../glib/struct.Permission.html' title='glib::Permission'>Permission</a></code></h3><div class='impl-items'><h4 id='method.wrap' class='method'><code>fn <a href='../glib/glib_container/trait.GlibContainer.html#method.wrap' class='fnname'>wrap</a>(pointer: <a href='http://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut <a class='struct' href='../glib/ffi/struct.GPermission.html' title='glib::ffi::GPermission'>GPermission</a></a>) -&gt; <a class='struct' href='../glib/struct.Permission.html' title='glib::Permission'>Permission</a></code></h4>
+<h4 id='method.unwrap' class='method'><code>fn <a href='../glib/glib_container/trait.GlibContainer.html#method.unwrap' class='fnname'>unwrap</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut <a class='struct' href='../glib/ffi/struct.GPermission.html' title='glib::ffi::GPermission'>GPermission</a></a></code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "glib";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script async src="../search-index.js"></script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Value` struct in crate `glib`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Value">
+
+    <title>glib::Value - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        
+        <p class='location'><a href='index.html'>glib</a></p><script>window.sidebarCurrent = {name: 'Value', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>glib</a>::<wbr><a class='struct' href=''>Value</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-4277' class='srclink' href='../src/glib/value.rs.html#21-23' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Value {
+    // some fields omitted
+}</pre><div class='docblock'><p>Possible improvement : store a function pointer inside the struct and make the struct
+templated</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../glib/struct.Value.html' title='glib::Value'>Value</a></code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>() -&gt; <a class='struct' href='../glib/struct.Value.html' title='glib::Value'>Value</a></code></h4>
+<h4 id='method.init' class='method'><code>fn <a href='#method.init' class='fnname'>init</a>(&amp;mut self, _type: <a class='enum' href='../glib/types/enum.Type.html' title='glib::types::Type'>Type</a>)</code></h4>
+<div class='docblock'><p>Initializes value with the default value of type .</p>
+</div><h4 id='method.reset' class='method'><code>fn <a href='#method.reset' class='fnname'>reset</a>(&amp;mut self)</code></h4>
+<div class='docblock'><p>Clears the current value in value and resets it to the default value (as if the
+value had just been initialized).</p>
+</div><h4 id='method.unset' class='method'><code>fn <a href='#method.unset' class='fnname'>unset</a>(&amp;mut self)</code></h4>
+<div class='docblock'><p>Clears the current value in value and &quot;unsets&quot; the type, this releases all resources
+associated with this GValue. An unset value is the same as an uninitialized (zero-filled)
+GValue structure.</p>
+</div><h4 id='method.strdup_value_contents' class='method'><code>fn <a href='#method.strdup_value_contents' class='fnname'>strdup_value_contents</a>(&amp;mut self) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;</code></h4>
+<div class='docblock'><p>Return a newly allocated string, which describes the contents of a GValue. The main
+purpose of this function is to describe GValue contents for debugging output, the way
+in which the contents are described may change between different GLib versions.</p>
+</div><h4 id='method.set_long' class='method'><code>fn <a href='#method.set_long' class='fnname'>set_long</a>(&amp;mut self, v_long: <a href='http://doc.rust-lang.org/nightly/std/primitive.i64.html'>i64</a>)</code></h4>
+<div class='docblock'><p>Set the contents of a G_TYPE_LONG GValue to v_long .</p>
+</div><h4 id='method.get_long' class='method'><code>fn <a href='#method.get_long' class='fnname'>get_long</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.i64.html'>i64</a></code></h4>
+<div class='docblock'><p>Get the contents of a G_TYPE_LONG GValue.</p>
+</div><h4 id='method.set_ulong' class='method'><code>fn <a href='#method.set_ulong' class='fnname'>set_ulong</a>(&amp;mut self, v_ulong: <a href='http://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a>)</code></h4>
+<div class='docblock'><p>Set the contents of a G_TYPE_ULONG GValue to v_ulong .</p>
+</div><h4 id='method.get_ulong' class='method'><code>fn <a href='#method.get_ulong' class='fnname'>get_ulong</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a></code></h4>
+<div class='docblock'><p>Get the contents of a G_TYPE_ULONG GValue.</p>
+</div><h4 id='method.set_enum' class='method'><code>fn <a href='#method.set_enum' class='fnname'>set_enum</a>(&amp;mut self, v_enum: <a class='enum' href='../glib/types/enum.Type.html' title='glib::types::Type'>Type</a>)</code></h4>
+<div class='docblock'><p>Set the contents of a G_TYPE_ENUM GValue to v_enum .</p>
+</div><h4 id='method.get_enum' class='method'><code>fn <a href='#method.get_enum' class='fnname'>get_enum</a>(&amp;self) -&gt; <a class='enum' href='../glib/types/enum.Type.html' title='glib::types::Type'>Type</a></code></h4>
+<div class='docblock'><p>Get the contents of a G_TYPE_ENUM GValue.</p>
+</div><h4 id='method.set_flags' class='method'><code>fn <a href='#method.set_flags' class='fnname'>set_flags</a>(&amp;mut self, v_flags: <a class='enum' href='../glib/types/enum.Type.html' title='glib::types::Type'>Type</a>)</code></h4>
+<div class='docblock'><p>Set the contents of a G_TYPE_FLAGS GValue to v_flags .</p>
+</div><h4 id='method.get_flags' class='method'><code>fn <a href='#method.get_flags' class='fnname'>get_flags</a>(&amp;self) -&gt; <a class='enum' href='../glib/types/enum.Type.html' title='glib::types::Type'>Type</a></code></h4>
+<div class='docblock'><p>Get the contents of a G_TYPE_FLAGS GValue.</p>
+</div><h4 id='method.get_string' class='method'><code>fn <a href='#method.get_string' class='fnname'>get_string</a>(&amp;self) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;</code></h4>
+<div class='docblock'><p>Get the contents of a G_TYPE_STRING GValue.</p>
+</div><h4 id='method.set_boxed' class='method'><code>fn <a href='#method.set_boxed' class='fnname'>set_boxed</a>&lt;T&gt;(&amp;mut self, v_box: &amp;T)</code></h4>
+<div class='docblock'><p>Set the contents of a G_TYPE_BOXED derived GValue to v_boxed .</p>
+</div><h4 id='method.get_boxed' class='method'><code>fn <a href='#method.get_boxed' class='fnname'>get_boxed</a>&lt;'r, T&gt;(&amp;'r self) -&gt; &amp;'r T</code></h4>
+<div class='docblock'><p>Get the contents of a G_TYPE_BOXED derived GValue.</p>
+</div><h4 id='method.set_pointer' class='method'><code>fn <a href='#method.set_pointer' class='fnname'>set_pointer</a>&lt;T&gt;(&amp;mut self, v_pointer: &amp;T)</code></h4>
+<div class='docblock'><p>Set the contents of a pointer GValue to v_pointer .</p>
+</div><h4 id='method.get_pointer' class='method'><code>fn <a href='#method.get_pointer' class='fnname'>get_pointer</a>&lt;'r, T&gt;(&amp;'r self) -&gt; &amp;'r T</code></h4>
+<div class='docblock'><p>Get the contents of a pointer GValue.</p>
+</div><h4 id='method.set_object' class='method'><code>fn <a href='#method.set_object' class='fnname'>set_object</a>&lt;T&gt;(&amp;mut self, v_object: &amp;T)</code></h4>
+<div class='docblock'><p>Set the contents of a G_TYPE_OBJECT derived GValue to v_object .</p>
+
+<p>g_value_set_object() increases the reference count of v_object (the GValue holds a reference
+to v_object ). If you do not wish to increase the reference count of the object (i.e. you
+wish to pass your current reference to the GValue because you no longer need it), use
+g_value_take_object() instead.</p>
+
+<p>It is important that your GValue holds a reference to v_object (either its own, or one it
+has taken) to ensure that the object won&#39;t be destroyed while the GValue still exists).</p>
+</div><h4 id='method.get_object' class='method'><code>fn <a href='#method.get_object' class='fnname'>get_object</a>&lt;'r, T&gt;(&amp;'r self) -&gt; &amp;'r T</code></h4>
+<div class='docblock'><p>Get the contents of a G_TYPE_OBJECT derived GValue.</p>
+</div><h4 id='method.set' class='method'><code>fn <a href='#method.set' class='fnname'>set</a>&lt;T: <a class='trait' href='../glib/trait.ValuePublic.html' title='glib::ValuePublic'>ValuePublic</a>&gt;(&amp;mut self, val: &amp;T)</code></h4>
+<h4 id='method.get' class='method'><code>fn <a href='#method.get' class='fnname'>get</a>&lt;T: <a class='trait' href='../glib/trait.ValuePublic.html' title='glib::ValuePublic'>ValuePublic</a>&gt;(&amp;self) -&gt; T</code></h4>
+<h4 id='method.compatible' class='method'><code>fn <a href='#method.compatible' class='fnname'>compatible</a>(src_type: <a class='enum' href='../glib/types/enum.Type.html' title='glib::types::Type'>Type</a>, dest_type: <a class='enum' href='../glib/types/enum.Type.html' title='glib::types::Type'>Type</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>Returns whether a GValue of type src_type can be copied into a GValue of type dest_type .</p>
+</div><h4 id='method.transformable' class='method'><code>fn <a href='#method.transformable' class='fnname'>transformable</a>(src_type: <a class='enum' href='../glib/types/enum.Type.html' title='glib::types::Type'>Type</a>, dest_type: <a class='enum' href='../glib/types/enum.Type.html' title='glib::types::Type'>Type</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>Check whether g_value_transform() is able to transform values of type src_type into
+values of type dest_type . Note that for the types to be transformable, they must be
+compatible and a transform function must be registered.</p>
+</div><h4 id='method.as_ptr' class='method'><code>fn <a href='#method.as_ptr' class='fnname'>as_ptr</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*const <a class='struct' href='../glib/ffi/struct.GValue.html' title='glib::ffi::GValue'>GValue</a></a></code></h4>
+<h4 id='method.as_mut_ptr' class='method'><code>fn <a href='#method.as_mut_ptr' class='fnname'>as_mut_ptr</a>(&amp;mut self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut <a class='struct' href='../glib/ffi/struct.GValue.html' title='glib::ffi::GValue'>GValue</a></a></code></h4>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Drop.html' title='core::ops::Drop'>Drop</a> for <a class='struct' href='../glib/struct.Value.html' title='glib::Value'>Value</a></code></h3><div class='impl-items'><h4 id='method.drop' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/ops/trait.Drop.html#method.drop' class='fnname'>drop</a>(&amp;mut self)</code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "glib";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script async src="../search-index.js"></script>
+</body>
+</html>

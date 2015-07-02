@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="Source to the Rust file `/home/kokxx/.cargo/git/checkouts/glib-092facbaf88f3275/master/src/source.rs`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang">
+
+    <title>source.rs.html -- source</title>
+
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        
+        
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content source"><pre class="line-numbers"><span id="1">  1</span>
+<span id="2">  2</span>
+<span id="3">  3</span>
+<span id="4">  4</span>
+<span id="5">  5</span>
+<span id="6">  6</span>
+<span id="7">  7</span>
+<span id="8">  8</span>
+<span id="9">  9</span>
+<span id="10"> 10</span>
+<span id="11"> 11</span>
+<span id="12"> 12</span>
+<span id="13"> 13</span>
+<span id="14"> 14</span>
+<span id="15"> 15</span>
+<span id="16"> 16</span>
+<span id="17"> 17</span>
+<span id="18"> 18</span>
+<span id="19"> 19</span>
+<span id="20"> 20</span>
+<span id="21"> 21</span>
+<span id="22"> 22</span>
+<span id="23"> 23</span>
+<span id="24"> 24</span>
+<span id="25"> 25</span>
+<span id="26"> 26</span>
+<span id="27"> 27</span>
+<span id="28"> 28</span>
+<span id="29"> 29</span>
+<span id="30"> 30</span>
+<span id="31"> 31</span>
+<span id="32"> 32</span>
+<span id="33"> 33</span>
+<span id="34"> 34</span>
+<span id="35"> 35</span>
+<span id="36"> 36</span>
+<span id="37"> 37</span>
+<span id="38"> 38</span>
+<span id="39"> 39</span>
+<span id="40"> 40</span>
+<span id="41"> 41</span>
+<span id="42"> 42</span>
+<span id="43"> 43</span>
+<span id="44"> 44</span>
+<span id="45"> 45</span>
+<span id="46"> 46</span>
+<span id="47"> 47</span>
+<span id="48"> 48</span>
+<span id="49"> 49</span>
+<span id="50"> 50</span>
+<span id="51"> 51</span>
+<span id="52"> 52</span>
+<span id="53"> 53</span>
+<span id="54"> 54</span>
+<span id="55"> 55</span>
+<span id="56"> 56</span>
+<span id="57"> 57</span>
+<span id="58"> 58</span>
+<span id="59"> 59</span>
+<span id="60"> 60</span>
+<span id="61"> 61</span>
+<span id="62"> 62</span>
+<span id="63"> 63</span>
+<span id="64"> 64</span>
+<span id="65"> 65</span>
+<span id="66"> 66</span>
+<span id="67"> 67</span>
+<span id="68"> 68</span>
+<span id="69"> 69</span>
+<span id="70"> 70</span>
+<span id="71"> 71</span>
+<span id="72"> 72</span>
+<span id="73"> 73</span>
+<span id="74"> 74</span>
+<span id="75"> 75</span>
+<span id="76"> 76</span>
+<span id="77"> 77</span>
+<span id="78"> 78</span>
+<span id="79"> 79</span>
+<span id="80"> 80</span>
+<span id="81"> 81</span>
+<span id="82"> 82</span>
+<span id="83"> 83</span>
+<span id="84"> 84</span>
+<span id="85"> 85</span>
+<span id="86"> 86</span>
+<span id="87"> 87</span>
+<span id="88"> 88</span>
+<span id="89"> 89</span>
+<span id="90"> 90</span>
+<span id="91"> 91</span>
+<span id="92"> 92</span>
+<span id="93"> 93</span>
+<span id="94"> 94</span>
+<span id="95"> 95</span>
+<span id="96"> 96</span>
+<span id="97"> 97</span>
+<span id="98"> 98</span>
+<span id="99"> 99</span>
+<span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+</pre><pre class='rust '>
+<span class='comment'>// Copyright 2013-2015, The Rust-GNOME Project Developers.</span>
+<span class='comment'>// See the COPYRIGHT file at the top-level directory of this distribution.</span>
+<span class='comment'>// Licensed under the MIT license, see the LICENSE file or &lt;http://opensource.org/licenses/MIT&gt;</span>
+
+<span class='doccomment'>//! Manages available sources of events for the main loop</span>
+
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>cell</span>::<span class='ident'>RefCell</span>;
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ops</span>::<span class='ident'>DerefMut</span>;
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>mem</span>::<span class='ident'>transmute</span>;
+<span class='kw'>use</span> <span class='ident'>ffi</span>::{<span class='ident'>gboolean</span>, <span class='ident'>gpointer</span>, <span class='ident'>g_idle_add_full</span>, <span class='ident'>g_timeout_add_full</span>, <span class='ident'>g_timeout_add_seconds_full</span>};
+<span class='kw'>use</span> <span class='ident'>translate</span>::<span class='ident'>ToGlib</span>;
+
+<span class='doccomment'>/// Return type of idle and timeout functions.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// In the callback, return `Continue(true)` to continue scheduling the callback</span>
+<span class='doccomment'>/// in the main loop or `Continue(false)` to remove it from the main loop.</span>
+<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Continue</span>(<span class='kw'>pub</span> <span class='ident'>bool</span>);
+
+<span class='kw'>impl</span> <span class='ident'>ToGlib</span> <span class='kw'>for</span> <span class='ident'>Continue</span> {
+    <span class='kw'>type</span> <span class='ident'>GlibType</span> <span class='op'>=</span> <span class='ident'>gboolean</span>;
+
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>to_glib</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>gboolean</span> {
+        <span class='self'>self</span>.<span class='number'>0</span>.<span class='ident'>to_glib</span>()
+    }
+}
+
+
+<span class='comment'>// Box::into_raw stability workaround</span>
+<span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>into_raw</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>(<span class='ident'>b</span>: <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>T</span> { <span class='ident'>transmute</span>(<span class='ident'>b</span>) }
+
+<span class='kw'>extern</span> <span class='string'>&quot;C&quot;</span> <span class='kw'>fn</span> <span class='ident'>trampoline</span>(<span class='ident'>func</span>: <span class='kw-2'>&amp;</span><span class='ident'>RefCell</span><span class='op'>&lt;</span><span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>FnMut</span>() <span class='op'>-&gt;</span> <span class='ident'>Continue</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span><span class='op'>&gt;&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>gboolean</span> {
+    <span class='ident'>func</span>.<span class='ident'>borrow_mut</span>().<span class='ident'>deref_mut</span>()().<span class='ident'>to_glib</span>()
+}
+
+<span class='kw'>unsafe</span> <span class='kw'>extern</span> <span class='string'>&quot;C&quot;</span> <span class='kw'>fn</span> <span class='ident'>destroy_closure</span>(<span class='ident'>ptr</span>: <span class='ident'>gpointer</span>) {
+    <span class='comment'>// Box::from_raw API stability workaround</span>
+    <span class='kw'>let</span> <span class='ident'>ptr</span> <span class='op'>=</span> <span class='ident'>ptr</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>RefCell</span><span class='op'>&lt;</span><span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>FnMut</span>() <span class='op'>-&gt;</span> <span class='ident'>Continue</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span><span class='op'>&gt;&gt;</span>;
+    <span class='kw'>let</span> _: <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>RefCell</span><span class='op'>&lt;</span><span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>FnMut</span>() <span class='op'>-&gt;</span> <span class='ident'>Continue</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span><span class='op'>&gt;&gt;</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>transmute</span>(<span class='ident'>ptr</span>);
+}
+
+<span class='kw'>const</span> <span class='ident'>PRIORITY_DEFAULT</span>: <span class='ident'>i32</span> <span class='op'>=</span> <span class='number'>0</span>;
+<span class='kw'>const</span> <span class='ident'>PRIORITY_DEFAULT_IDLE</span>: <span class='ident'>i32</span> <span class='op'>=</span> <span class='number'>200</span>;
+
+
+<span class='doccomment'>/// Adds a function to be called whenever there are no higher priority events pending to the default main loop.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// The function is given the default idle priority, `PRIORITY_DEFAULT_IDLE`.</span>
+<span class='doccomment'>/// If the function returns `Continue(false)` it is automatically removed from</span>
+<span class='doccomment'>/// the list of event sources and will not be called again.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// # Examples</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// ```ignore</span>
+<span class='doccomment'>/// let mut i = 0;</span>
+<span class='doccomment'>/// idle_add(move || {</span>
+<span class='doccomment'>///     println!(&quot;Idle: {}&quot;, i);</span>
+<span class='doccomment'>///     i += 1;</span>
+<span class='doccomment'>///     Continue(if i &lt;= 10 { true } else { false })</span>
+<span class='doccomment'>/// });</span>
+<span class='doccomment'>/// ```</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>idle_add</span><span class='op'>&lt;</span><span class='ident'>F</span><span class='op'>&gt;</span>(<span class='ident'>func</span>: <span class='ident'>F</span>) <span class='op'>-&gt;</span> <span class='ident'>u32</span>
+    <span class='kw'>where</span> <span class='ident'>F</span>: <span class='ident'>FnMut</span>() <span class='op'>-&gt;</span> <span class='ident'>Continue</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span> {
+    <span class='kw'>let</span> <span class='ident'>f</span>: <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>RefCell</span><span class='op'>&lt;</span><span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>FnMut</span>() <span class='op'>-&gt;</span> <span class='ident'>Continue</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span><span class='op'>&gt;&gt;</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>RefCell</span>::<span class='ident'>new</span>(<span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>func</span>)));
+    <span class='kw'>unsafe</span> {
+        <span class='ident'>g_idle_add_full</span>(<span class='ident'>PRIORITY_DEFAULT_IDLE</span>, <span class='ident'>transmute</span>(<span class='ident'>trampoline</span>),
+            <span class='ident'>into_raw</span>(<span class='ident'>f</span>) <span class='kw'>as</span> <span class='ident'>gpointer</span>, <span class='ident'>destroy_closure</span>)
+    }
+}
+
+<span class='doccomment'>/// Sets a function to be called at regular intervals, with the default priority, `PRIORITY_DEFAULT`.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// The function is called repeatedly until it returns `Continue(false)`, at which point the timeout is</span>
+<span class='doccomment'>/// automatically destroyed and the function will not be called again. The first call to the</span>
+<span class='doccomment'>/// function will be at the end of the first interval .</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// Note that timeout functions may be delayed, due to the processing of other event sources. Thus</span>
+<span class='doccomment'>/// they should not be relied on for precise timing. After each call to the timeout function, the</span>
+<span class='doccomment'>/// time of the next timeout is recalculated based on the current time and the given interval (it</span>
+<span class='doccomment'>/// does not try to &#39;catch up&#39; time lost in delays).</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// If you want to have a timer in the &quot;seconds&quot; range and do not care about the exact time of the</span>
+<span class='doccomment'>/// first call of the timer, use the `timeout_add_seconds()` function; this function allows for more</span>
+<span class='doccomment'>/// optimizations and more efficient system power usage.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// The interval given is in terms of monotonic time, not wall clock time.</span>
+<span class='doccomment'>/// See `g_get_monotonic_time()` in glib documentation.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// # Examples</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// ```ignore</span>
+<span class='doccomment'>/// timeout_add(3000, || {</span>
+<span class='doccomment'>///     println!(&quot;This prints once every 3 seconds&quot;);</span>
+<span class='doccomment'>///     Continue(true)</span>
+<span class='doccomment'>/// });</span>
+<span class='doccomment'>/// ```</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>timeout_add</span><span class='op'>&lt;</span><span class='ident'>F</span><span class='op'>&gt;</span>(<span class='ident'>interval</span>: <span class='ident'>u32</span>, <span class='ident'>func</span>: <span class='ident'>F</span>) <span class='op'>-&gt;</span> <span class='ident'>u32</span>
+    <span class='kw'>where</span> <span class='ident'>F</span>: <span class='ident'>FnMut</span>() <span class='op'>-&gt;</span> <span class='ident'>Continue</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span> {
+    <span class='kw'>let</span> <span class='ident'>f</span>: <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>RefCell</span><span class='op'>&lt;</span><span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>FnMut</span>() <span class='op'>-&gt;</span> <span class='ident'>Continue</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span><span class='op'>&gt;&gt;</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>RefCell</span>::<span class='ident'>new</span>(<span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>func</span>)));
+    <span class='kw'>unsafe</span> {
+        <span class='ident'>g_timeout_add_full</span>(<span class='ident'>PRIORITY_DEFAULT</span>, <span class='ident'>interval</span>, <span class='ident'>transmute</span>(<span class='ident'>trampoline</span>),
+            <span class='ident'>into_raw</span>(<span class='ident'>f</span>) <span class='kw'>as</span> <span class='ident'>gpointer</span>, <span class='ident'>destroy_closure</span>)
+    }
+}
+
+<span class='doccomment'>/// Sets a function to be called at regular intervals with the default priority, `PRIORITY_DEFAULT`.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// The function is called repeatedly until it returns `Continue(false)`, at which point the timeout</span>
+<span class='doccomment'>/// is automatically destroyed and the function will not be called again.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// Note that the first call of the timer may not be precise for timeouts of one second. If you need</span>
+<span class='doccomment'>/// finer precision and have such a timeout, you may want to use `timeout_add()` instead.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// The interval given is in terms of monotonic time, not wall clock time.</span>
+<span class='doccomment'>/// See `g_get_monotonic_time()` in glib documentation.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// # Examples</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// ```ignore</span>
+<span class='doccomment'>/// timeout_add_seconds(10, || {</span>
+<span class='doccomment'>///     println!(&quot;This prints once every 10 seconds&quot;);</span>
+<span class='doccomment'>///     Continue(true)</span>
+<span class='doccomment'>/// });</span>
+<span class='doccomment'>/// ```</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>timeout_add_seconds</span><span class='op'>&lt;</span><span class='ident'>F</span><span class='op'>&gt;</span>(<span class='ident'>interval</span>: <span class='ident'>u32</span>, <span class='ident'>func</span>: <span class='ident'>F</span>) <span class='op'>-&gt;</span> <span class='ident'>u32</span>
+    <span class='kw'>where</span> <span class='ident'>F</span>: <span class='ident'>FnMut</span>() <span class='op'>-&gt;</span> <span class='ident'>Continue</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span> {
+    <span class='kw'>let</span> <span class='ident'>f</span>: <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>RefCell</span><span class='op'>&lt;</span><span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>FnMut</span>() <span class='op'>-&gt;</span> <span class='ident'>Continue</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span><span class='op'>&gt;&gt;</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>RefCell</span>::<span class='ident'>new</span>(<span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>func</span>)));
+    <span class='kw'>unsafe</span> {
+        <span class='ident'>g_timeout_add_seconds_full</span>(<span class='ident'>PRIORITY_DEFAULT</span>, <span class='ident'>interval</span>, <span class='ident'>transmute</span>(<span class='ident'>trampoline</span>),
+            <span class='ident'>into_raw</span>(<span class='ident'>f</span>) <span class='kw'>as</span> <span class='ident'>gpointer</span>, <span class='ident'>destroy_closure</span>)
+    }
+}
+</pre>
+</section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "glib";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script async src="../../search-index.js"></script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `TimeVal` struct in crate `glib`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, TimeVal">
+
+    <title>glib::date::TimeVal - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        
+        <p class='location'><a href='../index.html'>glib</a>::<wbr><a href='index.html'>date</a></p><script>window.sidebarCurrent = {name: 'TimeVal', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>glib</a>::<wbr><a href='index.html'>date</a>::<wbr><a class='struct' href=''>TimeVal</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-8318' class='srclink' href='../../src/glib/date.rs.html#363-368' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct TimeVal {
+    pub tv_sec: <a class='type' href='../../libc/types/os/arch/c95/type.c_long.html' title='libc::types::os::arch::c95::c_long'>c_long</a>,
+    pub tv_usec: <a class='type' href='../../libc/types/os/arch/c95/type.c_long.html' title='libc::types::os::arch::c95::c_long'>c_long</a>,
+}</pre><div class='docblock'><p>Represents a precise time, with seconds and microseconds. Similar to the struct timeval returned by the gettimeofday() UNIX
+system call.</p>
+
+<p>GLib is attempting to unify around the use of 64bit integers to represent microsecond-precision time. As such, this type
+will be removed from a future version of GLib.</p>
+</div><h2 class='fields'>Fields</h2>
+<table><tr class='stab '>
+                                  <td id='structfield.tv_sec'><code>tv_sec</code></td><td><div class='docblock'><p>seconds</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.tv_usec'><code>tv_usec</code></td><td><div class='docblock'><p>microseconds</p>
+</div></td></tr></table><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../../glib/date/struct.TimeVal.html' title='glib::date::TimeVal'>TimeVal</a></code></h3><div class='impl-items'><h4 id='method.add' class='method'><code>fn <a href='#method.add' class='fnname'>add</a>(&amp;mut self, microseconds: <a href='http://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a>)</code></h4>
+<div class='docblock'><p>Adds the given number of microseconds to self . microseconds can also be negative to
+decrease the value of self .</p>
+</div><h4 id='method.from_iso8601' class='method'><code>fn <a href='#method.from_iso8601' class='fnname'>from_iso8601</a>(&amp;mut self, iso_date: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>)</code></h4>
+<div class='docblock'><p>Converts a string containing an ISO 8601 encoded date and time to a GTimeVal and puts
+it into self .</p>
+
+<p>iso_date must include year, month, day, hours, minutes, and seconds. It can optionally
+include fractions of a second and a time zone indicator. (In the absence of any time
+zone indication, the timestamp is assumed to be in local time.)</p>
+</div><h4 id='method.to_iso8601' class='method'><code>fn <a href='#method.to_iso8601' class='fnname'>to_iso8601</a>(&amp;mut self) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;</code></h4>
+<div class='docblock'><p>Converts time_ into an RFC 3339 encoded string, relative to the Coordinated Universal
+Time (UTC). This is one of the many formats allowed by ISO 8601.</p>
+
+<p>ISO 8601 allows a large number of date/time formats, with or without punctuation and
+optional elements. The format returned by this function is a complete date and time,
+with optional punctuation included, the UTC time zone represented as &quot;Z&quot;, and the tv_usec
+part included if and only if it is nonzero, i.e. either &quot;YYYY-MM-DDTHH:MM:SSZ&quot; or
+&quot;YYYY-MM-DDTHH:MM:SS.fffffZ&quot;.</p>
+
+<p>This corresponds to the Internet date/time format defined by RFC 3339, and to either of
+the two most-precise formats defined by the W3C Note Date and Time Formats. Both of these
+documents are profiles of ISO 8601.</p>
+
+<p>Use g_date_time_format() or g_strdup_printf() if a different variation of ISO 8601 format
+is required.</p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "glib";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script async src="../../search-index.js"></script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Date` struct in crate `glib`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Date">
+
+    <title>glib::date::Date - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        
+        <p class='location'><a href='../index.html'>glib</a>::<wbr><a href='index.html'>date</a></p><script>window.sidebarCurrent = {name: 'Date', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>glib</a>::<wbr><a href='index.html'>date</a>::<wbr><a class='struct' href=''>Date</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-7670' class='srclink' href='../../src/glib/date.rs.html#79-81' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Date {
+    // some fields omitted
+}</pre><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../../glib/date/struct.Date.html' title='glib::date::Date'>Date</a></code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>() -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../glib/date/struct.Date.html' title='glib::date::Date'>Date</a>&gt;</code></h4>
+<div class='docblock'><p>Allocates a GDate and initializes it to a sane state. The new date will be cleared
+(as if you&#39;d called g_date_clear()) but invalid (it won&#39;t represent an existing day).</p>
+</div><h4 id='method.new_dmy' class='method'><code>fn <a href='#method.new_dmy' class='fnname'>new_dmy</a>(day: <a class='type' href='../../glib/date/type.Day.html' title='glib::date::Day'>Day</a>, month: <a class='enum' href='../../glib/date/enum.Month.html' title='glib::date::Month'>Month</a>, year: <a class='type' href='../../glib/date/type.Year.html' title='glib::date::Year'>Year</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../glib/date/struct.Date.html' title='glib::date::Date'>Date</a>&gt;</code></h4>
+<div class='docblock'><p>Like g_date_new(), but also sets the value of the date. Assuming the day-month-year
+triplet you pass in represents an existing day, the returned date will be valid.</p>
+</div><h4 id='method.new_julian' class='method'><code>fn <a href='#method.new_julian' class='fnname'>new_julian</a>(julian_day: <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../glib/date/struct.Date.html' title='glib::date::Date'>Date</a>&gt;</code></h4>
+<div class='docblock'><p>Like g_date_new(), but also sets the value of the date. Assuming the Julian day
+number you pass in is valid (greater than 0, less than an unreasonably large
+number), the returned date will be valid.</p>
+</div><h4 id='method.clear' class='method'><code>fn <a href='#method.clear' class='fnname'>clear</a>(&amp;mut self)</code></h4>
+<div class='docblock'><p>Initializes one or more GDate structs to a sane but invalid state. The cleared
+dates will not represent an existing date, but will not contain garbage. Useful
+to init a date declared on the stack. Validity can be tested with g_date_valid().</p>
+</div><h4 id='method.set_day' class='method'><code>fn <a href='#method.set_day' class='fnname'>set_day</a>(&amp;mut self, day: <a class='type' href='../../glib/date/type.Day.html' title='glib::date::Day'>Day</a>)</code></h4>
+<div class='docblock'><p>Sets the day of the month for a GDate. If the resulting day-month-year triplet is
+invalid, the date will be invalid.</p>
+</div><h4 id='method.set_month' class='method'><code>fn <a href='#method.set_month' class='fnname'>set_month</a>(&amp;mut self, month: <a class='enum' href='../../glib/date/enum.Month.html' title='glib::date::Month'>Month</a>)</code></h4>
+<div class='docblock'><p>Sets the month of the year for a GDate. If the resulting day-month-year triplet is
+invalid, the date will be invalid.</p>
+</div><h4 id='method.set_year' class='method'><code>fn <a href='#method.set_year' class='fnname'>set_year</a>(&amp;mut self, year: <a class='type' href='../../glib/date/type.Year.html' title='glib::date::Year'>Year</a>)</code></h4>
+<div class='docblock'><p>Sets the year for a GDate. If the resulting day-month-year triplet is invalid, the
+date will be invalid.</p>
+</div><h4 id='method.set_dmy' class='method'><code>fn <a href='#method.set_dmy' class='fnname'>set_dmy</a>(&amp;mut self, day: <a class='type' href='../../glib/date/type.Day.html' title='glib::date::Day'>Day</a>, month: <a class='enum' href='../../glib/date/enum.Month.html' title='glib::date::Month'>Month</a>, year: <a class='type' href='../../glib/date/type.Year.html' title='glib::date::Year'>Year</a>)</code></h4>
+<div class='docblock'><p>Sets the value of a GDate from a day, month, and year. The day-month-year triplet
+must be valid; if you aren&#39;t sure it is, call g_date_valid_dmy() to check before
+you set it.</p>
+</div><h4 id='method.set_julian' class='method'><code>fn <a href='#method.set_julian' class='fnname'>set_julian</a>(&amp;mut self, julian: <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>)</code></h4>
+<div class='docblock'><p>Sets the value of a GDate from a Julian day number.</p>
+</div><h4 id='method.set_time_t' class='method'><code>fn <a href='#method.set_time_t' class='fnname'>set_time_t</a>(&amp;mut self, timet: <a href='http://doc.rust-lang.org/nightly/std/primitive.i64.html'>i64</a>)</code></h4>
+<div class='docblock'><p>Sets the value of a date to the date corresponding to a time specified as a time_t.
+The time to date conversion is done using the user&#39;s current timezone.
+To set the value of a date to the current day, you could write:
+<code>Date::new().set_time_t(date, time::get_time().sec);</code></p>
+</div><h4 id='method.set_time_val' class='method'><code>fn <a href='#method.set_time_val' class='fnname'>set_time_val</a>(&amp;mut self, timeval: &amp;mut <a class='struct' href='../../glib/date/struct.TimeVal.html' title='glib::date::TimeVal'>TimeVal</a>)</code></h4>
+<div class='docblock'><p>Sets the value of a date from a GTimeVal value. Note that the tv_usec member is ignored,
+because GDate can&#39;t make use of the additional precision.</p>
+
+<p>The time to date conversion is done using the user&#39;s current timezone.</p>
+</div><h4 id='method.set_parse' class='method'><code>fn <a href='#method.set_parse' class='fnname'>set_parse</a>(&amp;mut self, str_: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>)</code></h4>
+<div class='docblock'><p>Parses a user-inputted string str , and try to figure out what date it represents,
+taking the current locale into account. If the string is successfully parsed, the
+date will be valid after the call. Otherwise, it will be invalid. You should check
+using g_date_valid() to see whether the parsing succeeded.</p>
+
+<p>This function is not appropriate for file formats and the like; it isn&#39;t very precise,
+and its exact behavior varies with the locale. It&#39;s intended to be a heuristic routine
+that guesses what the user means by a given string (and it does work pretty well in
+that capacity).</p>
+</div><h4 id='method.add_days' class='method'><code>fn <a href='#method.add_days' class='fnname'>add_days</a>(&amp;mut self, days: <a href='http://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>)</code></h4>
+<div class='docblock'><p>Increments a date some number of days. To move forward by weeks, add weeks*7 days. The
+date must be valid.</p>
+</div><h4 id='method.subtract_days' class='method'><code>fn <a href='#method.subtract_days' class='fnname'>subtract_days</a>(&amp;mut self, days: <a href='http://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>)</code></h4>
+<div class='docblock'><p>Moves a date some number of days into the past. To move by weeks, just move by weeks*7
+days. The date must be valid.</p>
+</div><h4 id='method.add_months' class='method'><code>fn <a href='#method.add_months' class='fnname'>add_months</a>(&amp;mut self, months: <a href='http://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>)</code></h4>
+<div class='docblock'><p>Increments a date by some number of months. If the day of the month is greater than 28,
+this routine may change the day of the month (because the destination month may not have
+the current day in it). The date must be valid.</p>
+</div><h4 id='method.subtract_months' class='method'><code>fn <a href='#method.subtract_months' class='fnname'>subtract_months</a>(&amp;mut self, months: <a href='http://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>)</code></h4>
+<div class='docblock'><p>Moves a date some number of months into the past. If the current day of the month doesn&#39;t
+exist in the destination month, the day of the month may change. The date must be valid.</p>
+</div><h4 id='method.add_years' class='method'><code>fn <a href='#method.add_years' class='fnname'>add_years</a>(&amp;mut self, years: <a href='http://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>)</code></h4>
+<div class='docblock'><p>Increments a date by some number of years. If the date is February 29, and the destination
+year is not a leap year, the date will be changed to February 28. The date must be valid.</p>
+</div><h4 id='method.subtract_years' class='method'><code>fn <a href='#method.subtract_years' class='fnname'>subtract_years</a>(&amp;mut self, years: <a href='http://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>)</code></h4>
+<div class='docblock'><p>Moves a date some number of years into the past. If the current day doesn&#39;t exist in the
+destination year (i.e. it&#39;s February 29 and you move to a non-leap-year) then the day is
+changed to February 29. The date must be valid.</p>
+</div><h4 id='method.days_between' class='method'><code>fn <a href='#method.days_between' class='fnname'>days_between</a>(&amp;self, other: &amp;<a class='struct' href='../../glib/date/struct.Date.html' title='glib::date::Date'>Date</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.isize.html'>isize</a></code></h4>
+<div class='docblock'><p>Computes the number of days between two dates. If date2 is prior to date1 , the returned
+value is negative. Both dates must be valid.</p>
+</div><h4 id='method.compare' class='method'><code>fn <a href='#method.compare' class='fnname'>compare</a>(&amp;self, other: &amp;<a class='struct' href='../../glib/date/struct.Date.html' title='glib::date::Date'>Date</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.isize.html'>isize</a></code></h4>
+<div class='docblock'><p>qsort()-style comparison function for dates. Both dates must be valid.</p>
+
+<p>returned value :
+* 0 for equal
+* &lt; 0 if lhs is less than rhs
+* &gt; 0 if lhs is greater than rhs</p>
+</div><h4 id='method.clamp' class='method'><code>fn <a href='#method.clamp' class='fnname'>clamp</a>(&amp;mut self, min_date: &amp;<a class='struct' href='../../glib/date/struct.Date.html' title='glib::date::Date'>Date</a>, max_date: &amp;<a class='struct' href='../../glib/date/struct.Date.html' title='glib::date::Date'>Date</a>)</code></h4>
+<div class='docblock'><p>If date is prior to min_date , sets date equal to min_date . If date falls after
+max_date , sets date equal to max_date . Otherwise, date is unchanged. Either of min_date
+and max_date may be NULL. All non-NULL dates must be valid.</p>
+</div><h4 id='method.order' class='method'><code>fn <a href='#method.order' class='fnname'>order</a>(&amp;mut self, other: &amp;mut <a class='struct' href='../../glib/date/struct.Date.html' title='glib::date::Date'>Date</a>)</code></h4>
+<div class='docblock'><p>Checks if date1 is less than or equal to date2 , and swap the values if this is not
+the case.</p>
+</div><h4 id='method.get_day' class='method'><code>fn <a href='#method.get_day' class='fnname'>get_day</a>(&amp;self) -&gt; <a class='type' href='../../glib/date/type.Day.html' title='glib::date::Day'>Day</a></code></h4>
+<div class='docblock'><p>Returns the day of the month. The date must be valid.</p>
+</div><h4 id='method.get_month' class='method'><code>fn <a href='#method.get_month' class='fnname'>get_month</a>(&amp;self) -&gt; <a class='enum' href='../../glib/date/enum.Month.html' title='glib::date::Month'>Month</a></code></h4>
+<div class='docblock'><p>Returns the month of the year. The date must be valid.</p>
+</div><h4 id='method.get_year' class='method'><code>fn <a href='#method.get_year' class='fnname'>get_year</a>(&amp;self) -&gt; <a class='type' href='../../glib/date/type.Year.html' title='glib::date::Year'>Year</a></code></h4>
+<div class='docblock'><p>Returns the year of a GDate. The date must be valid.</p>
+</div><h4 id='method.get_julian' class='method'><code>fn <a href='#method.get_julian' class='fnname'>get_julian</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code></h4>
+<div class='docblock'><p>Returns the Julian day or &quot;serial number&quot; of the GDate. The Julian day is simply the
+number of days since January 1, Year 1; i.e., January 1, Year 1 is Julian day 1;
+January 2, Year 1 is Julian day 2, etc. The date must be valid.</p>
+</div><h4 id='method.get_weekday' class='method'><code>fn <a href='#method.get_weekday' class='fnname'>get_weekday</a>(&amp;self) -&gt; <a class='enum' href='../../glib/date/enum.Weekday.html' title='glib::date::Weekday'>Weekday</a></code></h4>
+<div class='docblock'><p>Returns the day of the week for a GDate. The date must be valid.</p>
+</div><h4 id='method.get_day_of_year' class='method'><code>fn <a href='#method.get_day_of_year' class='fnname'>get_day_of_year</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code></h4>
+<div class='docblock'><p>Returns the day of the year, where Jan 1 is the first day of the year. The date
+must be valid.</p>
+</div><h4 id='method.is_first_of_month' class='method'><code>fn <a href='#method.is_first_of_month' class='fnname'>is_first_of_month</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>Returns true if the date is on the first of a month. The date must be valid.</p>
+</div><h4 id='method.is_last_of_month' class='method'><code>fn <a href='#method.is_last_of_month' class='fnname'>is_last_of_month</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>Returns true if the date is the last day of the month. The date must be valid.</p>
+</div><h4 id='method.get_monday_week_of_year' class='method'><code>fn <a href='#method.get_monday_week_of_year' class='fnname'>get_monday_week_of_year</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code></h4>
+<div class='docblock'><p>Returns the week of the year, where weeks are understood to start on Monday. If
+the date is before the first Monday of the year, return ???</p>
+
+<p>The date must be valid.</p>
+</div><h4 id='method.get_sunday_week_of_year' class='method'><code>fn <a href='#method.get_sunday_week_of_year' class='fnname'>get_sunday_week_of_year</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code></h4>
+<div class='docblock'><p>Returns the week of the year during which this date falls, if weeks are understood
+to being on Sunday. The date must be valid. Can return 0 if the day is before the
+first Sunday of the year.</p>
+</div><h4 id='method.get_iso8601_week_of_year' class='method'><code>fn <a href='#method.get_iso8601_week_of_year' class='fnname'>get_iso8601_week_of_year</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code></h4>
+<div class='docblock'><p>Returns the week of the year, where weeks are interpreted according to ISO 8601.</p>
+</div><h4 id='method.is_valid' class='method'><code>fn <a href='#method.is_valid' class='fnname'>is_valid</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>Returns TRUE if the GDate represents an existing day. The date must not contain
+garbage; it should have been initialized with g_date_clear() if it wasn&#39;t allocated
+by one of the g_date_new() variants.</p>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Drop.html' title='core::ops::Drop'>Drop</a> for <a class='struct' href='../../glib/date/struct.Date.html' title='glib::date::Date'>Date</a></code></h3><div class='impl-items'><h4 id='method.drop' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/ops/trait.Drop.html#method.drop' class='fnname'>drop</a>(&amp;mut self)</code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "glib";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script async src="../../search-index.js"></script>
+</body>
+</html>

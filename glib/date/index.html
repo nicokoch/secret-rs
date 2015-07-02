@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `date` mod in crate `glib`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, date">
+
+    <title>glib::date - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        
+        <p class='location'><a href='../index.html'>glib</a></p><script>window.sidebarCurrent = {name: 'date', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Module <a href='../index.html'>glib</a>::<wbr><a class='mod' href=''>date</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-7502' class='srclink' href='../../src/glib/date.rs.html#5-526' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p>Date and Time Functions — calendrical calculations and miscellaneous time stuff</p>
+</div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.Date.html'
+                               title='glib::date::Date'>Date</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.TimeVal.html'
+                               title='glib::date::TimeVal'>TimeVal</a></td>
+                        <td class='docblock short'>
+                             <p>Represents a precise time, with seconds and microseconds. Similar to the struct timeval returned by the gettimeofday() UNIX
+system call.</p>
+
+                        </td>
+                    </tr>
+                </table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='enum' href='enum.Month.html'
+                               title='glib::date::Month'>Month</a></td>
+                        <td class='docblock short'>
+                             <p>Enumeration representing a month; values are G_DATE_JANUARY, G_DATE_FEBRUARY, etc. G_DATE_BAD_MONTH is the invalid value.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='enum' href='enum.Weekday.html'
+                               title='glib::date::Weekday'>Weekday</a></td>
+                        <td class='docblock short'>
+                             <p>Enumeration representing a day of the week; G_DATE_MONDAY, G_DATE_TUESDAY, etc. G_DATE_BAD_WEEKDAY is an invalid weekday.</p>
+
+                        </td>
+                    </tr>
+                </table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.get_current_time.html'
+                               title='glib::date::get_current_time'>get_current_time</a></td>
+                        <td class='docblock short'>
+                             <p>Equivalent to the UNIX gettimeofday() function, but portable.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.get_days_in_month.html'
+                               title='glib::date::get_days_in_month'>get_days_in_month</a></td>
+                        <td class='docblock short'>
+                             <p>Returns the number of days in a month, taking leap years into account.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.get_monday_weeks_in_year.html'
+                               title='glib::date::get_monday_weeks_in_year'>get_monday_weeks_in_year</a></td>
+                        <td class='docblock short'>
+                             <p>Returns the number of weeks in the year, where weeks are taken to start on Monday.
+Will be 52 or 53. The date must be valid. (Years always have 52 7-day periods,
+plus 1 or 2 extra days depending on whether it&#39;s a leap year. This function is
+basically telling you how many Mondays are in the year, i.e. there are 53 Mondays
+if one of the extra days happens to be a Monday.)</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.get_monotonic_time.html'
+                               title='glib::date::get_monotonic_time'>get_monotonic_time</a></td>
+                        <td class='docblock short'>
+                             <p>Queries the system monotonic time.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.get_real_time.html'
+                               title='glib::date::get_real_time'>get_real_time</a></td>
+                        <td class='docblock short'>
+                             <p>Queries the system wall-clock time.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.get_sunday_weeks_in_year.html'
+                               title='glib::date::get_sunday_weeks_in_year'>get_sunday_weeks_in_year</a></td>
+                        <td class='docblock short'>
+                             <p>Returns the number of weeks in the year, where weeks are taken to start on Sunday.
+Will be 52 or 53. The date must be valid. (Years always have 52 7-day periods, plus
+1 or 2 extra days depending on whether it&#39;s a leap year. This function is basically
+telling you how many Sundays are in the year, i.e. there are 53 Sundays if one of
+the extra days happens to be a Sunday.)</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.is_leap_year.html'
+                               title='glib::date::is_leap_year'>is_leap_year</a></td>
+                        <td class='docblock short'>
+                             <p>Returns TRUE if the year is a leap year.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.is_valid_day.html'
+                               title='glib::date::is_valid_day'>is_valid_day</a></td>
+                        <td class='docblock short'>
+                             <p>Returns true if the day of the month is valid (a day is valid if it&#39;s between 1 and
+31 inclusive).</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.is_valid_dmy.html'
+                               title='glib::date::is_valid_dmy'>is_valid_dmy</a></td>
+                        <td class='docblock short'>
+                             <p>Returns true if the day-month-year triplet forms a valid, existing day in the range
+of days GDate understands (Year 1 or later, no more than a few thousand years in the
+future).</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.is_valid_julian.html'
+                               title='glib::date::is_valid_julian'>is_valid_julian</a></td>
+                        <td class='docblock short'>
+                             <p>Returns true if the Julian day is valid. Anything greater than zero is basically a
+valid Julian, though there is a 32-bit limit.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.is_valid_month.html'
+                               title='glib::date::is_valid_month'>is_valid_month</a></td>
+                        <td class='docblock short'>
+                             <p>Returns true if the month value is valid. The 12 GDateMonth enumeration values are
+the only valid months.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.is_valid_weekday.html'
+                               title='glib::date::is_valid_weekday'>is_valid_weekday</a></td>
+                        <td class='docblock short'>
+                             <p>Returns true if the weekday is valid. The seven GDateWeekday enumeration values are
+the only valid weekdays.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.is_valid_year.html'
+                               title='glib::date::is_valid_year'>is_valid_year</a></td>
+                        <td class='docblock short'>
+                             <p>Returns true if the year is valid. Any year greater than 0 is valid, though there
+is a 16-bit limit to what GDate will understand.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.usleep.html'
+                               title='glib::date::usleep'>usleep</a></td>
+                        <td class='docblock short'>
+                             <p>Pauses the current thread for the given number of microseconds.</p>
+
+                        </td>
+                    </tr>
+                </table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='type' href='type.Day.html'
+                               title='glib::date::Day'>Day</a></td>
+                        <td class='docblock short'>
+                             <p>Integer representing a day of the month; between 1 and 31. G_DATE_BAD_DAY represents an invalid day of the month.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='type' href='type.Time.html'
+                               title='glib::date::Time'>Time</a></td>
+                        <td class='docblock short'>
+                             <p>Simply a replacement for time_t. It has been deprecated since it is not equivalent to time_t on 64-bit platforms with a 64-bit time_t.
+Unrelated to GTimer.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='type' href='type.Year.html'
+                               title='glib::date::Year'>Year</a></td>
+                        <td class='docblock short'>
+                             <p>Integer representing a year; G_DATE_BAD_YEAR is the invalid value. The year must be 1 or higher; negative (BC) years are not allowed.
+The year is represented with four digits.</p>
+
+                        </td>
+                    </tr>
+                </table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "glib";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script async src="../../search-index.js"></script>
+</body>
+</html>
