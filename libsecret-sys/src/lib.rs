@@ -2,7 +2,7 @@
 extern crate libc;
 extern crate glib;
 
-use libc::{c_uint, c_char, c_int, c_ulong, c_long, c_void};
+use libc::{c_uint, c_char, c_int, c_ulong, c_long};
 use glib::ffi::{GError, GType, GList, gboolean, gsize, gpointer, GHashTable};
 
 //glib stuff not provided by glib-rs

@@ -1,7 +1,7 @@
 use std::ptr;
-use libc::{c_int, c_void};
+use libc::{c_int};
 use glib::Error;
-use glib::ffi::{GObject, GList};
+use glib::ffi::{GObject};
 use glib::object::{Wrapper, Ref};
 use glib::types::{StaticType, Type};
 use glib::translate::{ToGlibPtr, FromGlib, FromGlibPtr, FromGlibPtrContainer, IterToGlibPtr};
@@ -9,7 +9,6 @@ use glib::glib_container::GlibContainer;
 use secret_service::SecretService;
 use secret_item::SecretItem;
 use SecretResult;
-use Lock;
 use ffi;
 
 
