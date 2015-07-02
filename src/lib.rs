@@ -42,8 +42,7 @@ impl<W: Wrapper> Lock for W{
             prev: ptr::null_mut()
         };
         unsafe {
-            let no_locked = ffi::secret_service_lock_sync(ptr::null_mut(), &mut arr, ptr::null_mut(), &mut res, &mut err);
-            println!("{}", no_locked);
+            ffi::secret_service_lock_sync(ptr::null_mut(), &mut arr, ptr::null_mut(), &mut res, &mut err);
             if err.is_null() {
                 Ok(FromGlibPtrContainer::from_glib_none(res))
             } else {
@@ -62,8 +61,7 @@ impl<W: Wrapper> Lock for W{
             prev: ptr::null_mut()
         };
         unsafe {
-            let no_locked = ffi::secret_service_unlock_sync(ptr::null_mut(), &mut arr, ptr::null_mut(), &mut res, &mut err);
-            println!("{}", no_locked);
+            ffi::secret_service_unlock_sync(ptr::null_mut(), &mut arr, ptr::null_mut(), &mut res, &mut err);
             if err.is_null() {
                 Ok(FromGlibPtrContainer::from_glib_none(res))
             } else {
