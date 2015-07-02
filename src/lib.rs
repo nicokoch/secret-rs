@@ -25,7 +25,9 @@ pub type SecretResult<T> = Result<T, Error>;
 
 /// This Trait is implemented by objects which can be locked and unlocked
 pub trait Lock {
+    /// Lock the object.
     fn lock(&self) -> SecretResult<Vec<Self>>;
+    /// Unlock the object
     fn unlock(&self) -> SecretResult<Vec<Self>>;
 }
 
@@ -70,6 +72,3 @@ impl<W: Wrapper> Lock for W{
         }
     }
 }
-
-#[test]
-fn it_works() {}

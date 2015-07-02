@@ -18,6 +18,11 @@ use glib::ffi::{GObject};
 use SecretResult;
 use ffi;
 
+/// A SecretService object represents the Secret Service implementation which runs as a D-Bus service.
+/// In order to securely transfer secrets to the Sercret Service, a session is established. This will automatically be done when calling `SecretService::get()`
+/// To search for items, use the `search()` method.
+/// Multiple collections can exist in the Secret Service, each of which contains secret items. To access the list of Collections, use `get_collections()`.
+/// Certain actions on the Secret Service require user prompting to complete, such as creating a collection, or unlocking a collection. When such a prompt is necessary, then a SecretPrompt object is created by libsecret, and passed to the secret_service_prompt() method. In this way it is handled automatically.
 pub struct SecretService(Ref);
 
 impl SecretService {
@@ -43,11 +48,13 @@ impl SecretService {
         self.0.to_glib_none() as *mut ffi::SecretServiceFFI
     }
 
+    /// Returns if a session to the SecretService is currently established.
     pub fn is_session_established(&self) -> bool {
         let flags = unsafe {ffi::secret_service_get_flags(self.raw())};
         flags & SECRET_SERVICE_OPEN_SESSION != 0
     }
 
+    /// Returns if the Service's collections are loaded.
     pub fn are_collections_loaded(&self) -> bool {
         let flags = unsafe {ffi::secret_service_get_flags(self.raw())};
         flags & SECRET_SERVICE_LOAD_COLLECTIONS != 0
@@ -67,6 +74,8 @@ impl SecretService {
         }
     }
 
+    /// Get the collections of the Service.
+    /// A collection contains multiple SecretItems.
     pub fn get_collections(&self) -> Option<Vec<SecretCollection>> {
         unsafe {
             let glist = ffi::secret_service_get_collections(self.raw());
@@ -81,18 +90,6 @@ impl SecretService {
     /*
     pub fn search() -> Vec<SecretItem> {
         unimplemented!()
-    }
-    */
-
-    /*
-    pub fn lock () -> Vec<SecretItem> {
-
-    }
-    */
-
-    /*
-    pub fn unlock () -> Vec<SecretItem> {
-
     }
     */
 
@@ -121,8 +118,6 @@ impl SecretService {
     */
 
     /// Ensures that a session is established.
-    /// This function should rarely be needed. Construct a SecretService with the `SECRET_SERVICE_OPEN_SESSION` flag instead.
-    /// Returns true if a session has been established, false otherwise.
     pub fn ensure_session(&self) -> SecretResult<()> {
         unsafe {
             let mut err = ptr::null_mut();
@@ -136,8 +131,6 @@ impl SecretService {
     }
 
     /// Ensures that the collections are loaded.
-    /// This function should rarely be needed. Construct a SecretService with the `SECRET_SERVICE_LOAD_COLLECTIONS` flag instead.
-    /// Returns true if a session has been established, false otherwise.
     pub fn load_collections(&self) -> SecretResult<()> {
         unsafe {
             let mut err = ptr::null_mut();
