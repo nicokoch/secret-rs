@@ -9,6 +9,6 @@ To use this library in your project, add the following to your Cargo.toml:
 git = "https://github.com/nicokoch/secret-rs/"
 ```
 
-Documentation can be generated with `cargo doc`
+Documentation can be found [here](https://nicokoch.github.io/secret-rs/secret/)
 
 A lot of features from libsecret are missing, so feel free to send me a pull request if you need a certain feature.
