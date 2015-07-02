@@ -18,7 +18,7 @@ use glib::Error;
 use libc::{c_void};
 use glib::ffi::{GList};
 use glib::object::{Wrapper};
-use glib::translate::{ToGlibPtr, FromGlibPtrContainer, IterToGlibPtr};
+use glib::translate::{ToGlibPtr, FromGlibPtrContainer};
 use glib::glib_container::GlibContainer;
 
 pub type SecretResult<T> = Result<T, Error>;

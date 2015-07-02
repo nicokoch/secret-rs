@@ -4,7 +4,7 @@ use glib::Error;
 use glib::ffi::{GObject};
 use glib::object::{Wrapper, Ref};
 use glib::types::{StaticType, Type};
-use glib::translate::{ToGlibPtr, FromGlib, FromGlibPtr, FromGlibPtrContainer, IterToGlibPtr};
+use glib::translate::{ToGlibPtr, FromGlib, FromGlibPtr, FromGlibPtrContainer};
 use glib::glib_container::GlibContainer;
 use secret_service::SecretService;
 use secret_item::SecretItem;
