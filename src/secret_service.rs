@@ -136,7 +136,7 @@ impl StaticType for SecretService {
 }
 
 impl Wrapper for SecretService {
-    type GlibType = ffi::SecretServiceFFI;
+    type GlibType = ffi::SecretService;
 
     unsafe fn wrap(r: Ref) -> Self{
         SecretService(r)

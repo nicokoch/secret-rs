@@ -2,7 +2,7 @@ use glib::translate::{ToGlibPtr, FromGlibPtr};
 use ffi;
 
 pub struct SecretValue {
-    ptr: *mut ffi::SecretValueFFI,
+    ptr: *mut ffi::SecretValue,
 }
 
 impl SecretValue{
@@ -43,7 +43,7 @@ impl SecretValue{
     }
 
     /// Workaround method, do not use :-)
-    pub unsafe fn wrap(ptr: *mut ffi::SecretValueFFI) -> Self{
+    pub unsafe fn wrap(ptr: *mut ffi::SecretValue) -> Self{
         SecretValue {
             ptr: ptr,
         }

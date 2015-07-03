@@ -112,7 +112,7 @@ impl StaticType for SecretCollection {
 unsafe impl Upcast<Object> for SecretCollection { }
 
 impl Wrapper for SecretCollection {
-    type GlibType = ffi::SecretCollectionFFI;
+    type GlibType = ffi::SecretCollection;
     unsafe fn wrap(r: Ref) -> Self{
         SecretCollection(r)
     }

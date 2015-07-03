@@ -93,7 +93,7 @@ impl StaticType for SecretItem {
 }
 
 impl Wrapper for SecretItem {
-    type GlibType = ffi::SecretItemFFI;
+    type GlibType = ffi::SecretItem;
     unsafe fn wrap(r: Ref) -> Self{
         SecretItem(r)
     }
