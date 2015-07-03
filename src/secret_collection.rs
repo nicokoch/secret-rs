@@ -4,7 +4,7 @@ use glib::Error;
 use glib::ffi::{GObject};
 use glib::object::{Wrapper, Ref};
 use glib::types::{StaticType, Type};
-use glib::translate::{ToGlibPtr, FromGlib, FromGlibPtr, FromGlibPtrContainer};
+use glib::translate::*;
 use glib::glib_container::GlibContainer;
 use secret_service::SecretService;
 use secret_item::SecretItem;
@@ -118,7 +118,7 @@ impl SecretCollection {
 
 impl StaticType for SecretCollection {
     fn static_type() -> Type{
-        Type::BaseObject
+        unsafe { from_glib(ffi::secret_collection_get_type()) }
     }
 }
 

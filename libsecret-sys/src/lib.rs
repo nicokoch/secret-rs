@@ -62,6 +62,7 @@ extern "C" {
     pub fn secret_collection_get_locked     (secret_collection: *mut SecretCollectionFFI) -> gboolean;
     pub fn secret_collection_get_modified   (secret_collection: *mut SecretCollectionFFI) -> guint64;
     pub fn secret_collection_refresh        (secret_collection: *mut SecretCollectionFFI);
+    pub fn secret_collection_get_type       () -> GType;
 
     //=========================================================================
     // SecretItem
