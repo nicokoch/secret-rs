@@ -17,7 +17,7 @@ impl SecretItem {
     /// Delete this secret item.
     pub fn delete(&self) -> SecretResult<()> {
         let mut err = ptr::null_mut();
-        unsafe{ffi::secret_item_delete_sync(self.raw(), ptr::null_mut(), &mut err)};
+        unsafe{ffi::secret_item_delete_sync(self.to_glib_none().0, ptr::null_mut(), &mut err)};
         if err.is_null() {
             Ok(())
         } else {
@@ -27,7 +27,7 @@ impl SecretItem {
 
     pub fn get_schema_name(&self) -> String {
         unsafe {
-            let ptr = ffi::secret_item_get_schema_name(self.raw());
+            let ptr = ffi::secret_item_get_schema_name(self.to_glib_none().0);
             FromGlibPtr::from_glib_none(ptr)
         }
     }
@@ -39,35 +39,35 @@ impl SecretItem {
     */
 
     pub fn get_created(&self) -> u64 {
-        unsafe {ffi::secret_item_get_created(self.raw())}
+        unsafe {ffi::secret_item_get_created(self.to_glib_none().0)}
     }
 
     pub fn get_modified(&self) -> u64 {
-        unsafe {ffi::secret_item_get_modified(self.raw())}
+        unsafe {ffi::secret_item_get_modified(self.to_glib_none().0)}
     }
 
     pub fn get_label(&self) -> String {
         unsafe {
-            let ptr = ffi::secret_item_get_label(self.raw());
+            let ptr = ffi::secret_item_get_label(self.to_glib_none().0);
             FromGlibPtr::from_glib_none(ptr)
         }
     }
 
     pub fn get_locked(&self) -> bool {
-        let gbool = unsafe{ffi::secret_item_get_locked(self.raw())};
+        let gbool = unsafe{ffi::secret_item_get_locked(self.to_glib_none().0)};
         FromGlib::from_glib(gbool)
     }
 
     pub fn get_service(&self) -> SecretService {
         unsafe {
-            let ptr = ffi::secret_item_get_service(self.raw());
+            let ptr = ffi::secret_item_get_service(self.to_glib_none().0);
             SecretService::wrap(Ref::from_glib_none(ptr as *mut GObject))
         }
     }
 
     pub fn load_secret(&self) -> SecretResult<()> {
         let mut err = ptr::null_mut();
-        unsafe{ffi::secret_item_load_secret_sync(self.raw(), ptr::null_mut(), &mut err)};
+        unsafe{ffi::secret_item_load_secret_sync(self.to_glib_none().0, ptr::null_mut(), &mut err)};
         if err.is_null() {
             Ok(())
         } else {
@@ -77,7 +77,7 @@ impl SecretItem {
 
     pub fn get_secret(&self) -> Option<SecretValue> {
         unsafe {
-            let ptr = ffi::secret_item_get_secret(self.raw());
+            let ptr = ffi::secret_item_get_secret(self.to_glib_none().0);
             if ptr.is_null() {
                 None
             } else {
@@ -85,12 +85,6 @@ impl SecretItem {
             }
         }
     }
-
-    #[inline]
-    fn raw(&self) -> *mut ffi::SecretItemFFI {
-        self.0.to_glib_none() as *mut ffi::SecretItemFFI
-    }
-
 }
 
 impl StaticType for SecretItem {
