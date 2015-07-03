@@ -1,4 +1,5 @@
 use std::ptr;
+use std::collections::HashMap;
 use glib::Error;
 use glib::glib_container::GlibContainer;
 use glib::object::{Wrapper, Ref, Object, Upcast};
@@ -82,6 +83,13 @@ impl SecretItem {
             } else {
                 Some(SecretValue::wrap(ptr))
             }
+        }
+    }
+
+    pub fn get_attributes(&self) -> HashMap<String, String> {
+        unsafe {
+            let ptr = ffi::secret_item_get_attributes(self.to_glib_none().0);
+            HashMap::from_glib_full(ptr)
         }
     }
 }

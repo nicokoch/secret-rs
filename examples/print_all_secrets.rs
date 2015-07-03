@@ -19,6 +19,10 @@ fn main() {
             secret_item.load_secret().ok().unwrap();
             let secret_value = secret_item.get_secret().unwrap();
             println!("ContentType for item: {}", secret_value.get_content_type());
+            println!("Attributes for item:");
+            for (key, val) in secret_item.get_attributes() {
+                println!("({}, {})", key, val);
+            }
             println!("SecretValue for item: {}\n", secret_value.get().unwrap());
         }
     }
