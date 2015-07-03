@@ -1,5 +1,4 @@
 use std::ptr;
-use libc::{c_int};
 use glib::Error;
 use glib::object::{Object, Upcast, Wrapper, Ref};
 use glib::types::{StaticType, Type};
@@ -33,7 +32,7 @@ impl SecretCollection {
     /// Returns the created Collection.
     pub fn create(label: &str, alias: Option<&str>) -> SecretResult<SecretCollection> {
         let mut err = ptr::null_mut();
-        let ptr = unsafe{ffi::secret_collection_create_sync(ptr::null_mut(), label.to_glib_none().0, alias.to_glib_none().0, 0 as c_int, ptr::null_mut(), &mut err)};
+        let ptr = unsafe{ffi::secret_collection_create_sync(ptr::null_mut(), label.to_glib_none().0, alias.to_glib_none().0, 0, ptr::null_mut(), &mut err)};
         if err.is_null(){
             Ok(unsafe { from_glib_full(ptr) })
         } else {
