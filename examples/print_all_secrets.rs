@@ -12,10 +12,7 @@ fn main() {
             println!("Collection is locked");
             secret_collection.unlock().ok().unwrap();
         }
-        let all_items = match secret_collection.get_items(){
-            Some(items) => items,
-            None => continue
-        };
+        let all_items = secret_collection.get_items();
 
         for secret_item in all_items {
             println!("Label for item: {}", secret_item.get_label());

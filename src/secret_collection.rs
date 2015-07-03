@@ -1,7 +1,6 @@
 use std::ptr;
 use libc::{c_int};
 use glib::Error;
-use glib::ffi::{GObject};
 use glib::object::{Wrapper, Ref};
 use glib::types::{StaticType, Type};
 use glib::translate::*;
@@ -23,7 +22,7 @@ impl SecretCollection {
         let mut err = ptr::null_mut();
         let ptr = unsafe{ffi::secret_collection_for_alias_sync(ptr::null_mut(), alias.to_glib_none().0, SECRET_COLLECTION_LOAD_ITEMS, ptr::null_mut(), &mut err)};
         if err.is_null(){
-            Ok(SecretCollection(Ref::from_glib_none(ptr as *mut GObject)))
+            Ok(unsafe { from_glib_full(ptr) })
         } else {
             Err(Error::wrap(err))
         }
@@ -36,7 +35,7 @@ impl SecretCollection {
         let mut err = ptr::null_mut();
         let ptr = unsafe{ffi::secret_collection_create_sync(ptr::null_mut(), label.to_glib_none().0, alias.to_glib_none().0, 0 as c_int, ptr::null_mut(), &mut err)};
         if err.is_null(){
-            Ok(SecretCollection(Ref::from_glib_none(ptr as *mut GObject)))
+            Ok(unsafe { from_glib_full(ptr) })
         } else {
             Err(Error::wrap(err))
         }
@@ -58,7 +57,7 @@ impl SecretCollection {
     pub fn get_service(&self) -> SecretService { //TODO find out if this can return null
         unsafe {
             let ptr = ffi::secret_collection_get_service(self.to_glib_none().0);
-            SecretService::wrap(Ref::from_glib_none(ptr as *mut GObject))
+            from_glib_none(ptr)
         }
     }
 
@@ -71,27 +70,22 @@ impl SecretCollection {
     pub fn get_label(&self) -> String {
         unsafe{
             let ptr = ffi::secret_collection_get_label(self.to_glib_none().0);
-            FromGlibPtr::from_glib_none(ptr)
+            from_glib_full(ptr)
         }
     }
 
     /// Get whether the collection is locked or not.
     pub fn get_locked(&self) -> bool {
         let gbool = unsafe{ffi::secret_collection_get_locked(self.to_glib_none().0)};
-        FromGlib::from_glib(gbool)
+        from_glib(gbool)
     }
 
     /// Returns None, if the items have not yet been loaded.
-    pub fn get_items(&self) -> Option<Vec<SecretItem>> {
+    pub fn get_items(&self) -> Vec<SecretItem> {
         unsafe {
             let glist = ffi::secret_collection_get_items(self.to_glib_none().0);
-            if glist.is_null(){
-                None
-            } else {
-                Some(FromGlibPtrContainer::from_glib_none(glist))
-            }
+            Vec::from_glib_full(glist)
         }
-
     }
 
     /// Ensure that the SecretCollection proxy has loaded all the items present in the Secret Service.
