@@ -1,3 +1,4 @@
+#![warn(missing_docs)]
 extern crate libc;
 extern crate glib;
 extern crate libsecret_sys;
