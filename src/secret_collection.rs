@@ -1,7 +1,7 @@
 use std::ptr;
 use libc::{c_int};
 use glib::Error;
-use glib::object::{Wrapper, Ref};
+use glib::object::{Object, Upcast, Wrapper, Ref};
 use glib::types::{StaticType, Type};
 use glib::translate::*;
 use glib::glib_container::GlibContainer;
@@ -109,6 +109,8 @@ impl StaticType for SecretCollection {
         unsafe { from_glib(ffi::secret_collection_get_type()) }
     }
 }
+
+unsafe impl Upcast<Object> for SecretCollection { }
 
 impl Wrapper for SecretCollection {
     type GlibType = ffi::SecretCollectionFFI;
