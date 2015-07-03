@@ -11,7 +11,7 @@ pub use secret_value::*;
 use std::ptr;
 use glib::Error;
 use glib::glib_container::GlibContainer;
-use glib::object::{Ref, Wrapper};
+use glib::object::{Ref, Wrapper, Object, Upcast};
 use glib::types::{StaticType, Type};
 use glib::translate::*;
 use SecretResult;
@@ -128,6 +128,8 @@ impl SecretService {
         }
     }
 }
+
+unsafe impl Upcast<Object> for SecretService { }
 
 impl StaticType for SecretService {
     fn static_type() -> Type{

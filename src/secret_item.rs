@@ -1,7 +1,7 @@
 use std::ptr;
 use glib::Error;
 use glib::glib_container::GlibContainer;
-use glib::object::{Wrapper, Ref};
+use glib::object::{Wrapper, Ref, Object, Upcast};
 use glib::types::{StaticType, Type};
 use glib::translate::*;
 use secret_service::SecretService;
@@ -91,6 +91,8 @@ impl StaticType for SecretItem {
         Type::BaseObject //TODO?
     }
 }
+
+unsafe impl Upcast<Object> for SecretItem { }
 
 impl Wrapper for SecretItem {
     type GlibType = ffi::SecretItem;
