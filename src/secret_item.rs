@@ -1,10 +1,9 @@
 use std::ptr;
 use glib::Error;
 use glib::glib_container::GlibContainer;
-use glib::ffi::{GObject};
 use glib::object::{Wrapper, Ref};
 use glib::types::{StaticType, Type};
-use glib::translate::{ToGlibPtr, FromGlib, FromGlibPtr};
+use glib::translate::*;
 use secret_service::SecretService;
 use secret_value::SecretValue;
 use SecretResult;
@@ -28,7 +27,7 @@ impl SecretItem {
     pub fn get_schema_name(&self) -> String {
         unsafe {
             let ptr = ffi::secret_item_get_schema_name(self.to_glib_none().0);
-            FromGlibPtr::from_glib_none(ptr)
+            from_glib_full(ptr)
         }
     }
 
@@ -49,19 +48,19 @@ impl SecretItem {
     pub fn get_label(&self) -> String {
         unsafe {
             let ptr = ffi::secret_item_get_label(self.to_glib_none().0);
-            FromGlibPtr::from_glib_none(ptr)
+            from_glib_full(ptr)
         }
     }
 
     pub fn get_locked(&self) -> bool {
         let gbool = unsafe{ffi::secret_item_get_locked(self.to_glib_none().0)};
-        FromGlib::from_glib(gbool)
+        from_glib(gbool)
     }
 
     pub fn get_service(&self) -> SecretService {
         unsafe {
             let ptr = ffi::secret_item_get_service(self.to_glib_none().0);
-            SecretService::wrap(Ref::from_glib_none(ptr as *mut GObject))
+            from_glib_none(ptr)
         }
     }
 

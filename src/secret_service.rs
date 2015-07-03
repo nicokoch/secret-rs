@@ -13,8 +13,7 @@ use glib::Error;
 use glib::glib_container::GlibContainer;
 use glib::object::{Ref, Wrapper};
 use glib::types::{StaticType, Type};
-use glib::translate::{FromGlibPtr, FromGlibPtrContainer, ToGlibPtr};
-use glib::ffi::{GObject};
+use glib::translate::*;
 use SecretResult;
 use ffi;
 
@@ -37,7 +36,7 @@ impl SecretService {
             let mut err = ptr::null_mut();
             let ptr = unsafe{ffi::secret_service_get_sync(flags, ptr::null_mut(), &mut err)};
             if err.is_null() {
-                Ok(SecretService(Ref::from_glib_none(ptr as *mut GObject)))
+                Ok(unsafe{from_glib_full(ptr)})
             } else {
                 Err(Error::wrap(err))
             }
@@ -56,29 +55,20 @@ impl SecretService {
     }
 
     /// Get the set of algorithms being used to transfer secrets between this secret service proxy and the Secret Service itself.
-    /// Returns `None` if no session has been established yet.
     /// The contained String has the format "algorithm-algorithm-algorithm-..."
-    pub fn get_session_algorithms(&self) -> Option<String> {
+    pub fn get_session_algorithms(&self) -> String {
         unsafe{
-            let res_c = ffi::secret_service_get_session_algorithms(self.to_glib_none().0);
-            if res_c.is_null(){
-                None
-            } else {
-                Some(FromGlibPtr::from_glib_none(res_c))
-            }
+            let ptr = ffi::secret_service_get_session_algorithms(self.to_glib_none().0);
+            from_glib_none(ptr)
         }
     }
 
     /// Get the collections of the Service.
     /// A collection contains multiple SecretItems.
-    pub fn get_collections(&self) -> Option<Vec<SecretCollection>> {
+    pub fn get_collections(&self) -> Vec<SecretCollection> {
         unsafe {
             let glist = ffi::secret_service_get_collections(self.to_glib_none().0);
-            if glist.is_null(){
-                None
-            } else {
-                Some(FromGlibPtrContainer::from_glib_none(glist))
-            }
+            Vec::from_glib_full(glist)
         }
     }
 
