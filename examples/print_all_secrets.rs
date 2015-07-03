@@ -4,9 +4,9 @@ use secret::{SecretService, Lock};
 
 fn main() {
     let secret_service = SecretService::get().ok().unwrap();
-    println!("Session algorithms: {}", secret_service.get_session_algorithms().unwrap());
-    println!("Number of collections: {}\n", secret_service.get_collections().unwrap().len());
-    for secret_collection in secret_service.get_collections().unwrap() {
+    println!("Session algorithms: {}", secret_service.get_session_algorithms());
+    println!("Number of collections: {}\n", secret_service.get_collections().len());
+    for secret_collection in secret_service.get_collections() {
         println!("Label for collection: {}\n", secret_collection.get_label());
         if secret_collection.get_locked() {
             println!("Collection is locked");
