@@ -79,7 +79,7 @@ impl SecretCollection {
         from_glib(gbool)
     }
 
-    /// Returns None, if the items have not yet been loaded.
+    /// Get the SecretItems of the collection
     pub fn get_items(&self) -> Vec<SecretItem> {
         unsafe {
             let glist = ffi::secret_collection_get_items(self.to_glib_none().0);
