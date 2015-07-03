@@ -44,6 +44,7 @@ extern "C" {
     pub fn secret_service_set_alias_sync        (secret_service: *mut SecretService, alias: *const gchar, collection: *mut SecretCollection, cancellable: *mut GCancellable, error: *mut *mut GError) -> gboolean;
     pub fn secret_service_get_collection_gtype  (secret_service: *mut SecretService) -> GType;
     pub fn secret_service_get_item_gtype        (secret_service: *mut SecretService) -> GType;
+    pub fn secret_service_get_type              () -> GType;
 
     //=========================================================================
     // SecretCollection
@@ -84,6 +85,7 @@ extern "C" {
     pub fn secret_item_load_secrets_sync    (items: *mut GList, cancellable: *mut GCancellable, error: *mut *mut GError) -> gboolean;
     pub fn secret_item_set_secret_sync      (secret_item: *mut SecretItem, value: *mut SecretValue, cancellable: *mut GCancellable, error: *mut *mut GError) -> gboolean;
     pub fn secret_item_refresh              (secret_item: *mut SecretItem);
+    pub fn secret_item_get_type             () -> GType;
 
 
     //=========================================================================

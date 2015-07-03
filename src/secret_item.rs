@@ -88,7 +88,7 @@ impl SecretItem {
 
 impl StaticType for SecretItem {
     fn static_type() -> Type{
-        Type::BaseObject //TODO?
+        unsafe { from_glib(ffi::secret_item_get_type()) }
     }
 }
 

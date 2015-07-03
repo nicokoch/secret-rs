@@ -133,7 +133,7 @@ unsafe impl Upcast<Object> for SecretService { }
 
 impl StaticType for SecretService {
     fn static_type() -> Type{
-        Type::BaseObject //TODO get this from libsecret
+        unsafe { from_glib(ffi::secret_service_get_type()) }
     }
 }
 
