@@ -9,6 +9,7 @@ pub use secret_value::*;
 // private imports
 //=========================================================================
 use std::ptr;
+use std::collections::HashMap;
 use glib::Error;
 use glib::glib_container::GlibContainer;
 use glib::object::{Ref, Wrapper, Object, Upcast};
@@ -72,11 +73,18 @@ impl SecretService {
         }
     }
 
-    /*
-    pub fn search() -> Vec<SecretItem> {
-        unimplemented!()
+    /// Search for items matching the attributes. All collections are searched. The attributes should be a table of string keys and string values.
+    pub fn search(&self, attributes: &HashMap<String, String>) -> SecretResult<Vec<SecretItem>> {
+        let mut err = ptr::null_mut();
+        unsafe {
+            let glist = ffi::secret_service_search_sync(self.to_glib_none().0, ptr::null(), attributes.to_glib_none().0, SECRET_SEARCH_ALL, ptr::null_mut(), &mut err);
+            if err.is_null() {
+                Ok(Vec::from_glib_full(glist))
+            } else {
+                Err(Error::wrap(err))
+            }
+        }
     }
-    */
 
     /*
     pub fn store () -> bool {
