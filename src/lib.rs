@@ -20,6 +20,7 @@ use glib::ffi::{GList};
 use glib::object::{Wrapper};
 use glib::translate::{ToGlibPtr, FromGlibPtrContainer};
 use glib::glib_container::GlibContainer;
+use glib::types::StaticType;
 
 pub type SecretResult<T> = Result<T, Error>;
 
@@ -33,6 +34,8 @@ pub trait Lock {
 
 impl<W: Wrapper> Lock for W{
     fn lock(&self) -> SecretResult<Vec<Self>>{
+        let my_type = W::static_type();
+        assert!(my_type == SecretItem::static_type() || my_type == SecretCollection::static_type(), "Can only lock items or collections");
         let mut err = ptr::null_mut();
         let mut res = ptr::null_mut();
         //TODO: We can definitely solve this with ToGlibPtrContainer somehow
@@ -52,6 +55,8 @@ impl<W: Wrapper> Lock for W{
     }
 
     fn unlock(&self) -> SecretResult<Vec<Self>>{
+        let my_type = W::static_type();
+        assert!(my_type == SecretItem::static_type() || my_type == SecretCollection::static_type(), "Can only unlock items or collections");
         let mut err = ptr::null_mut();
         let mut res = ptr::null_mut();
         //TODO: We can definitely solve this with ToGlibPtrContainer somehow
