@@ -81,7 +81,7 @@ impl SecretItem {
             if ptr.is_null() {
                 None
             } else {
-                Some(SecretValue::wrap(ptr))
+                Some(SecretValue::from_glib_full(ptr))
             }
         }
     }

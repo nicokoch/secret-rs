@@ -1,8 +1,9 @@
-use glib::translate::{ToGlibPtr, FromGlibPtr};
+use glib::types::{StaticType, Type};
+use glib::translate::*;
 use ffi;
 
 pub struct SecretValue {
-    ptr: *mut ffi::SecretValue,
+    ptr: *mut ffi::SecretValue
 }
 
 impl SecretValue{
@@ -10,14 +11,25 @@ impl SecretValue{
     /// Create a SecretValue for the secret data passed in.
     /// This method will *NOT* create the actual secret in the backing Secret Service. (see SecretService.store() for that)
     /// The secret data is copied into non-pageable 'secure' memory.
-    pub fn new(secret: &str) -> SecretValue {
+    pub fn new(secret: &str) -> Self {
         let content_type = "text/plain";
         unsafe {
             let ptr = ffi::secret_value_new(secret.to_glib_none().0, -1, content_type.to_glib_none().0);
-            SecretValue {
-                ptr: ptr,
-            }
+            SecretValue::from_glib_full(ptr)
         }
+    }
+
+    /// Transfer ownership of a raw SecretValue pointer to rust.
+    pub fn from_glib_full(ptr: *mut ffi::SecretValue) -> Self {
+        assert!(!ptr.is_null());
+        //debug_assert!(types::instance_of::<T>(ptr as *const _));
+        SecretValue {
+            ptr: ptr
+        }
+    }
+
+    fn to_glib_none(&self) -> *mut ffi::SecretValue {
+        self.ptr
     }
 
     /// Get the secret data in the SecretValue.
@@ -26,8 +38,8 @@ impl SecretValue{
     pub fn get(&self) -> Option<String> {
         if self.get_content_type() == "text/plain" {
             unsafe{
-                let secret = ffi::secret_value_get_text(self.ptr);
-                Some(String::from_glib_none(secret))
+                let secret = ffi::secret_value_get_text(self.to_glib_none());
+                Some(from_glib_none(secret))
             }
         } else {
             None
@@ -37,15 +49,8 @@ impl SecretValue{
     /// Get the content type of the secret value, such as `text/plain`.
     pub fn get_content_type(&self) -> String {
         unsafe {
-            let ptr = ffi::secret_value_get_content_type(self.ptr);
-            String::from_glib_none(ptr)
-        }
-    }
-
-    /// Workaround method, do not use :-)
-    pub unsafe fn wrap(ptr: *mut ffi::SecretValue) -> Self{
-        SecretValue {
-            ptr: ptr,
+            let ptr = ffi::secret_value_get_content_type(self.to_glib_none());
+            from_glib_none(ptr)
         }
     }
 }
@@ -57,10 +62,23 @@ impl Clone<T> for SecretValue<T> {
     }
 }*/
 
-impl Drop for SecretValue {
-    fn drop(&mut self) {
+impl StaticType for SecretValue {
+    fn static_type() -> Type{
+        unsafe { from_glib(ffi::secret_value_get_type()) }
+    }
+}
+
+impl Clone for SecretValue {
+    fn clone(&self) -> Self {
         unsafe {
-            ffi::secret_value_unref(self.ptr as *mut _);
+            let ptr = ffi::secret_value_ref(self.ptr);
+            SecretValue::from_glib_full(ptr)
         }
+    }
+}
+
+impl Drop for SecretValue {
+    fn drop(&mut self){
+        unsafe { ffi::secret_value_unref(self.ptr as *mut _) }
     }
 }

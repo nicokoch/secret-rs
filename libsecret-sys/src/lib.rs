@@ -98,4 +98,5 @@ extern "C" {
     pub fn secret_value_get_content_type(secret_value: *mut SecretValue) -> *const gchar;
     pub fn secret_value_ref             (secret_value: *mut SecretValue) -> *mut SecretValue;
     pub fn secret_value_unref           (value: gpointer);
+    pub fn secret_value_get_type        () -> GType;
 }
