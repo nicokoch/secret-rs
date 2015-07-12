@@ -28,7 +28,7 @@ impl SecretValue{
         }
     }
 
-    fn to_glib_none(&self) -> *mut ffi::SecretValue {
+    pub fn to_glib_none(&self) -> *mut ffi::SecretValue {
         self.ptr
     }
 

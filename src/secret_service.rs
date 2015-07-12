@@ -86,11 +86,23 @@ impl SecretService {
         }
     }
 
-    /*
-    pub fn store () -> bool {
-
+    /// Store a secret value in the secret service.
+    /// The `attributes` should be a set of key and value string pairs.
+    /// If the attributes match a secret item already stored in the collection, then the item will be updated with these new values.
+    /// `collection` is a collection alias, or `None` to store the value in the default collection (TODO: What about session storage?)
+    /// `label` specifies a label for the secret.
+    /// `value` is the actual secret to store. This can be created with `SecretValue::new()`.
+    pub fn store(&self, attributes: &HashMap<String, String>, collection: Option<&str>, label: &str, value: &SecretValue) -> SecretResult<()> {
+        let mut err = ptr::null_mut();
+        unsafe {
+            ffi::secret_service_store_sync(self.to_glib_none().0, ptr::null(), attributes.to_glib_none().0, collection.to_glib_none().0, label.to_glib_none().0, value.to_glib_none(), ptr::null_mut(), &mut err);
+            if err.is_null() {
+                Ok(())
+            } else {
+                Err(Error::wrap(err))
+            }
+        }
     }
-    */
 
     /*
     pub fn lookup () -> SecretValue {
