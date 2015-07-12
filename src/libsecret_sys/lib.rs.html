@@ -141,6 +141,7 @@
 <span id="99"> 99</span>
 <span id="100">100</span>
 <span id="101">101</span>
+<span id="102">102</span>
 </pre><pre class='rust '>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>allow</span>(<span class='ident'>non_camel_case_types</span>)]</span>
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>libc</span>;
@@ -242,6 +243,7 @@
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>secret_value_get_content_type</span>(<span class='ident'>secret_value</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>SecretValue</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>gchar</span>;
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>secret_value_ref</span>             (<span class='ident'>secret_value</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>SecretValue</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>SecretValue</span>;
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>secret_value_unref</span>           (<span class='ident'>value</span>: <span class='ident'>gpointer</span>);
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>secret_value_get_type</span>        () <span class='op'>-&gt;</span> <span class='ident'>GType</span>;
 }
 </pre>
 </section>
