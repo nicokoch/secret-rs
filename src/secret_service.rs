@@ -34,13 +34,13 @@ impl SecretService {
     }
 
     fn with_flags(flags: i32) -> SecretResult<Self> {
-            let mut err = ptr::null_mut();
-            let ptr = unsafe{ffi::secret_service_get_sync(flags, ptr::null_mut(), &mut err)};
-            if err.is_null() {
-                Ok(unsafe{from_glib_full(ptr)})
-            } else {
-                Err(Error::wrap(err))
-            }
+        let mut err = ptr::null_mut();
+        let ptr = unsafe{ffi::secret_service_get_sync(flags, ptr::null_mut(), &mut err)};
+        if err.is_null() {
+            Ok(unsafe{from_glib_full(ptr)})
+        } else {
+            Err(Error::wrap(err))
+        }
     }
 
     /// Returns if a session to the SecretService is currently established.

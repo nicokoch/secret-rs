@@ -61,7 +61,6 @@ impl<W: Wrapper> Lock for W{
     }
 
     fn unlock(&self) -> SecretResult<Vec<Self>>{
-        println!("Unlocking");
         let my_type = W::static_type();
         assert!(my_type == SecretItem::static_type() || my_type == SecretCollection::static_type(), "Can only unlock items or collections");
         let mut err = ptr::null_mut();
