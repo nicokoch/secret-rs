@@ -12,6 +12,11 @@ use ffi;
 
 pub struct SecretItem(Ref);
 
+/// SecretItem represents a secret item stored in the Secret Service.
+/// Each item has a value, represented by a SecretValue, which can be retrieved by `get_secret()` or set by `set_secret()` (TODO). The item is only available when the item is not locked.
+/// Items can be locked or unlocked using the `Lock::lock()` or `Lock::unlock()` functions. The Lock trait is implemented by SecretItem. The Secret Service may not be able to unlock individual items, and may unlock an entire collection when a single item is unlocked.
+/// Each item has a set of attributes, which are used to locate the item later. These are not stored or transferred in a secure manner. Each attribute has a string name and a string value. Use `SecretService::search()` to search for items based on their attributes, and `set_attributes()` (TODO) to change the attributes associated with an item.
+/// Items can be created with `create()` (TODO) or `SecretService::store()`.
 impl SecretItem {
 
     /// Delete this secret item.
@@ -25,6 +30,7 @@ impl SecretItem {
         }
     }
 
+    /// Get the name of the attribute schema.
     pub fn get_schema_name(&self) -> String {
         unsafe {
             let ptr = ffi::secret_item_get_schema_name(self.to_glib_none().0);
@@ -32,20 +38,19 @@ impl SecretItem {
         }
     }
 
-    /*
-    pub fn get_attributes(&self) -> HashMap{ TODO
-
-    }
-    */
-
+    /// Get the created date and time of the item.
+    /// The return value is the number of seconds since the unix epoch, January 1st 1970.
     pub fn get_created(&self) -> u64 {
         unsafe {ffi::secret_item_get_created(self.to_glib_none().0)}
     }
 
+    /// Get the modified date and time of the item.
+    /// The return value is the number of seconds since the unix epoch, January 1st 1970.
     pub fn get_modified(&self) -> u64 {
         unsafe {ffi::secret_item_get_modified(self.to_glib_none().0)}
     }
 
+    /// Get the label of the item.
     pub fn get_label(&self) -> String {
         unsafe {
             let ptr = ffi::secret_item_get_label(self.to_glib_none().0);
@@ -53,11 +58,13 @@ impl SecretItem {
         }
     }
 
+    /// Get if the item is locked or not.
     pub fn get_locked(&self) -> bool {
         let gbool = unsafe{ffi::secret_item_get_locked(self.to_glib_none().0)};
         from_glib(gbool)
     }
 
+    /// Get the SecretService this item was created with.
     pub fn get_service(&self) -> SecretService {
         unsafe {
             let ptr = ffi::secret_item_get_service(self.to_glib_none().0);
@@ -65,6 +72,7 @@ impl SecretItem {
         }
     }
 
+    /// Ensure that the SecretValue of this item is loaded.
     pub fn load_secret(&self) -> SecretResult<()> {
         let mut err = ptr::null_mut();
         unsafe{ffi::secret_item_load_secret_sync(self.to_glib_none().0, ptr::null_mut(), &mut err)};
@@ -75,6 +83,7 @@ impl SecretItem {
         }
     }
 
+    /// Get the SecretValue of this item. The item must be unlocked and the value must be loaded.
     pub fn get_secret(&self) -> Option<SecretValue> {
         unsafe {
             let ptr = ffi::secret_item_get_secret(self.to_glib_none().0);
@@ -86,6 +95,7 @@ impl SecretItem {
         }
     }
 
+    /// Get the attributes of this item.
     pub fn get_attributes(&self) -> HashMap<String, String> {
         unsafe {
             let ptr = ffi::secret_item_get_attributes(self.to_glib_none().0);

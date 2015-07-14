@@ -2,6 +2,8 @@ use glib::types::{StaticType, Type};
 use glib::translate::*;
 use ffi;
 
+/// A SecretValue contains a password or other secret value.
+/// Use `SecretValue::get()` to get the actual secret data, such as a password. This library only supports content type `text/plain` for now.
 pub struct SecretValue {
     ptr: *mut ffi::SecretValue
 }
@@ -28,6 +30,7 @@ impl SecretValue{
         }
     }
 
+    /// None-transfer to glib.
     pub fn to_glib_none(&self) -> *mut ffi::SecretValue {
         self.ptr
     }

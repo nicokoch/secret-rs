@@ -23,6 +23,7 @@ use glib::translate::{ToGlibPtr, FromGlibPtrContainer};
 use glib::glib_container::GlibContainer;
 use glib::types::StaticType;
 
+/// A Result which may contain an error from the SecretService backend.
 pub type SecretResult<T> = Result<T, Error>;
 
 /// This Trait is implemented by objects which can be locked and unlocked
