@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["SecretValue",""]]});
+initSidebarItems({"struct":[["SecretValue","A SecretValue contains a password or other secret value. Use `SecretValue::get()` to get the actual secret data, such as a password. This library only supports content type `text/plain` for now."]]});
