@@ -8,7 +8,7 @@ fn main() {
     println!("Number of collections: {}\n", secret_service.get_collections().len());
     for secret_collection in secret_service.get_collections() {
         println!("Label for collection: {}\n", secret_collection.get_label());
-        if secret_collection.get_locked() {
+        if secret_collection.is_locked() {
             println!("Collection is locked");
             secret_collection.unlock().ok().unwrap();
         }

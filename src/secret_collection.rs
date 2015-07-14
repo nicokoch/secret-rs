@@ -73,12 +73,6 @@ impl SecretCollection {
         }
     }
 
-    /// Get whether the collection is locked or not.
-    pub fn get_locked(&self) -> bool {
-        let gbool = unsafe{ffi::secret_collection_get_locked(self.to_glib_none().0)};
-        from_glib(gbool)
-    }
-
     /// Get the SecretItems of the collection
     pub fn get_items(&self) -> Vec<SecretItem> {
         unsafe {

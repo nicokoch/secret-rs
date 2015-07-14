@@ -19,7 +19,7 @@ use glib::Error;
 use libc::{c_void};
 use glib::ffi::{GList};
 use glib::object::{Wrapper};
-use glib::translate::{ToGlibPtr, FromGlibPtrContainer};
+use glib::translate::{ToGlibPtr, FromGlibPtrContainer, from_glib};
 use glib::glib_container::GlibContainer;
 use glib::types::StaticType;
 
@@ -28,10 +28,15 @@ pub type SecretResult<T> = Result<T, Error>;
 
 /// This Trait is implemented by objects which can be locked and unlocked
 pub trait Lock {
+
     /// Lock the object.
     fn lock(&self) -> SecretResult<Vec<Self>>;
+
     /// Unlock the object
     fn unlock(&self) -> SecretResult<Vec<Self>>;
+
+    /// Get if the object is currently locked.
+    fn is_locked(&self) -> bool;
 }
 
 impl<W: Wrapper> Lock for W{
@@ -75,5 +80,17 @@ impl<W: Wrapper> Lock for W{
                 Err(Error::wrap(err))
             }
         }
+    }
+
+    fn is_locked(&self) -> bool {
+        let my_type = W::static_type();
+        let gbool = if my_type == SecretItem::static_type() {
+            unsafe{ffi::secret_item_get_locked(self.as_ref().to_glib_none() as *mut ffi::SecretItem)}
+        } else if my_type == SecretCollection::static_type() {
+            unsafe{ffi::secret_collection_get_locked(self.as_ref().to_glib_none() as *mut ffi::SecretCollection)}
+        } else {
+            panic!("Only items and collections can be locked")
+        };
+        from_glib(gbool)
     }
 }

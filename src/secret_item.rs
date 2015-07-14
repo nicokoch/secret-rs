@@ -58,12 +58,6 @@ impl SecretItem {
         }
     }
 
-    /// Get if the item is locked or not.
-    pub fn get_locked(&self) -> bool {
-        let gbool = unsafe{ffi::secret_item_get_locked(self.to_glib_none().0)};
-        from_glib(gbool)
-    }
-
     /// Get the SecretService this item was created with.
     pub fn get_service(&self) -> SecretService {
         unsafe {
