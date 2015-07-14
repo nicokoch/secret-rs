@@ -1,10 +1,8 @@
 use std::ptr;
-use libc::{c_int};
 use glib::Error;
-use glib::ffi::{GObject};
-use glib::object::{Wrapper, Ref};
+use glib::object::{Object, Upcast, Wrapper, Ref};
 use glib::types::{StaticType, Type};
-use glib::translate::{ToGlibPtr, FromGlib, FromGlibPtr, FromGlibPtrContainer};
+use glib::translate::*;
 use glib::glib_container::GlibContainer;
 use secret_service::SecretService;
 use secret_item::SecretItem;
@@ -23,7 +21,7 @@ impl SecretCollection {
         let mut err = ptr::null_mut();
         let ptr = unsafe{ffi::secret_collection_for_alias_sync(ptr::null_mut(), alias.to_glib_none().0, SECRET_COLLECTION_LOAD_ITEMS, ptr::null_mut(), &mut err)};
         if err.is_null(){
-            Ok(SecretCollection(Ref::from_glib_none(ptr as *mut GObject)))
+            Ok(unsafe { from_glib_full(ptr) })
         } else {
             Err(Error::wrap(err))
         }
@@ -34,9 +32,9 @@ impl SecretCollection {
     /// Returns the created Collection.
     pub fn create(label: &str, alias: Option<&str>) -> SecretResult<SecretCollection> {
         let mut err = ptr::null_mut();
-        let ptr = unsafe{ffi::secret_collection_create_sync(ptr::null_mut(), label.to_glib_none().0, alias.to_glib_none().0, 0 as c_int, ptr::null_mut(), &mut err)};
+        let ptr = unsafe{ffi::secret_collection_create_sync(ptr::null_mut(), label.to_glib_none().0, alias.to_glib_none().0, 0, ptr::null_mut(), &mut err)};
         if err.is_null(){
-            Ok(SecretCollection(Ref::from_glib_none(ptr as *mut GObject)))
+            Ok(unsafe { from_glib_full(ptr) })
         } else {
             Err(Error::wrap(err))
         }
@@ -45,66 +43,55 @@ impl SecretCollection {
     /// Get the created date and time of the collection.
     /// The return value is the number of seconds since the unix epoch, January 1st 1970.
     pub fn get_created(&self) -> u64 {
-        unsafe {ffi::secret_collection_get_created(self.raw())}
+        unsafe {ffi::secret_collection_get_created(self.to_glib_none().0)}
     }
 
     /// Get the modified date and time of the collection.
     /// The return value is the number of seconds since the unix epoch, January 1st 1970.
     pub fn get_modified(&self) -> u64 {
-        unsafe {ffi::secret_collection_get_modified(self.raw())}
+        unsafe {ffi::secret_collection_get_modified(self.to_glib_none().0)}
     }
 
     /// Get the Secret Service object that this collection was created with.
     pub fn get_service(&self) -> SecretService { //TODO find out if this can return null
         unsafe {
-            let ptr = ffi::secret_collection_get_service(self.raw());
-            SecretService::wrap(Ref::from_glib_none(ptr as *mut GObject))
+            let ptr = ffi::secret_collection_get_service(self.to_glib_none().0);
+            from_glib_none(ptr)
         }
     }
 
     pub fn are_items_loaded(&self) -> bool {
-        let flags = unsafe {ffi::secret_collection_get_flags(self.raw())};
+        let flags = unsafe {ffi::secret_collection_get_flags(self.to_glib_none().0)};
         flags & SECRET_COLLECTION_LOAD_ITEMS != 0
     }
 
     /// Get the label of this collection.
     pub fn get_label(&self) -> String {
         unsafe{
-            let ptr = ffi::secret_collection_get_label(self.raw());
-            FromGlibPtr::from_glib_none(ptr)
+            let ptr = ffi::secret_collection_get_label(self.to_glib_none().0);
+            from_glib_full(ptr)
         }
     }
 
     /// Get whether the collection is locked or not.
     pub fn get_locked(&self) -> bool {
-        let gbool = unsafe{ffi::secret_collection_get_locked(self.raw())};
-        FromGlib::from_glib(gbool)
+        let gbool = unsafe{ffi::secret_collection_get_locked(self.to_glib_none().0)};
+        from_glib(gbool)
     }
 
-    /// Returns None, if the items have not yet been loaded.
-    pub fn get_items(&self) -> Option<Vec<SecretItem>> {
+    /// Get the SecretItems of the collection
+    pub fn get_items(&self) -> Vec<SecretItem> {
         unsafe {
-            let glist = ffi::secret_collection_get_items(self.raw());
-            if glist.is_null(){
-                None
-            } else {
-                Some(FromGlibPtrContainer::from_glib_none(glist))
-            }
+            let glist = ffi::secret_collection_get_items(self.to_glib_none().0);
+            Vec::from_glib_full(glist)
         }
-
-    }
-
-
-    #[inline]
-    fn raw(&self) -> *mut ffi::SecretCollectionFFI {
-        self.0.to_glib_none() as *mut ffi::SecretCollectionFFI
     }
 
     /// Ensure that the SecretCollection proxy has loaded all the items present in the Secret Service.
     pub fn load_items(&self) -> SecretResult<()>{
         unsafe {
             let mut err = ptr::null_mut();
-            ffi::secret_collection_load_items_sync(self.raw(), ptr::null_mut(), &mut err);
+            ffi::secret_collection_load_items_sync(self.to_glib_none().0, ptr::null_mut(), &mut err);
             if err.is_null() {
                 Ok(())
             } else {
@@ -118,12 +105,14 @@ impl SecretCollection {
 
 impl StaticType for SecretCollection {
     fn static_type() -> Type{
-        Type::BaseObject
+        unsafe { from_glib(ffi::secret_collection_get_type()) }
     }
 }
 
+unsafe impl Upcast<Object> for SecretCollection { }
+
 impl Wrapper for SecretCollection {
-    type GlibType = ffi::SecretCollectionFFI;
+    type GlibType = ffi::SecretCollection;
     unsafe fn wrap(r: Ref) -> Self{
         SecretCollection(r)
     }

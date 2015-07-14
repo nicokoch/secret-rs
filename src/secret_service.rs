@@ -9,12 +9,12 @@ pub use secret_value::*;
 // private imports
 //=========================================================================
 use std::ptr;
+use std::collections::HashMap;
 use glib::Error;
 use glib::glib_container::GlibContainer;
-use glib::object::{Ref, Wrapper};
+use glib::object::{Ref, Wrapper, Object, Upcast};
 use glib::types::{StaticType, Type};
-use glib::translate::{FromGlibPtr, FromGlibPtrContainer};
-use glib::ffi::{GObject};
+use glib::translate::*;
 use SecretResult;
 use ffi;
 
@@ -37,67 +37,72 @@ impl SecretService {
             let mut err = ptr::null_mut();
             let ptr = unsafe{ffi::secret_service_get_sync(flags, ptr::null_mut(), &mut err)};
             if err.is_null() {
-                Ok(SecretService(Ref::from_glib_none(ptr as *mut GObject)))
+                Ok(unsafe{from_glib_full(ptr)})
             } else {
                 Err(Error::wrap(err))
             }
     }
 
-    #[inline]
-    fn raw(&self) -> *mut ffi::SecretServiceFFI {
-        self.0.to_glib_none() as *mut ffi::SecretServiceFFI
-    }
-
     /// Returns if a session to the SecretService is currently established.
     pub fn is_session_established(&self) -> bool {
-        let flags = unsafe {ffi::secret_service_get_flags(self.raw())};
+        let flags = unsafe {ffi::secret_service_get_flags(self.to_glib_none().0)};
         flags & SECRET_SERVICE_OPEN_SESSION != 0
     }
 
     /// Returns if the Service's collections are loaded.
     pub fn are_collections_loaded(&self) -> bool {
-        let flags = unsafe {ffi::secret_service_get_flags(self.raw())};
+        let flags = unsafe {ffi::secret_service_get_flags(self.to_glib_none().0)};
         flags & SECRET_SERVICE_LOAD_COLLECTIONS != 0
     }
 
     /// Get the set of algorithms being used to transfer secrets between this secret service proxy and the Secret Service itself.
-    /// Returns `None` if no session has been established yet.
     /// The contained String has the format "algorithm-algorithm-algorithm-..."
-    pub fn get_session_algorithms(&self) -> Option<String> {
+    pub fn get_session_algorithms(&self) -> String {
         unsafe{
-            let res_c = ffi::secret_service_get_session_algorithms(self.raw());
-            if res_c.is_null(){
-                None
-            } else {
-                Some(FromGlibPtr::from_glib_none(res_c))
-            }
+            let ptr = ffi::secret_service_get_session_algorithms(self.to_glib_none().0);
+            from_glib_none(ptr)
         }
     }
 
     /// Get the collections of the Service.
     /// A collection contains multiple SecretItems.
-    pub fn get_collections(&self) -> Option<Vec<SecretCollection>> {
+    pub fn get_collections(&self) -> Vec<SecretCollection> {
         unsafe {
-            let glist = ffi::secret_service_get_collections(self.raw());
-            if glist.is_null(){
-                None
+            let glist = ffi::secret_service_get_collections(self.to_glib_none().0);
+            Vec::from_glib_full(glist)
+        }
+    }
+
+    /// Search for items matching the attributes. All collections are searched. The attributes should be a table of string keys and string values.
+    pub fn search(&self, attributes: &HashMap<String, String>) -> SecretResult<Vec<SecretItem>> {
+        let mut err = ptr::null_mut();
+        unsafe {
+            let glist = ffi::secret_service_search_sync(self.to_glib_none().0, ptr::null(), attributes.to_glib_none().0, SECRET_SEARCH_ALL, ptr::null_mut(), &mut err);
+            if err.is_null() {
+                Ok(Vec::from_glib_full(glist))
             } else {
-                Some(FromGlibPtrContainer::from_glib_none(glist))
+                Err(Error::wrap(err))
             }
         }
     }
 
-    /*
-    pub fn search() -> Vec<SecretItem> {
-        unimplemented!()
+    /// Store a secret value in the secret service.
+    /// The `attributes` should be a set of key and value string pairs.
+    /// If the attributes match a secret item already stored in the collection, then the item will be updated with these new values.
+    /// `collection` is a collection alias, or `None` to store the value in the default collection (TODO: What about session storage?)
+    /// `label` specifies a label for the secret.
+    /// `value` is the actual secret to store. This can be created with `SecretValue::new()`.
+    pub fn store(&self, attributes: &HashMap<String, String>, collection: Option<&str>, label: &str, value: &SecretValue) -> SecretResult<()> {
+        let mut err = ptr::null_mut();
+        unsafe {
+            ffi::secret_service_store_sync(self.to_glib_none().0, ptr::null(), attributes.to_glib_none().0, collection.to_glib_none().0, label.to_glib_none().0, value.to_glib_none(), ptr::null_mut(), &mut err);
+            if err.is_null() {
+                Ok(())
+            } else {
+                Err(Error::wrap(err))
+            }
+        }
     }
-    */
-
-    /*
-    pub fn store () -> bool {
-
-    }
-    */
 
     /*
     pub fn lookup () -> SecretValue {
@@ -121,7 +126,7 @@ impl SecretService {
     pub fn ensure_session(&self) -> SecretResult<()> {
         unsafe {
             let mut err = ptr::null_mut();
-            ffi::secret_service_ensure_session_sync(self.raw(), ptr::null_mut(), &mut err);
+            ffi::secret_service_ensure_session_sync(self.to_glib_none().0, ptr::null_mut(), &mut err);
             if err.is_null() {
                 Ok(())
             } else {
@@ -134,7 +139,7 @@ impl SecretService {
     pub fn load_collections(&self) -> SecretResult<()> {
         unsafe {
             let mut err = ptr::null_mut();
-            ffi::secret_service_load_collections_sync(self.raw(), ptr::null_mut(), &mut err);
+            ffi::secret_service_load_collections_sync(self.to_glib_none().0, ptr::null_mut(), &mut err);
             if err.is_null() {
                 Ok(())
             } else {
@@ -144,14 +149,16 @@ impl SecretService {
     }
 }
 
+unsafe impl Upcast<Object> for SecretService { }
+
 impl StaticType for SecretService {
     fn static_type() -> Type{
-        Type::BaseObject //TODO get this from libsecret
+        unsafe { from_glib(ffi::secret_service_get_type()) }
     }
 }
 
 impl Wrapper for SecretService {
-    type GlibType = ffi::SecretServiceFFI;
+    type GlibType = ffi::SecretService;
 
     unsafe fn wrap(r: Ref) -> Self{
         SecretService(r)

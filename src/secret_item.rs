@@ -1,10 +1,10 @@
 use std::ptr;
+use std::collections::HashMap;
 use glib::Error;
 use glib::glib_container::GlibContainer;
-use glib::ffi::{GObject};
-use glib::object::{Wrapper, Ref};
+use glib::object::{Wrapper, Ref, Object, Upcast};
 use glib::types::{StaticType, Type};
-use glib::translate::{ToGlibPtr, FromGlib, FromGlibPtr};
+use glib::translate::*;
 use secret_service::SecretService;
 use secret_value::SecretValue;
 use SecretResult;
@@ -17,7 +17,7 @@ impl SecretItem {
     /// Delete this secret item.
     pub fn delete(&self) -> SecretResult<()> {
         let mut err = ptr::null_mut();
-        unsafe{ffi::secret_item_delete_sync(self.raw(), ptr::null_mut(), &mut err)};
+        unsafe{ffi::secret_item_delete_sync(self.to_glib_none().0, ptr::null_mut(), &mut err)};
         if err.is_null() {
             Ok(())
         } else {
@@ -27,8 +27,8 @@ impl SecretItem {
 
     pub fn get_schema_name(&self) -> String {
         unsafe {
-            let ptr = ffi::secret_item_get_schema_name(self.raw());
-            FromGlibPtr::from_glib_none(ptr)
+            let ptr = ffi::secret_item_get_schema_name(self.to_glib_none().0);
+            from_glib_full(ptr)
         }
     }
 
@@ -39,35 +39,35 @@ impl SecretItem {
     */
 
     pub fn get_created(&self) -> u64 {
-        unsafe {ffi::secret_item_get_created(self.raw())}
+        unsafe {ffi::secret_item_get_created(self.to_glib_none().0)}
     }
 
     pub fn get_modified(&self) -> u64 {
-        unsafe {ffi::secret_item_get_modified(self.raw())}
+        unsafe {ffi::secret_item_get_modified(self.to_glib_none().0)}
     }
 
     pub fn get_label(&self) -> String {
         unsafe {
-            let ptr = ffi::secret_item_get_label(self.raw());
-            FromGlibPtr::from_glib_none(ptr)
+            let ptr = ffi::secret_item_get_label(self.to_glib_none().0);
+            from_glib_full(ptr)
         }
     }
 
     pub fn get_locked(&self) -> bool {
-        let gbool = unsafe{ffi::secret_item_get_locked(self.raw())};
-        FromGlib::from_glib(gbool)
+        let gbool = unsafe{ffi::secret_item_get_locked(self.to_glib_none().0)};
+        from_glib(gbool)
     }
 
     pub fn get_service(&self) -> SecretService {
         unsafe {
-            let ptr = ffi::secret_item_get_service(self.raw());
-            SecretService::wrap(Ref::from_glib_none(ptr as *mut GObject))
+            let ptr = ffi::secret_item_get_service(self.to_glib_none().0);
+            from_glib_none(ptr)
         }
     }
 
     pub fn load_secret(&self) -> SecretResult<()> {
         let mut err = ptr::null_mut();
-        unsafe{ffi::secret_item_load_secret_sync(self.raw(), ptr::null_mut(), &mut err)};
+        unsafe{ffi::secret_item_load_secret_sync(self.to_glib_none().0, ptr::null_mut(), &mut err)};
         if err.is_null() {
             Ok(())
         } else {
@@ -77,30 +77,33 @@ impl SecretItem {
 
     pub fn get_secret(&self) -> Option<SecretValue> {
         unsafe {
-            let ptr = ffi::secret_item_get_secret(self.raw());
+            let ptr = ffi::secret_item_get_secret(self.to_glib_none().0);
             if ptr.is_null() {
                 None
             } else {
-                Some(SecretValue::wrap(ptr))
+                Some(SecretValue::from_glib_full(ptr))
             }
         }
     }
 
-    #[inline]
-    fn raw(&self) -> *mut ffi::SecretItemFFI {
-        self.0.to_glib_none() as *mut ffi::SecretItemFFI
+    pub fn get_attributes(&self) -> HashMap<String, String> {
+        unsafe {
+            let ptr = ffi::secret_item_get_attributes(self.to_glib_none().0);
+            HashMap::from_glib_full(ptr)
+        }
     }
-
 }
 
 impl StaticType for SecretItem {
     fn static_type() -> Type{
-        Type::BaseObject //TODO?
+        unsafe { from_glib(ffi::secret_item_get_type()) }
     }
 }
 
+unsafe impl Upcast<Object> for SecretItem { }
+
 impl Wrapper for SecretItem {
-    type GlibType = ffi::SecretItemFFI;
+    type GlibType = ffi::SecretItem;
     unsafe fn wrap(r: Ref) -> Self{
         SecretItem(r)
     }
