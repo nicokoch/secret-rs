@@ -97,7 +97,18 @@ impl SecretCollection {
         }
     }
 
-    //TODO set_alias from ss
+    /// Assign the collection to this alias. Aliases help determine well known collections, such as 'default'.
+    pub fn set_alias(&self, alias: &str) -> SecretResult<()>{
+        unsafe {
+            let mut err = ptr::null_mut();
+            ffi::secret_service_set_alias_sync(ptr::null_mut(), alias.to_glib_none().0, self.to_glib_none().0, ptr::null_mut(), &mut err);
+            if err.is_null() {
+                Ok(())
+            } else {
+                Err(Error::wrap(err))
+            }
+        }
+    }
 }
 
 impl StaticType for SecretCollection {
