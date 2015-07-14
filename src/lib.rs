@@ -20,7 +20,6 @@ pub use self::secret_value::SecretValue;
 
 use std::ptr;
 use glib::Error;
-use libc::{c_void};
 use glib::ffi::{GList};
 use glib::object::{Wrapper};
 use glib::translate::{ToGlibPtr, FromGlibPtrContainer, from_glib};
@@ -49,14 +48,10 @@ impl<W: Wrapper> Lock for W{
         assert!(my_type == SecretItem::static_type() || my_type == SecretCollection::static_type(), "Can only lock items or collections");
         let mut err = ptr::null_mut();
         let mut res = ptr::null_mut();
-        //TODO: We can definitely solve this with ToGlibPtrContainer somehow
-        let mut arr = GList{
-            data: self.as_ref().to_glib_none() as *mut c_void,
-            next: ptr::null_mut(),
-            prev: ptr::null_mut()
-        };
+        let arr = [self];
+        let slice = (&arr[..]).to_glib_none();
         unsafe {
-            ffi::secret_service_lock_sync(ptr::null_mut(), &mut arr, ptr::null_mut(), &mut res, &mut err);
+            ffi::secret_service_lock_sync(ptr::null_mut(), slice.0 as *mut GList, ptr::null_mut(), &mut res, &mut err);
             if err.is_null() {
                 Ok(Vec::from_glib_full(res))
             } else {
@@ -66,18 +61,15 @@ impl<W: Wrapper> Lock for W{
     }
 
     fn unlock(&self) -> SecretResult<Vec<Self>>{
+        println!("Unlocking");
         let my_type = W::static_type();
         assert!(my_type == SecretItem::static_type() || my_type == SecretCollection::static_type(), "Can only unlock items or collections");
         let mut err = ptr::null_mut();
         let mut res = ptr::null_mut();
-        //TODO: We can definitely solve this with ToGlibPtrContainer somehow
-        let mut arr = GList{
-            data: self.as_ref().to_glib_none() as *mut c_void,
-            next: ptr::null_mut(),
-            prev: ptr::null_mut()
-        };
+        let arr = [self];
+        let slice = (&arr[..]).to_glib_none();
         unsafe {
-            ffi::secret_service_unlock_sync(ptr::null_mut(), &mut arr, ptr::null_mut(), &mut res, &mut err);
+            ffi::secret_service_unlock_sync(ptr::null_mut(), slice.0 as *mut GList, ptr::null_mut(), &mut res, &mut err);
             if err.is_null() {
                 Ok(Vec::from_glib_full(res))
             } else {
