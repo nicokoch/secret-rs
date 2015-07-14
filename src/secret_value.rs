@@ -55,13 +55,6 @@ impl SecretValue{
     }
 }
 
-/*
-impl Clone<T> for SecretValue<T> {
-    fn clone(&self) -> SecretValue<T>{
-
-    }
-}*/
-
 impl StaticType for SecretValue {
     fn static_type() -> Type{
         unsafe { from_glib(ffi::secret_value_get_type()) }
