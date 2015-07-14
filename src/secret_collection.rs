@@ -9,7 +9,9 @@ use secret_item::SecretItem;
 use SecretResult;
 use ffi;
 
-
+/// SecretCollection represents a collection of secret items stored in the Secret Service.
+/// A collection can be in a locked or unlocked state. Use `Lock::lock()` or `Lock::unlock()` to lock or unlock the collection.
+/// Use `get_items()` to lookup the items in the collection. There may not be any items exposed when the collection is locked.
 pub struct SecretCollection(Ref);
 
 impl SecretCollection {
@@ -60,6 +62,7 @@ impl SecretCollection {
         }
     }
 
+    /// Get if the items are currently loaded. Use `load_items()` to load them.
     pub fn are_items_loaded(&self) -> bool {
         let flags = unsafe {ffi::secret_collection_get_flags(self.to_glib_none().0)};
         flags & SECRET_COLLECTION_LOAD_ITEMS != 0

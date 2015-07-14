@@ -1,4 +1,8 @@
 #![warn(missing_docs)]
+//! Rust bindings to libsecret.
+//! Many unix/linux systems utilize a secret service to securely store and retrieve passwords. Examples for such a SecretService are gnome-keyring and kwallet.
+//! This library provides methods to access the system's secret service in a platform independent matter. This is done by linking to [libsecret](https://developer.gnome.org/libsecret/0.18/), a library developed by the gnome project.
+
 extern crate libc;
 extern crate glib;
 extern crate libsecret_sys;
