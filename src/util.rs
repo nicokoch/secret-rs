@@ -2,7 +2,7 @@ use std::ptr;
 use glib::Error;
 use glib::ffi::{GList};
 use glib::object::{Wrapper};
-use glib::translate::{ToGlibPtr, FromGlibPtrContainer, from_glib};
+use glib::translate::{ToGlibPtr, FromGlibPtrContainer};
 use glib::glib_container::GlibContainer;
 use glib::types::StaticType;
 use secret_item::SecretItem;

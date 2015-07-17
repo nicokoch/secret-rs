@@ -1,6 +1,6 @@
 extern crate secret;
 
-use secret::{SecretService, Lock, SecretCollection};
+use secret::{SecretService, Lock};
 
 fn main() {
     let secret_service = SecretService::get().ok().unwrap();

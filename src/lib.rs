@@ -19,13 +19,7 @@ pub use self::secret_collection::SecretCollection;
 pub use self::secret_item::SecretItem;
 pub use self::secret_value::SecretValue;
 
-use std::ptr;
 use glib::Error;
-use glib::ffi::{GList};
-use glib::object::{Wrapper};
-use glib::translate::{ToGlibPtr, FromGlibPtrContainer, from_glib};
-use glib::glib_container::GlibContainer;
-use glib::types::StaticType;
 
 /// A Result which may contain an error from the SecretService backend.
 pub type SecretResult<T> = Result<T, Error>;
