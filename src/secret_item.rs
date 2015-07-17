@@ -10,6 +10,8 @@ use secret_collection::SecretCollection;
 use secret_value::SecretValue;
 use SecretResult;
 use ffi;
+use util::{lock_object, unlock_object};
+use Lock;
 
 /// SecretItem represents a secret item stored in the Secret Service.
 /// Each item has a value, represented by a SecretValue, which can be retrieved by `get_secret()` or set by `set_secret()`. The item is only available when the item is not locked.
@@ -141,6 +143,14 @@ impl SecretItem {
             }
         }
     }
+
+    /// Check if the item is currently locked.
+    pub fn is_locked(&self) -> bool {
+        let gbool = unsafe {
+            ffi::secret_item_get_locked(self.to_glib_none().0)
+        };
+        from_glib(gbool)
+    }
 }
 
 impl StaticType for SecretItem {
@@ -163,6 +173,17 @@ impl Wrapper for SecretItem {
 
     fn unwrap(self) -> Ref{
         self.0
+    }
+}
+
+impl Lock<SecretItem> for SecretItem {
+
+    fn lock(&self) -> SecretResult<Vec<SecretItem>>{
+        lock_object::<SecretItem>(self)
+    }
+
+    fn unlock(&self) -> SecretResult<Vec<SecretItem>>{
+        unlock_object::<SecretItem>(self)
     }
 }
 
