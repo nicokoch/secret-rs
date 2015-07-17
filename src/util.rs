@@ -11,8 +11,7 @@ use ffi;
 use SecretResult;
 
 pub fn lock_object<W: Wrapper>(obj: &W) -> SecretResult<Vec<W>>{
-    let my_type = W::static_type();
-    assert!(my_type == SecretItem::static_type() || my_type == SecretCollection::static_type(), "Can only lock items or collections");
+    debug_assert!(W::static_type() == SecretItem::static_type() || W::static_type() == SecretCollection::static_type(), "Can only lock items or collections");
     let mut err = ptr::null_mut();
     let mut res = ptr::null_mut();
     let arr = [obj];
@@ -28,8 +27,7 @@ pub fn lock_object<W: Wrapper>(obj: &W) -> SecretResult<Vec<W>>{
 }
 
 pub fn unlock_object<W: Wrapper>(obj: &W) -> SecretResult<Vec<W>>{
-    let my_type = W::static_type();
-    assert!(my_type == SecretItem::static_type() || my_type == SecretCollection::static_type(), "Can only unlock items or collections");
+    debug_assert!(W::static_type() == SecretItem::static_type() || W::static_type() == SecretCollection::static_type(), "Can only unlock items or collections");
     let mut err = ptr::null_mut();
     let mut res = ptr::null_mut();
     let arr = [obj];
