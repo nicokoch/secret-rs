@@ -33,18 +33,18 @@ pub type SecretResult<T> = Result<T, Error>;
 pub trait Lock {
 
     /// Lock the object.
-    fn lock(&self) -> SecretResult<Vec<Self>>;
+    fn lock<W: Wrapper>(&self) -> SecretResult<Vec<W>>;
 
     /// Unlock the object
-    fn unlock(&self) -> SecretResult<Vec<Self>>;
+    fn unlock<W: Wrapper>(&self) -> SecretResult<Vec<W>>;
 
     /// Get if the object is currently locked.
     fn is_locked(&self) -> bool;
 }
 
-impl<W: Wrapper> Lock for W{
-    fn lock(&self) -> SecretResult<Vec<Self>>{
-        let my_type = W::static_type();
+impl<T: Wrapper> Lock for T{
+    fn lock<W: Wrapper>(&self) -> SecretResult<Vec<W>>{
+        let my_type = T::static_type();
         assert!(my_type == SecretItem::static_type() || my_type == SecretCollection::static_type(), "Can only lock items or collections");
         let mut err = ptr::null_mut();
         let mut res = ptr::null_mut();
@@ -60,8 +60,8 @@ impl<W: Wrapper> Lock for W{
         }
     }
 
-    fn unlock(&self) -> SecretResult<Vec<Self>>{
-        let my_type = W::static_type();
+    fn unlock<W: Wrapper>(&self) -> SecretResult<Vec<W>>{
+        let my_type = T::static_type();
         assert!(my_type == SecretItem::static_type() || my_type == SecretCollection::static_type(), "Can only unlock items or collections");
         let mut err = ptr::null_mut();
         let mut res = ptr::null_mut();
@@ -78,7 +78,7 @@ impl<W: Wrapper> Lock for W{
     }
 
     fn is_locked(&self) -> bool {
-        let my_type = W::static_type();
+        let my_type = T::static_type();
         let gbool = if my_type == SecretItem::static_type() {
             unsafe{ffi::secret_item_get_locked(self.as_ref().to_glib_none() as *mut ffi::SecretItem)}
         } else if my_type == SecretCollection::static_type() {
