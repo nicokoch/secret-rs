@@ -116,12 +116,6 @@ impl SecretService {
     }
     */
 
-    /*
-    pub fn set_alias(&str alias, ) -> bool {
-        //FIXME: actually we should put this into SecretCollection
-    }
-    */
-
     /// Ensures that a session is established.
     pub fn ensure_session(&self) -> SecretResult<()> {
         unsafe {
@@ -186,3 +180,40 @@ const SECRET_SEARCH_ALL: i32                = 1 << 1;
 const SECRET_SEARCH_UNLOCK: i32             = 1 << 2;
 #[allow(dead_code)]
 const SECRET_SEARCH_LOAD_SECRETS: i32       = 1 << 3;
+
+#[cfg(test)]
+mod test {
+    use glib::types::{StaticType, Type};
+    use super::SecretService;
+
+    #[test]
+    pub fn test_ss_get() {
+        let res = SecretService::get();
+        assert!(res.is_ok());
+        let ss = res.ok().unwrap();
+        assert!(ss.is_session_established());
+        assert!(ss.are_collections_loaded());
+    }
+
+    #[test]
+    pub fn test_ss_session_algorithms() {
+        let ss = SecretService::get().ok().unwrap();
+        assert!(ss.get_session_algorithms() == "plain" || ss.get_session_algorithms() == "dh-ietf1024-sha256-aes128-cbc-pkcs7");
+    }
+
+    #[test]
+    pub fn test_ss_static_type() {
+        match SecretService::static_type() {
+            Type::Other(_) => {},
+            _ => panic!("Expected Type::Other")
+        }
+    }
+
+    /*
+    #[test]
+    pub fn test_ss_store_search_clear() {
+        let res = SecretService::get().ok().unwrap();
+
+    }
+    */
+}
