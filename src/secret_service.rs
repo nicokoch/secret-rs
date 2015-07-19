@@ -197,7 +197,7 @@ mod test {
     pub fn test_ss_get() {
         let res = SecretService::get();
         assert!(res.is_ok());
-        let ss = res.ok().unwrap();
+        let ss = res.unwrap();
         assert!(ss.is_session_established());
         assert!(ss.are_collections_loaded());
     }
@@ -218,21 +218,21 @@ mod test {
 
     #[test]
     pub fn test_ss_store_search_clear() {
-        let ss = SecretService::get().ok().unwrap();
+        let ss = SecretService::get().unwrap();
         let mut attrs: HashMap<String, String> = HashMap::new();
         attrs.insert("application".into(), "secret-rs-unit-test".into());
 
         let sv = SecretValue::new("password123");
 
-        ss.store(&attrs, None, "mylabel", &sv).ok().unwrap();
-        let search_results = ss.search(&attrs).ok().unwrap();
+        ss.store(&attrs, None, "mylabel", &sv).unwrap();
+        let search_results = ss.search(&attrs).unwrap();
         assert!(search_results.len() == 1);
         let item = search_results.get(0).unwrap();
         assert_eq!(item.get_label(), "mylabel");
         assert_eq!(item.get_attributes().get("application").unwrap(), "secret-rs-unit-test");
         assert_eq!(item.get_secret().unwrap().get().unwrap(), "password123");
-        ss.clear(&attrs).ok().unwrap();
-        let search_results = ss.search(&attrs).ok().unwrap();
+        ss.clear(&attrs).unwrap();
+        let search_results = ss.search(&attrs).unwrap();
         assert!(search_results.len() == 0);
     }
 }
