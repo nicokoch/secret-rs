@@ -7,6 +7,8 @@ use glib::glib_container::GlibContainer;
 use secret_service::SecretService;
 use secret_item::SecretItem;
 use SecretResult;
+use util::{lock_object, unlock_object};
+use Lock;
 use ffi;
 
 /// SecretCollection represents a collection of secret items stored in the Secret Service.
@@ -109,6 +111,14 @@ impl SecretCollection {
             }
         }
     }
+
+    /// Check if the collection is currently locked.
+    pub fn is_locked(&self) -> bool {
+        let gbool = unsafe {
+            ffi::secret_collection_get_locked(self.to_glib_none().0)
+        };
+        from_glib(gbool)
+    }
 }
 
 impl StaticType for SecretCollection {
@@ -131,6 +141,17 @@ impl Wrapper for SecretCollection {
 
     fn unwrap(self) -> Ref{
         self.0
+    }
+}
+
+impl Lock<SecretCollection> for SecretCollection {
+
+    fn lock(&self) -> SecretResult<Vec<SecretCollection>>{
+        lock_object::<SecretCollection>(self)
+    }
+
+    fn unlock(&self) -> SecretResult<Vec<SecretCollection>>{
+        unlock_object::<SecretCollection>(self)
     }
 }
 
