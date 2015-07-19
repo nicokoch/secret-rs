@@ -44,6 +44,18 @@ impl SecretCollection {
         }
     }
 
+    /// Delete this collection.
+    /// The Secret Service may prompt the user.
+    pub fn delete(&self) -> SecretResult<()>{
+        let mut err = ptr::null_mut();
+        unsafe{ffi::secret_collection_delete_sync(self.to_glib_none().0, ptr::null_mut(), &mut err)};
+        if err.is_null(){
+            Ok(())
+        } else {
+            Err(Error::wrap(err))
+        }
+    }
+
     /// Get the created date and time of the collection.
     /// The return value is the number of seconds since the unix epoch, January 1st 1970.
     pub fn get_created(&self) -> u64 {
