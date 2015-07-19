@@ -12,5 +12,6 @@ license = "MIT"
 libc = "*"
 glib = "*"
 
-[dependencies.libsecret-sys]
-path = "libsecret-sys"
+[dependencies.secret-sys]
+path = "secret-sys"
+version = "0.2.0"

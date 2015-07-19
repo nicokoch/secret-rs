@@ -5,7 +5,7 @@
 
 extern crate libc;
 extern crate glib;
-extern crate libsecret_sys;
+extern crate secret_sys;
 
 mod secret_service;
 mod secret_collection;
@@ -13,7 +13,7 @@ mod secret_item;
 mod secret_value;
 mod util;
 
-pub use self::libsecret_sys as ffi;
+pub use self::secret_sys as ffi;
 pub use self::secret_service::SecretService;
 pub use self::secret_collection::SecretCollection;
 pub use self::secret_item::SecretItem;
