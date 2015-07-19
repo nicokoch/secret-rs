@@ -5,6 +5,12 @@ I am happy about any type of contribution!
 
 ## Usage
 To use this library in your project, add the following to your Cargo.toml:
+
+```
+[dependencies]
+secret = "*"
+```
+or
 ```
 [dependencies.secret]
 git = "https://github.com/nicokoch/secret-rs/"
