@@ -1,6 +1,6 @@
 [package]
 name = "secret"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Nicolas Koch <nioko1337@gmail.com>"]
 description = "Libsecret bindings for Rust"
 documentation = "https://nicokoch.github.io/secret-rs/secret/"
