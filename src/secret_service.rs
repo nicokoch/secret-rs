@@ -77,7 +77,7 @@ impl SecretService {
     pub fn search(&self, attributes: &HashMap<String, String>) -> SecretResult<Vec<SecretItem>> {
         let mut err = ptr::null_mut();
         unsafe {
-            let glist = ffi::secret_service_search_sync(self.to_glib_none().0, ptr::null(), attributes.to_glib_none().0, SECRET_SEARCH_ALL, ptr::null_mut(), &mut err);
+            let glist = ffi::secret_service_search_sync(self.to_glib_none().0, ptr::null(), attributes.to_glib_none().0, SECRET_SEARCH_ALL | SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS, ptr::null_mut(), &mut err);
             if err.is_null() {
                 Ok(Vec::from_glib_full(glist))
             } else {
@@ -123,7 +123,7 @@ impl SecretService {
             }
         }
     }
-    
+
     /// Ensures that a session is established.
     pub fn ensure_session(&self) -> SecretResult<()> {
         unsafe {
@@ -182,16 +182,15 @@ const SECRET_SERVICE_LOAD_COLLECTIONS: i32  = 1 << 2;
 
 #[allow(dead_code)]
 const SECRET_SEARCH_NONE: i32               = 0;
-#[allow(dead_code)]
 const SECRET_SEARCH_ALL: i32                = 1 << 1;
-#[allow(dead_code)]
 const SECRET_SEARCH_UNLOCK: i32             = 1 << 2;
-#[allow(dead_code)]
 const SECRET_SEARCH_LOAD_SECRETS: i32       = 1 << 3;
 
 #[cfg(test)]
 mod test {
+    use std::collections::HashMap;
     use glib::types::{StaticType, Type};
+    use secret_value::SecretValue;
     use super::SecretService;
 
     #[test]
@@ -217,11 +216,23 @@ mod test {
         }
     }
 
-    /*
     #[test]
     pub fn test_ss_store_search_clear() {
-        let res = SecretService::get().ok().unwrap();
+        let ss = SecretService::get().ok().unwrap();
+        let mut attrs: HashMap<String, String> = HashMap::new();
+        attrs.insert("application".into(), "secret-rs-unit-test".into());
 
+        let sv = SecretValue::new("password123");
+
+        ss.store(&attrs, None, "mylabel", &sv).ok().unwrap();
+        let search_results = ss.search(&attrs).ok().unwrap();
+        assert!(search_results.len() == 1);
+        let item = search_results.get(0).unwrap();
+        assert_eq!(item.get_label(), "mylabel");
+        assert_eq!(item.get_attributes().get("application").unwrap(), "secret-rs-unit-test");
+        assert_eq!(item.get_secret().unwrap().get().unwrap(), "password123");
+        ss.clear(&attrs).ok().unwrap();
+        let search_results = ss.search(&attrs).ok().unwrap();
+        assert!(search_results.len() == 0);
     }
-    */
 }
