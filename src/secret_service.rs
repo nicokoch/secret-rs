@@ -110,17 +110,20 @@ impl SecretService {
     }
     */
 
-    /*
-    pub fn clear () -> bool {
-
+    /// Remove unlocked items which match the attributes from the secret service.
+    /// The attributes should be a set of key and value string pairs.
+    pub fn clear(&self, attributes: &HashMap<String, String>) -> SecretResult<()> {
+        let mut err = ptr::null_mut();
+        unsafe {
+            ffi::secret_service_clear_sync(self.to_glib_none().0, ptr::null(), attributes.to_glib_none().0, ptr::null_mut(), &mut err);
+            if err.is_null() {
+                Ok(())
+            } else {
+                Err(Error::wrap(err))
+            }
+        }
     }
-    */
 
-    /*
-    pub fn set_alias(&str alias, ) -> bool {
-        //FIXME: actually we should put this into SecretCollection
-    }
-    */
 
     /// Ensures that a session is established.
     pub fn ensure_session(&self) -> SecretResult<()> {
