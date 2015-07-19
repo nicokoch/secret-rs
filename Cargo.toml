@@ -10,9 +10,7 @@ license = "MIT"
 
 [dependencies]
 libc = "*"
-
-[dependencies.glib]
-git = "https://github.com/rust-gnome/glib"
+glib = "*"
 
 [dependencies.libsecret-sys]
 path = "libsecret-sys"

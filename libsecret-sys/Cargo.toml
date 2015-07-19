@@ -6,9 +6,7 @@ build = "build.rs"
 
 [dependencies]
 libc = "*"
-
-[dependencies.glib]
-git = "https://github.com/rust-gnome/glib"
+glib = "*"
 
 [build-dependencies]
 pkg-config = "0.3"
