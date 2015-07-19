@@ -3,6 +3,10 @@ name = "secret-sys"
 version = "0.2.0"
 authors = ["Nicolas Koch <nioko1337@gmail.com>"]
 build = "build.rs"
+description = "Libsecret bindings for Rust"
+documentation = "https://nicokoch.github.io/secret-rs/secret/"
+repository = "https://github.com/nicokoch/secret-rs"
+license = "MIT"
 
 [dependencies]
 libc = "*"
