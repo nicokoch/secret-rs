@@ -69,7 +69,7 @@ impl SecretCollection {
     }
 
     /// Get the Secret Service object that this collection was created with.
-    pub fn get_service(&self) -> SecretService { //TODO find out if this can return null
+    pub fn get_service(&self) -> SecretService {
         unsafe {
             let ptr = ffi::secret_collection_get_service(self.to_glib_none().0);
             from_glib_none(ptr)
@@ -170,3 +170,29 @@ impl Lock<SecretCollection> for SecretCollection {
 #[allow(dead_code)]
 const SECRET_COLLECTION_NONE: i32        = 0;
 const SECRET_COLLECTION_LOAD_ITEMS: i32  = 1 << 1;
+
+
+#[cfg(test)]
+mod test {
+    use glib::types::{StaticType, Type};
+    use super::SecretCollection;
+
+    /*
+    #[test]
+    fn test_sc_create_delete() {
+        let sc = SecretCollection::create("cool_label", None).unwrap();
+        assert!(!sc.is_locked());
+        assert!(sc.are_items_loaded());
+        assert_eq!(sc.get_label(), "cool_label");
+        assert_eq!(sc.get_items().len(), 0);
+        sc.delete().ok().unwrap();
+    } */
+
+    #[test]
+    pub fn test_sc_static_type() {
+        match SecretCollection::static_type() {
+            Type::Other(_) => {},
+            _ => panic!("Expected Type::Other")
+        }
+    }
+}
