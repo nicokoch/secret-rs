@@ -14,10 +14,20 @@ use util::{lock_object, unlock_object};
 use Lock;
 
 /// SecretItem represents a secret item stored in the Secret Service.
-/// Each item has a value, represented by a SecretValue, which can be retrieved by `get_secret()` or set by `set_secret()`. The item is only available when the item is not locked.
-/// Items can be locked or unlocked using the `Lock::lock()` or `Lock::unlock()` functions. The Lock trait is implemented by SecretItem. The Secret Service may not be able to unlock individual items, and may unlock an entire collection when a single item is unlocked.
-/// Each item has a set of attributes, which are used to locate the item later. These are not stored or transferred in a secure manner. Each attribute has a string name and a string value. Use `SecretService::search()` to search for items based on their attributes, and `set_attributes()` to change the attributes associated with an item.
+/// Each item has a value, represented by a SecretValue, which can be retrieved
+/// by `get_secret()` or set by `set_secret()`. The item is only available when
+/// the item is not locked.
+/// Items can be locked or unlocked using the `Lock::lock()` or `Lock::unlock()`
+/// functions. The Lock trait is implemented by SecretItem. The Secret Service
+/// may not be able to unlock individual items, and may unlock an entire 
+/// collection when a single item is unlocked.
+/// Each item has a set of attributes, which are used to locate the item later.
+/// These are not stored or transferred in a secure manner. Each attribute has
+/// a string name and a string value. Use `SecretService::search()` to search 
+/// for items based on their attributes, and `set_attributes()` to change the 
+/// attributes associated with an item.
 /// Items can be created with `create()` or `SecretService::store()`.
+///
 pub struct SecretItem(Ref);
 
 impl SecretItem {
@@ -30,7 +40,17 @@ impl SecretItem {
     pub fn create(collection: &SecretCollection, attributes: &HashMap<String, String>, label: &str, value: &SecretValue) -> SecretResult<SecretItem> {
         let mut err = ptr::null_mut();
         unsafe {
-            let item = ffi::secret_item_create_sync(collection.to_glib_none().0, ptr::null(), attributes.to_glib_none().0, label.to_glib_none().0, value.to_glib_none(), SECRET_ITEM_CREATE_NONE, ptr::null_mut(), &mut err);
+            let item = ffi::secret_item_create_sync(
+                collection.to_glib_none().0,
+                ptr::null(),
+                attributes.to_glib_none().0,
+                label.to_glib_none().0,
+                value.to_glib_none(),
+                SECRET_ITEM_CREATE_NONE,
+                ptr::null_mut(),
+                &mut err
+                );
+
             if err.is_null() { //TODO for all patterns like this: This if does not need to be in the unsafe block. Fix pls.
                 Ok(from_glib_full(item))
             } else {
@@ -42,7 +62,13 @@ impl SecretItem {
     /// Delete this secret item.
     pub fn delete(&self) -> SecretResult<()> {
         let mut err = ptr::null_mut();
-        unsafe{ffi::secret_item_delete_sync(self.to_glib_none().0, ptr::null_mut(), &mut err)};
+        unsafe {
+            ffi::secret_item_delete_sync(
+                self.to_glib_none().0,
+                ptr::null_mut(),
+                &mut err
+                )
+        };
         if err.is_null() {
             Ok(())
         } else {
@@ -61,13 +87,17 @@ impl SecretItem {
     /// Get the created date and time of the item.
     /// The return value is the number of seconds since the unix epoch, January 1st 1970.
     pub fn get_created(&self) -> u64 {
-        unsafe {ffi::secret_item_get_created(self.to_glib_none().0)}
+        unsafe {
+            ffi::secret_item_get_created(self.to_glib_none().0)
+        }
     }
 
     /// Get the modified date and time of the item.
     /// The return value is the number of seconds since the unix epoch, January 1st 1970.
     pub fn get_modified(&self) -> u64 {
-        unsafe {ffi::secret_item_get_modified(self.to_glib_none().0)}
+        unsafe {
+            ffi::secret_item_get_modified(self.to_glib_none().0)
+        }
     }
 
     /// Get the label of the item.
@@ -89,7 +119,13 @@ impl SecretItem {
     /// Ensure that the SecretValue of this item is loaded.
     pub fn load_secret(&self) -> SecretResult<()> {
         let mut err = ptr::null_mut();
-        unsafe{ffi::secret_item_load_secret_sync(self.to_glib_none().0, ptr::null_mut(), &mut err)};
+        unsafe {
+            ffi::secret_item_load_secret_sync(
+                self.to_glib_none().0,
+                ptr::null_mut(),
+                &mut err
+                )
+        };
         if err.is_null() {
             Ok(())
         } else {
@@ -97,7 +133,8 @@ impl SecretItem {
         }
     }
 
-    /// Get the SecretValue of this item. The item must be unlocked and the value must be loaded.
+    /// Get the SecretValue of this item. The item must be unlocked and the 
+    /// value must be loaded.
     pub fn get_secret(&self) -> Option<SecretValue> {
         unsafe {
             let ptr = ffi::secret_item_get_secret(self.to_glib_none().0);
@@ -110,11 +147,17 @@ impl SecretItem {
     }
 
     /// Set the secret value of this item.
-    /// Each item has a single secret which might be a password or some other secret binary value (not supported yet).
+    /// Each item has a single secret which might be a password or some other 
+    /// secret binary value (not supported yet).
     pub fn set_secret(&self, value: &SecretValue) -> SecretResult<()> {
         let mut err = ptr::null_mut();
         unsafe {
-            ffi::secret_item_set_secret_sync(self.to_glib_none().0, value.to_glib_none(), ptr::null_mut(), &mut err);
+            ffi::secret_item_set_secret_sync(
+                self.to_glib_none().0,
+                value.to_glib_none(),
+                ptr::null_mut(),
+                &mut err
+                );
             if err.is_null() {
                 Ok(())
             } else {
@@ -135,7 +178,13 @@ impl SecretItem {
     pub fn set_attributes(&self, attributes: &HashMap<String, String>) -> SecretResult<()> {
         let mut err = ptr::null_mut();
         unsafe {
-            ffi::secret_item_set_attributes_sync(self.to_glib_none().0, ptr::null(), attributes.to_glib_none().0, ptr::null_mut(), &mut err);
+            ffi::secret_item_set_attributes_sync(
+                self.to_glib_none().0,
+                ptr::null(),
+                attributes.to_glib_none().0,
+                ptr::null_mut(),
+                &mut err
+                );
             if err.is_null() {
                 Ok(())
             } else {
@@ -155,7 +204,9 @@ impl SecretItem {
 
 impl StaticType for SecretItem {
     fn static_type() -> Type{
-        unsafe { from_glib(ffi::secret_item_get_type()) }
+        unsafe {
+            from_glib(ffi::secret_item_get_type())
+        }
     }
 }
 

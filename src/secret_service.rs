@@ -18,24 +18,37 @@ use glib::translate::*;
 use SecretResult;
 use ffi;
 
-/// A SecretService object represents the Secret Service implementation which runs as a D-Bus service.
-/// In order to securely transfer secrets to the Sercret Service, a session is established. This will automatically be done when calling `SecretService::get()`
+/// A SecretService object represents the Secret Service implementation which 
+/// runs as a D-Bus service.
+/// In order to securely transfer secrets to the Sercret Service, a session is 
+/// established. This will automatically be done when calling 
+/// `SecretService::get()`
 /// To search for items, use the `search()` method.
-/// Multiple collections can exist in the Secret Service, each of which contains secret items. To access the list of Collections, use `get_collections()`.
-/// Certain actions on the Secret Service require user prompting to complete, such as creating a collection, or unlocking a collection. When such a prompt is necessary, then a SecretPrompt object is created by libsecret, and passed to the secret_service_prompt() method. In this way it is handled automatically.
+/// Multiple collections can exist in the Secret Service, each of which 
+/// contains secret items. To access the list of Collections, use 
+/// `get_collections()`.
+/// Certain actions on the Secret Service require user prompting to complete, 
+/// such as creating a collection, or unlocking a collection. When such a 
+/// prompt is necessary, then a SecretPrompt object is created by libsecret, 
+/// and passed to the secret_service_prompt() method. In this way it is handled
+/// automatically.
 pub struct SecretService(Ref);
 
 impl SecretService {
 
-    /// Constructs a new SecretService which has established a session and whose collections are loaded.
-    /// The underlying FFI object might be identical for multiple instances of this struct.
+    /// Constructs a new SecretService which has established a session and whose
+    /// collections are loaded.
+    /// The underlying FFI object might be identical for multiple instances of 
+    /// this struct.
     pub fn get() -> SecretResult<Self>{
         SecretService::with_flags(SECRET_SERVICE_OPEN_SESSION | SECRET_SERVICE_LOAD_COLLECTIONS)
     }
 
     fn with_flags(flags: i32) -> SecretResult<Self> {
         let mut err = ptr::null_mut();
-        let ptr = unsafe{ffi::secret_service_get_sync(flags, ptr::null_mut(), &mut err)};
+        let ptr = unsafe {
+            ffi::secret_service_get_sync(flags, ptr::null_mut(), &mut err)
+        };
         if err.is_null() {
             Ok(unsafe{from_glib_full(ptr)})
         } else {
@@ -45,21 +58,28 @@ impl SecretService {
 
     /// Returns if a session to the SecretService is currently established.
     pub fn is_session_established(&self) -> bool {
-        let flags = unsafe {ffi::secret_service_get_flags(self.to_glib_none().0)};
+        let flags = unsafe {
+            ffi::secret_service_get_flags(self.to_glib_none().0)
+        };
         flags & SECRET_SERVICE_OPEN_SESSION != 0
     }
 
     /// Returns if the Service's collections are loaded.
     pub fn are_collections_loaded(&self) -> bool {
-        let flags = unsafe {ffi::secret_service_get_flags(self.to_glib_none().0)};
+        let flags = unsafe {
+            ffi::secret_service_get_flags(self.to_glib_none().0)
+        };
         flags & SECRET_SERVICE_LOAD_COLLECTIONS != 0
     }
 
-    /// Get the set of algorithms being used to transfer secrets between this secret service proxy and the Secret Service itself.
+    /// Get the set of algorithms being used to transfer secrets between this 
+    /// secret service proxy and the Secret Service itself.
     /// The contained String has the format "algorithm-algorithm-algorithm-..."
     pub fn get_session_algorithms(&self) -> String {
         unsafe{
-            let ptr = ffi::secret_service_get_session_algorithms(self.to_glib_none().0);
+            let ptr = ffi::secret_service_get_session_algorithms(
+                self.to_glib_none().0
+                );
             from_glib_none(ptr)
         }
     }
@@ -68,16 +88,25 @@ impl SecretService {
     /// A collection contains multiple SecretItems.
     pub fn get_collections(&self) -> Vec<SecretCollection> {
         unsafe {
-            let glist = ffi::secret_service_get_collections(self.to_glib_none().0);
+            let glist = ffi::secret_service_get_collections(
+                self.to_glib_none().0
+                );
             Vec::from_glib_full(glist)
         }
     }
 
-    /// Search for items matching the attributes. All collections are searched. The attributes should be a table of string keys and string values.
+    /// Search for items matching the attributes. All collections are searched.
+    /// The attributes should be a table of string keys and string values.
     pub fn search(&self, attributes: &HashMap<String, String>) -> SecretResult<Vec<SecretItem>> {
         let mut err = ptr::null_mut();
         unsafe {
-            let glist = ffi::secret_service_search_sync(self.to_glib_none().0, ptr::null(), attributes.to_glib_none().0, SECRET_SEARCH_ALL | SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS, ptr::null_mut(), &mut err);
+            let glist = ffi::secret_service_search_sync(
+                self.to_glib_none().0,
+                ptr::null(), attributes.to_glib_none().0,
+                SECRET_SEARCH_ALL | SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS,
+                ptr::null_mut(),
+                &mut err
+                );
             if err.is_null() {
                 Ok(Vec::from_glib_full(glist))
             } else {
@@ -88,14 +117,26 @@ impl SecretService {
 
     /// Store a secret value in the secret service.
     /// The `attributes` should be a set of key and value string pairs.
-    /// If the attributes match a secret item already stored in the collection, then the item will be updated with these new values.
-    /// `collection` is a collection alias, or `None` to store the value in the default collection (TODO: What about session storage?)
+    /// If the attributes match a secret item already stored in the collection,
+    /// then the item will be updated with these new values.
+    /// `collection` is a collection alias, or `None` to store the value in the
+    /// default collection (TODO: What about session storage?)
     /// `label` specifies a label for the secret.
-    /// `value` is the actual secret to store. This can be created with `SecretValue::new()`.
+    /// `value` is the actual secret to store. This can be created with 
+    /// `SecretValue::new()`.
     pub fn store(&self, attributes: &HashMap<String, String>, collection: Option<&str>, label: &str, value: &SecretValue) -> SecretResult<()> {
         let mut err = ptr::null_mut();
         unsafe {
-            ffi::secret_service_store_sync(self.to_glib_none().0, ptr::null(), attributes.to_glib_none().0, collection.to_glib_none().0, label.to_glib_none().0, value.to_glib_none(), ptr::null_mut(), &mut err);
+            ffi::secret_service_store_sync(
+                self.to_glib_none().0,
+                ptr::null(),
+                attributes.to_glib_none().0,
+                collection.to_glib_none().0,
+                label.to_glib_none().0,
+                value.to_glib_none(),
+                ptr::null_mut(),
+                &mut err
+                );
             if err.is_null() {
                 Ok(())
             } else {
@@ -115,7 +156,13 @@ impl SecretService {
     pub fn clear(&self, attributes: &HashMap<String, String>) -> SecretResult<()> {
         let mut err = ptr::null_mut();
         unsafe {
-            ffi::secret_service_clear_sync(self.to_glib_none().0, ptr::null(), attributes.to_glib_none().0, ptr::null_mut(), &mut err);
+            ffi::secret_service_clear_sync(
+                self.to_glib_none().0,
+                ptr::null(),
+                attributes.to_glib_none().0,
+                ptr::null_mut(),
+                &mut err
+                );
             if err.is_null() {
                 Ok(())
             } else {
@@ -128,7 +175,11 @@ impl SecretService {
     pub fn ensure_session(&self) -> SecretResult<()> {
         unsafe {
             let mut err = ptr::null_mut();
-            ffi::secret_service_ensure_session_sync(self.to_glib_none().0, ptr::null_mut(), &mut err);
+            ffi::secret_service_ensure_session_sync(
+                self.to_glib_none().0,
+                ptr::null_mut(),
+                &mut err
+                );
             if err.is_null() {
                 Ok(())
             } else {
@@ -141,7 +192,11 @@ impl SecretService {
     pub fn load_collections(&self) -> SecretResult<()> {
         unsafe {
             let mut err = ptr::null_mut();
-            ffi::secret_service_load_collections_sync(self.to_glib_none().0, ptr::null_mut(), &mut err);
+            ffi::secret_service_load_collections_sync(
+                self.to_glib_none().0,
+                ptr::null_mut(),
+                &mut err
+                );
             if err.is_null() {
                 Ok(())
             } else {
@@ -155,7 +210,9 @@ unsafe impl Upcast<Object> for SecretService { }
 
 impl StaticType for SecretService {
     fn static_type() -> Type{
-        unsafe { from_glib(ffi::secret_service_get_type()) }
+        unsafe {
+            from_glib(ffi::secret_service_get_type())
+        }
     }
 }
 
