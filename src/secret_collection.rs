@@ -11,9 +11,12 @@ use util::{lock_object, unlock_object};
 use Lock;
 use ffi;
 
-/// SecretCollection represents a collection of secret items stored in the Secret Service.
-/// A collection can be in a locked or unlocked state. Use `Lock::lock()` or `Lock::unlock()` to lock or unlock the collection.
-/// Use `get_items()` to lookup the items in the collection. There may not be any items exposed when the collection is locked.
+/// SecretCollection represents a collection of secret items stored in the
+/// Secret Service.
+/// A collection can be in a locked or unlocked state. Use `Lock::lock()` or 
+/// `Lock::unlock()` to lock or unlock the collection.
+/// Use `get_items()` to lookup the items in the collection. There may not be 
+/// any items exposed when the collection is locked.
 pub struct SecretCollection(Ref);
 
 impl SecretCollection {
@@ -32,7 +35,9 @@ impl SecretCollection {
     }
 
     /// Create a new collection in the secret service.
-    /// If you specify an alias and a collection with that alias already exists, then a new collection will not be created. The previous one will be returned instead.
+    /// If you specify an alias and a collection with that alias already exists,
+    /// then a new collection will not be created. The previous one will be 
+    /// returned instead.
     /// Returns the created Collection.
     pub fn create(label: &str, alias: Option<&str>) -> SecretResult<SecretCollection> {
         let mut err = ptr::null_mut();
@@ -57,13 +62,15 @@ impl SecretCollection {
     }
 
     /// Get the created date and time of the collection.
-    /// The return value is the number of seconds since the unix epoch, January 1st 1970.
+    /// The return value is the number of seconds since the unix epoch, 
+    /// January 1st 1970.
     pub fn get_created(&self) -> u64 {
         unsafe {ffi::secret_collection_get_created(self.to_glib_none().0)}
     }
 
     /// Get the modified date and time of the collection.
-    /// The return value is the number of seconds since the unix epoch, January 1st 1970.
+    /// The return value is the number of seconds since the unix epoch, 
+    /// January 1st 1970.
     pub fn get_modified(&self) -> u64 {
         unsafe {ffi::secret_collection_get_modified(self.to_glib_none().0)}
     }
@@ -98,7 +105,8 @@ impl SecretCollection {
         }
     }
 
-    /// Ensure that the SecretCollection proxy has loaded all the items present in the Secret Service.
+    /// Ensure that the SecretCollection proxy has loaded all the items present
+    /// in the Secret Service.
     pub fn load_items(&self) -> SecretResult<()>{
         unsafe {
             let mut err = ptr::null_mut();
@@ -111,7 +119,8 @@ impl SecretCollection {
         }
     }
 
-    /// Assign the collection to this alias. Aliases help determine well known collections, such as 'default'.
+    /// Assign the collection to this alias. Aliases help determine well known
+    /// collections, such as 'default'.
     pub fn set_alias(&self, alias: &str) -> SecretResult<()>{
         unsafe {
             let mut err = ptr::null_mut();

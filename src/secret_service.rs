@@ -18,17 +18,28 @@ use glib::translate::*;
 use SecretResult;
 use ffi;
 
-/// A SecretService object represents the Secret Service implementation which runs as a D-Bus service.
-/// In order to securely transfer secrets to the Sercret Service, a session is established. This will automatically be done when calling `SecretService::get()`
+/// A SecretService object represents the Secret Service implementation which 
+/// runs as a D-Bus service.
+/// In order to securely transfer secrets to the Sercret Service, a session is 
+/// established. This will automatically be done when calling 
+/// `SecretService::get()`
 /// To search for items, use the `search()` method.
-/// Multiple collections can exist in the Secret Service, each of which contains secret items. To access the list of Collections, use `get_collections()`.
-/// Certain actions on the Secret Service require user prompting to complete, such as creating a collection, or unlocking a collection. When such a prompt is necessary, then a SecretPrompt object is created by libsecret, and passed to the secret_service_prompt() method. In this way it is handled automatically.
+/// Multiple collections can exist in the Secret Service, each of which 
+/// contains secret items. To access the list of Collections, use 
+/// `get_collections()`.
+/// Certain actions on the Secret Service require user prompting to complete, 
+/// such as creating a collection, or unlocking a collection. When such a 
+/// prompt is necessary, then a SecretPrompt object is created by libsecret, 
+/// and passed to the secret_service_prompt() method. In this way it is handled
+/// automatically.
 pub struct SecretService(Ref);
 
 impl SecretService {
 
-    /// Constructs a new SecretService which has established a session and whose collections are loaded.
-    /// The underlying FFI object might be identical for multiple instances of this struct.
+    /// Constructs a new SecretService which has established a session and whose
+    /// collections are loaded.
+    /// The underlying FFI object might be identical for multiple instances of 
+    /// this struct.
     pub fn get() -> SecretResult<Self>{
         SecretService::with_flags(SECRET_SERVICE_OPEN_SESSION | SECRET_SERVICE_LOAD_COLLECTIONS)
     }
@@ -55,7 +66,8 @@ impl SecretService {
         flags & SECRET_SERVICE_LOAD_COLLECTIONS != 0
     }
 
-    /// Get the set of algorithms being used to transfer secrets between this secret service proxy and the Secret Service itself.
+    /// Get the set of algorithms being used to transfer secrets between this 
+    /// secret service proxy and the Secret Service itself.
     /// The contained String has the format "algorithm-algorithm-algorithm-..."
     pub fn get_session_algorithms(&self) -> String {
         unsafe{
@@ -73,7 +85,8 @@ impl SecretService {
         }
     }
 
-    /// Search for items matching the attributes. All collections are searched. The attributes should be a table of string keys and string values.
+    /// Search for items matching the attributes. All collections are searched.
+    /// The attributes should be a table of string keys and string values.
     pub fn search(&self, attributes: &HashMap<String, String>) -> SecretResult<Vec<SecretItem>> {
         let mut err = ptr::null_mut();
         unsafe {
@@ -88,10 +101,13 @@ impl SecretService {
 
     /// Store a secret value in the secret service.
     /// The `attributes` should be a set of key and value string pairs.
-    /// If the attributes match a secret item already stored in the collection, then the item will be updated with these new values.
-    /// `collection` is a collection alias, or `None` to store the value in the default collection (TODO: What about session storage?)
+    /// If the attributes match a secret item already stored in the collection,
+    /// then the item will be updated with these new values.
+    /// `collection` is a collection alias, or `None` to store the value in the
+    /// default collection (TODO: What about session storage?)
     /// `label` specifies a label for the secret.
-    /// `value` is the actual secret to store. This can be created with `SecretValue::new()`.
+    /// `value` is the actual secret to store. This can be created with 
+    /// `SecretValue::new()`.
     pub fn store(&self, attributes: &HashMap<String, String>, collection: Option<&str>, label: &str, value: &SecretValue) -> SecretResult<()> {
         let mut err = ptr::null_mut();
         unsafe {

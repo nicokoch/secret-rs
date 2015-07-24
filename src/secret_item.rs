@@ -14,10 +14,20 @@ use util::{lock_object, unlock_object};
 use Lock;
 
 /// SecretItem represents a secret item stored in the Secret Service.
-/// Each item has a value, represented by a SecretValue, which can be retrieved by `get_secret()` or set by `set_secret()`. The item is only available when the item is not locked.
-/// Items can be locked or unlocked using the `Lock::lock()` or `Lock::unlock()` functions. The Lock trait is implemented by SecretItem. The Secret Service may not be able to unlock individual items, and may unlock an entire collection when a single item is unlocked.
-/// Each item has a set of attributes, which are used to locate the item later. These are not stored or transferred in a secure manner. Each attribute has a string name and a string value. Use `SecretService::search()` to search for items based on their attributes, and `set_attributes()` to change the attributes associated with an item.
+/// Each item has a value, represented by a SecretValue, which can be retrieved
+/// by `get_secret()` or set by `set_secret()`. The item is only available when
+/// the item is not locked.
+/// Items can be locked or unlocked using the `Lock::lock()` or `Lock::unlock()`
+/// functions. The Lock trait is implemented by SecretItem. The Secret Service
+/// may not be able to unlock individual items, and may unlock an entire 
+/// collection when a single item is unlocked.
+/// Each item has a set of attributes, which are used to locate the item later.
+/// These are not stored or transferred in a secure manner. Each attribute has
+/// a string name and a string value. Use `SecretService::search()` to search 
+/// for items based on their attributes, and `set_attributes()` to change the 
+/// attributes associated with an item.
 /// Items can be created with `create()` or `SecretService::store()`.
+///
 pub struct SecretItem(Ref);
 
 impl SecretItem {
@@ -97,7 +107,8 @@ impl SecretItem {
         }
     }
 
-    /// Get the SecretValue of this item. The item must be unlocked and the value must be loaded.
+    /// Get the SecretValue of this item. The item must be unlocked and the 
+    /// value must be loaded.
     pub fn get_secret(&self) -> Option<SecretValue> {
         unsafe {
             let ptr = ffi::secret_item_get_secret(self.to_glib_none().0);
@@ -110,7 +121,8 @@ impl SecretItem {
     }
 
     /// Set the secret value of this item.
-    /// Each item has a single secret which might be a password or some other secret binary value (not supported yet).
+    /// Each item has a single secret which might be a password or some other 
+    /// secret binary value (not supported yet).
     pub fn set_secret(&self, value: &SecretValue) -> SecretResult<()> {
         let mut err = ptr::null_mut();
         unsafe {
