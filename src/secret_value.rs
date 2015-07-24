@@ -18,7 +18,11 @@ impl SecretValue{
     pub fn new(secret: &str) -> Self {
         let content_type = "text/plain";
         unsafe {
-            let ptr = ffi::secret_value_new(secret.to_glib_none().0, -1, content_type.to_glib_none().0);
+            let ptr = ffi::secret_value_new(
+                secret.to_glib_none().0,
+                -1,
+                content_type.to_glib_none().0
+                );
             SecretValue::from_glib_full(ptr)
         }
     }
@@ -62,7 +66,9 @@ impl SecretValue{
 
 impl StaticType for SecretValue {
     fn static_type() -> Type{
-        unsafe { from_glib(ffi::secret_value_get_type()) }
+        unsafe {
+            from_glib(ffi::secret_value_get_type())
+        }
     }
 }
 
@@ -77,6 +83,8 @@ impl Clone for SecretValue {
 
 impl Drop for SecretValue {
     fn drop(&mut self){
-        unsafe { ffi::secret_value_unref(self.ptr as *mut _) }
+        unsafe {
+            ffi::secret_value_unref(self.ptr as *mut _)
+        }
     }
 }

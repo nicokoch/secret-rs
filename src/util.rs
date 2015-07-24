@@ -17,7 +17,13 @@ pub fn lock_object<W: Wrapper>(obj: &W) -> SecretResult<Vec<W>>{
     let arr = [obj];
     let slice = (&arr[..]).to_glib_none();
     unsafe {
-        ffi::secret_service_lock_sync(ptr::null_mut(), slice.0 as *mut GList, ptr::null_mut(), &mut res, &mut err);
+        ffi::secret_service_lock_sync(
+            ptr::null_mut(),
+            slice.0 as *mut GList,
+            ptr::null_mut(),
+            &mut res,
+            &mut err
+            );
         if err.is_null() {
             Ok(Vec::from_glib_full(res))
         } else {
@@ -33,7 +39,13 @@ pub fn unlock_object<W: Wrapper>(obj: &W) -> SecretResult<Vec<W>>{
     let arr = [obj];
     let slice = (&arr[..]).to_glib_none();
     unsafe {
-        ffi::secret_service_unlock_sync(ptr::null_mut(), slice.0 as *mut GList, ptr::null_mut(), &mut res, &mut err);
+        ffi::secret_service_unlock_sync(
+            ptr::null_mut(),
+            slice.0 as *mut GList,
+            ptr::null_mut(),
+            &mut res,
+            &mut err
+            );
         if err.is_null() {
             Ok(Vec::from_glib_full(res))
         } else {

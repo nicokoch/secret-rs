@@ -46,7 +46,9 @@ impl SecretService {
 
     fn with_flags(flags: i32) -> SecretResult<Self> {
         let mut err = ptr::null_mut();
-        let ptr = unsafe{ffi::secret_service_get_sync(flags, ptr::null_mut(), &mut err)};
+        let ptr = unsafe {
+            ffi::secret_service_get_sync(flags, ptr::null_mut(), &mut err)
+        };
         if err.is_null() {
             Ok(unsafe{from_glib_full(ptr)})
         } else {
@@ -56,13 +58,17 @@ impl SecretService {
 
     /// Returns if a session to the SecretService is currently established.
     pub fn is_session_established(&self) -> bool {
-        let flags = unsafe {ffi::secret_service_get_flags(self.to_glib_none().0)};
+        let flags = unsafe {
+            ffi::secret_service_get_flags(self.to_glib_none().0)
+        };
         flags & SECRET_SERVICE_OPEN_SESSION != 0
     }
 
     /// Returns if the Service's collections are loaded.
     pub fn are_collections_loaded(&self) -> bool {
-        let flags = unsafe {ffi::secret_service_get_flags(self.to_glib_none().0)};
+        let flags = unsafe {
+            ffi::secret_service_get_flags(self.to_glib_none().0)
+        };
         flags & SECRET_SERVICE_LOAD_COLLECTIONS != 0
     }
 
@@ -71,7 +77,9 @@ impl SecretService {
     /// The contained String has the format "algorithm-algorithm-algorithm-..."
     pub fn get_session_algorithms(&self) -> String {
         unsafe{
-            let ptr = ffi::secret_service_get_session_algorithms(self.to_glib_none().0);
+            let ptr = ffi::secret_service_get_session_algorithms(
+                self.to_glib_none().0
+                );
             from_glib_none(ptr)
         }
     }
@@ -80,7 +88,9 @@ impl SecretService {
     /// A collection contains multiple SecretItems.
     pub fn get_collections(&self) -> Vec<SecretCollection> {
         unsafe {
-            let glist = ffi::secret_service_get_collections(self.to_glib_none().0);
+            let glist = ffi::secret_service_get_collections(
+                self.to_glib_none().0
+                );
             Vec::from_glib_full(glist)
         }
     }
@@ -90,7 +100,13 @@ impl SecretService {
     pub fn search(&self, attributes: &HashMap<String, String>) -> SecretResult<Vec<SecretItem>> {
         let mut err = ptr::null_mut();
         unsafe {
-            let glist = ffi::secret_service_search_sync(self.to_glib_none().0, ptr::null(), attributes.to_glib_none().0, SECRET_SEARCH_ALL | SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS, ptr::null_mut(), &mut err);
+            let glist = ffi::secret_service_search_sync(
+                self.to_glib_none().0,
+                ptr::null(), attributes.to_glib_none().0,
+                SECRET_SEARCH_ALL | SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS,
+                ptr::null_mut(),
+                &mut err
+                );
             if err.is_null() {
                 Ok(Vec::from_glib_full(glist))
             } else {
@@ -111,7 +127,16 @@ impl SecretService {
     pub fn store(&self, attributes: &HashMap<String, String>, collection: Option<&str>, label: &str, value: &SecretValue) -> SecretResult<()> {
         let mut err = ptr::null_mut();
         unsafe {
-            ffi::secret_service_store_sync(self.to_glib_none().0, ptr::null(), attributes.to_glib_none().0, collection.to_glib_none().0, label.to_glib_none().0, value.to_glib_none(), ptr::null_mut(), &mut err);
+            ffi::secret_service_store_sync(
+                self.to_glib_none().0,
+                ptr::null(),
+                attributes.to_glib_none().0,
+                collection.to_glib_none().0,
+                label.to_glib_none().0,
+                value.to_glib_none(),
+                ptr::null_mut(),
+                &mut err
+                );
             if err.is_null() {
                 Ok(())
             } else {
@@ -131,7 +156,13 @@ impl SecretService {
     pub fn clear(&self, attributes: &HashMap<String, String>) -> SecretResult<()> {
         let mut err = ptr::null_mut();
         unsafe {
-            ffi::secret_service_clear_sync(self.to_glib_none().0, ptr::null(), attributes.to_glib_none().0, ptr::null_mut(), &mut err);
+            ffi::secret_service_clear_sync(
+                self.to_glib_none().0,
+                ptr::null(),
+                attributes.to_glib_none().0,
+                ptr::null_mut(),
+                &mut err
+                );
             if err.is_null() {
                 Ok(())
             } else {
@@ -144,7 +175,11 @@ impl SecretService {
     pub fn ensure_session(&self) -> SecretResult<()> {
         unsafe {
             let mut err = ptr::null_mut();
-            ffi::secret_service_ensure_session_sync(self.to_glib_none().0, ptr::null_mut(), &mut err);
+            ffi::secret_service_ensure_session_sync(
+                self.to_glib_none().0,
+                ptr::null_mut(),
+                &mut err
+                );
             if err.is_null() {
                 Ok(())
             } else {
@@ -157,7 +192,11 @@ impl SecretService {
     pub fn load_collections(&self) -> SecretResult<()> {
         unsafe {
             let mut err = ptr::null_mut();
-            ffi::secret_service_load_collections_sync(self.to_glib_none().0, ptr::null_mut(), &mut err);
+            ffi::secret_service_load_collections_sync(
+                self.to_glib_none().0,
+                ptr::null_mut(),
+                &mut err
+                );
             if err.is_null() {
                 Ok(())
             } else {
@@ -171,7 +210,9 @@ unsafe impl Upcast<Object> for SecretService { }
 
 impl StaticType for SecretService {
     fn static_type() -> Type{
-        unsafe { from_glib(ffi::secret_service_get_type()) }
+        unsafe {
+            from_glib(ffi::secret_service_get_type())
+        }
     }
 }
 

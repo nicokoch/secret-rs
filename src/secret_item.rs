@@ -40,7 +40,17 @@ impl SecretItem {
     pub fn create(collection: &SecretCollection, attributes: &HashMap<String, String>, label: &str, value: &SecretValue) -> SecretResult<SecretItem> {
         let mut err = ptr::null_mut();
         unsafe {
-            let item = ffi::secret_item_create_sync(collection.to_glib_none().0, ptr::null(), attributes.to_glib_none().0, label.to_glib_none().0, value.to_glib_none(), SECRET_ITEM_CREATE_NONE, ptr::null_mut(), &mut err);
+            let item = ffi::secret_item_create_sync(
+                collection.to_glib_none().0,
+                ptr::null(),
+                attributes.to_glib_none().0,
+                label.to_glib_none().0,
+                value.to_glib_none(),
+                SECRET_ITEM_CREATE_NONE,
+                ptr::null_mut(),
+                &mut err
+                );
+
             if err.is_null() { //TODO for all patterns like this: This if does not need to be in the unsafe block. Fix pls.
                 Ok(from_glib_full(item))
             } else {
@@ -52,7 +62,13 @@ impl SecretItem {
     /// Delete this secret item.
     pub fn delete(&self) -> SecretResult<()> {
         let mut err = ptr::null_mut();
-        unsafe{ffi::secret_item_delete_sync(self.to_glib_none().0, ptr::null_mut(), &mut err)};
+        unsafe {
+            ffi::secret_item_delete_sync(
+                self.to_glib_none().0,
+                ptr::null_mut(),
+                &mut err
+                )
+        };
         if err.is_null() {
             Ok(())
         } else {
@@ -71,13 +87,17 @@ impl SecretItem {
     /// Get the created date and time of the item.
     /// The return value is the number of seconds since the unix epoch, January 1st 1970.
     pub fn get_created(&self) -> u64 {
-        unsafe {ffi::secret_item_get_created(self.to_glib_none().0)}
+        unsafe {
+            ffi::secret_item_get_created(self.to_glib_none().0)
+        }
     }
 
     /// Get the modified date and time of the item.
     /// The return value is the number of seconds since the unix epoch, January 1st 1970.
     pub fn get_modified(&self) -> u64 {
-        unsafe {ffi::secret_item_get_modified(self.to_glib_none().0)}
+        unsafe {
+            ffi::secret_item_get_modified(self.to_glib_none().0)
+        }
     }
 
     /// Get the label of the item.
@@ -99,7 +119,13 @@ impl SecretItem {
     /// Ensure that the SecretValue of this item is loaded.
     pub fn load_secret(&self) -> SecretResult<()> {
         let mut err = ptr::null_mut();
-        unsafe{ffi::secret_item_load_secret_sync(self.to_glib_none().0, ptr::null_mut(), &mut err)};
+        unsafe {
+            ffi::secret_item_load_secret_sync(
+                self.to_glib_none().0,
+                ptr::null_mut(),
+                &mut err
+                )
+        };
         if err.is_null() {
             Ok(())
         } else {
@@ -126,7 +152,12 @@ impl SecretItem {
     pub fn set_secret(&self, value: &SecretValue) -> SecretResult<()> {
         let mut err = ptr::null_mut();
         unsafe {
-            ffi::secret_item_set_secret_sync(self.to_glib_none().0, value.to_glib_none(), ptr::null_mut(), &mut err);
+            ffi::secret_item_set_secret_sync(
+                self.to_glib_none().0,
+                value.to_glib_none(),
+                ptr::null_mut(),
+                &mut err
+                );
             if err.is_null() {
                 Ok(())
             } else {
@@ -147,7 +178,13 @@ impl SecretItem {
     pub fn set_attributes(&self, attributes: &HashMap<String, String>) -> SecretResult<()> {
         let mut err = ptr::null_mut();
         unsafe {
-            ffi::secret_item_set_attributes_sync(self.to_glib_none().0, ptr::null(), attributes.to_glib_none().0, ptr::null_mut(), &mut err);
+            ffi::secret_item_set_attributes_sync(
+                self.to_glib_none().0,
+                ptr::null(),
+                attributes.to_glib_none().0,
+                ptr::null_mut(),
+                &mut err
+                );
             if err.is_null() {
                 Ok(())
             } else {
@@ -167,7 +204,9 @@ impl SecretItem {
 
 impl StaticType for SecretItem {
     fn static_type() -> Type{
-        unsafe { from_glib(ffi::secret_item_get_type()) }
+        unsafe {
+            from_glib(ffi::secret_item_get_type())
+        }
     }
 }
 
