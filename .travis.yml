@@ -7,4 +7,4 @@ sudo: false
 addons:
   apt:
     packages:
-    - libsecret-1-dev
+    - libsecret-1-dev/trusty
