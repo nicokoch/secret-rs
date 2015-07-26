@@ -3,7 +3,8 @@ rust:
   - stable
   - beta
   - nightly
-sudo: required
-before_install:
-- sudo apt-get update
-- sudo apt-get install libsecret-1-dev
+sudo: false
+addons:
+  apt:
+    packages:
+    - libsecret-1-dev/trusty
