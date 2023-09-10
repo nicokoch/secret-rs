@@ -14,9 +14,6 @@ use glib::Error;
 use glib::translate::*;
 use SecretResult;
 use ffi;
-use glib_sys as glib_ffi;  // FIXME workaround for bug in glib 0.3.1
-use std::mem;  // FIXME workaround for bug in glib 0.3.1
-use gobject_sys as gobject_ffi;  // FIXME workaround for bug in glib 0.3.1
 
 /// A SecretService object represents the Secret Service implementation which 
 /// runs as a D-Bus service.

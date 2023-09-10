@@ -12,7 +12,6 @@ extern crate libc;
 #[macro_use]
 extern crate glib;
 extern crate glib_sys;
-extern crate gobject_sys;
 extern crate secret_sys;
 
 mod secret_service;
