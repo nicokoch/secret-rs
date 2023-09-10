@@ -33,7 +33,7 @@ use gobject_sys as gobject_ffi;  // FIXME workaround for bug in glib 0.3.1
 /// and passed to the secret_service_prompt() method. In this way it is handled
 /// automatically.
 glib_wrapper! {
-    pub struct SecretService(Object<ffi::SecretService>);
+    pub struct SecretService(Object<ffi::SecretService, SecretServiceClass>);
 
     match fn {
         get_type => || ffi::secret_service_get_type(),

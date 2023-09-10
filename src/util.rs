@@ -1,7 +1,7 @@
 use std::ptr;
 use glib::Error;
 use glib_sys::{GList};
-use glib::wrapper::{Wrapper};
+use glib::object::ObjectType;
 use glib::translate::{ToGlibPtr, FromGlibPtrContainer, GlibPtrDefault};
 use glib::translate::ToGlibContainerFromSlice;
 use glib::types::StaticType;
@@ -10,9 +10,9 @@ use secret_collection::SecretCollection;
 use ffi;
 use SecretResult;
 
-//pub fn lock_object<'a, W: Wrapper + StaticType + GlibPtrDefault + ToGlibContainerFromSlice<'a, *mut <W as GlibPtrDefault>::GlibType>>(obj: &W) -> SecretResult<Vec<W>>{
-//pub fn lock_object<'a, W: Wrapper + StaticType + GlibPtrDefault + ToGlibContainerFromSlice<'a, *mut GList>>(obj: &W) -> SecretResult<Vec<W>>{
-pub fn lock_object<'a, W: Wrapper + StaticType + GlibPtrDefault + ToGlibPtr<'a, <W as GlibPtrDefault>::GlibType>>(obj: &'a W) -> SecretResult<Vec<W>>{
+//pub fn lock_object<'a, W: ObjectType + StaticType + GlibPtrDefault + ToGlibContainerFromSlice<'a, *mut <W as GlibPtrDefault>::GlibType>>(obj: &W) -> SecretResult<Vec<W>>{
+//pub fn lock_object<'a, W: ObjectType + StaticType + GlibPtrDefault + ToGlibContainerFromSlice<'a, *mut GList>>(obj: &W) -> SecretResult<Vec<W>>{
+pub fn lock_object<'a, W: ObjectType + StaticType + GlibPtrDefault + ToGlibPtr<'a, <W as GlibPtrDefault>::GlibType>>(obj: &'a W) -> SecretResult<Vec<W>>{
     debug_assert!(W::static_type() == SecretItem::static_type() || W::static_type() == SecretCollection::static_type(), "Can only lock items or collections");
     let mut err = ptr::null_mut();
     let mut res = ptr::null_mut();
@@ -35,7 +35,7 @@ pub fn lock_object<'a, W: Wrapper + StaticType + GlibPtrDefault + ToGlibPtr<'a, 
     }
 }
 
-pub fn unlock_object<W: Wrapper + StaticType + GlibPtrDefault>(obj: &W) -> SecretResult<Vec<W>>{
+pub fn unlock_object<W: ObjectType + StaticType + GlibPtrDefault>(obj: &W) -> SecretResult<Vec<W>>{
     debug_assert!(W::static_type() == SecretItem::static_type() || W::static_type() == SecretCollection::static_type(), "Can only unlock items or collections");
     let mut err = ptr::null_mut();
     let mut res = ptr::null_mut();

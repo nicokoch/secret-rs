@@ -29,7 +29,7 @@ use Lock;
 /// Items can be created with `create()` or `SecretService::store()`.
 ///
 glib_wrapper! {
-    pub struct SecretItem(Object<ffi::SecretItem>);
+    pub struct SecretItem(Object<ffi::SecretItem, SecretItemClass>);
 
     match fn {
         get_type => || ffi::secret_item_get_type(),

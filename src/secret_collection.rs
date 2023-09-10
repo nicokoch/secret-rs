@@ -18,7 +18,7 @@ use gobject_sys as gobject_ffi;  // FIXME workaround for bug in glib 0.3.1
 /// Use `get_items()` to lookup the items in the collection. There may not be 
 /// any items exposed when the collection is locked.
 glib_wrapper! {
-    pub struct SecretCollection(Object<ffi::SecretCollection>);
+    pub struct SecretCollection(Object<ffi::SecretCollection, SecretCollectionClass>);
 
     match fn {
         get_type => || ffi::secret_collection_get_type(),
