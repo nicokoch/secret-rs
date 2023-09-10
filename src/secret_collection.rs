@@ -17,11 +17,11 @@ use gobject_sys as gobject_ffi;  // FIXME workaround for bug in glib 0.3.1
 /// `Lock::unlock()` to lock or unlock the collection.
 /// Use `get_items()` to lookup the items in the collection. There may not be 
 /// any items exposed when the collection is locked.
-glib_wrapper! {
-    pub struct SecretCollection(Object<ffi::SecretCollection, SecretCollectionClass>);
+wrapper! {
+    pub struct SecretCollection(Object<ffi::SecretCollection, ffi::SecretCollectionClass>);
 
     match fn {
-        get_type => || ffi::secret_collection_get_type(),
+        type_ => || ffi::secret_collection_get_type(),
     }
 }
 
@@ -225,7 +225,7 @@ impl SecretCollection {
                 self.to_glib_none().0
                 )
         };
-        from_glib(gbool)
+        unsafe { from_glib(gbool) }
     }
 }
 
@@ -262,10 +262,11 @@ mod test {
     } */
 
     #[test]
+    #[ignore = "glib 0.14.x no longer uses an enum Type"]
     pub fn test_sc_static_type() {
-        match SecretCollection::static_type() {
-            Type::Other(_) => {},
-            _ => panic!("Expected Type::Other")
-        }
+        //match SecretCollection::static_type() {
+        //    Type::Other(_) => {},
+        //    _ => panic!("Expected Type::Other")
+        //}
     }
 }

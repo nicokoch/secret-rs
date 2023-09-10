@@ -28,11 +28,11 @@ use Lock;
 /// attributes associated with an item.
 /// Items can be created with `create()` or `SecretService::store()`.
 ///
-glib_wrapper! {
-    pub struct SecretItem(Object<ffi::SecretItem, SecretItemClass>);
+wrapper! {
+    pub struct SecretItem(Object<ffi::SecretItem, ffi::SecretItemClass>);
 
     match fn {
-        get_type => || ffi::secret_item_get_type(),
+        type_ => || ffi::secret_item_get_type(),
     }
 }
 
@@ -224,7 +224,7 @@ impl SecretItem {
         let gbool = unsafe {
             ffi::secret_item_get_locked(self.to_glib_none().0)
         };
-        from_glib(gbool)
+        unsafe { from_glib(gbool) }
     }
 }
 

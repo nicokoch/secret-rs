@@ -32,11 +32,11 @@ use gobject_sys as gobject_ffi;  // FIXME workaround for bug in glib 0.3.1
 /// prompt is necessary, then a SecretPrompt object is created by libsecret, 
 /// and passed to the secret_service_prompt() method. In this way it is handled
 /// automatically.
-glib_wrapper! {
-    pub struct SecretService(Object<ffi::SecretService, SecretServiceClass>);
+wrapper! {
+    pub struct SecretService(Object<ffi::SecretService, ffi::SecretServiceClass>);
 
     match fn {
-        get_type => || ffi::secret_service_get_type(),
+        type_ => || ffi::secret_service_get_type(),
     }
 }
 
@@ -270,11 +270,12 @@ mod test {
     }
 
     #[test]
+    #[ignore = "glib 0.14.x no longer uses an enum Type"]
     pub fn test_ss_static_type() {
-        match SecretService::static_type() {
-            Type::Other(_) => {},
-            _ => panic!("Expected Type::Other")
-        }
+        //match SecretService::static_type() {
+        //    Type::Other(_) => {},
+        //    _ => panic!("Expected Type::Other")
+        //}
     }
 
     #[test]

@@ -17,9 +17,12 @@ pub type gssize = c_long;
 //libsecret
 
 #[repr(C)] pub struct SecretService;
+#[repr(C)] pub struct SecretServiceClass;
 #[repr(C)] pub struct SecretSchema;
 #[repr(C)] pub struct SecretCollection;
+#[repr(C)] pub struct SecretCollectionClass;
 #[repr(C)] pub struct SecretItem;
+#[repr(C)] pub struct SecretItemClass;
 #[repr(C)] pub struct SecretValue;
 
 #[link(name="secret-1")]
