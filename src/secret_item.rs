@@ -1,6 +1,7 @@
 use std::ptr;
 use std::collections::HashMap;
 use glib::translate::*;
+use glib::wrapper;
 use secret_service::SecretService;
 use secret_collection::SecretCollection;
 use secret_value::SecretValue;

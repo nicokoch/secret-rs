@@ -1,5 +1,6 @@
 use std::ptr;
 use glib::translate::*;
+use glib::wrapper;
 use secret_service::SecretService;
 use secret_item::SecretItem;
 use SecretResult;

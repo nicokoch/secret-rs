@@ -11,6 +11,7 @@ pub use secret_value::*;
 use std::ptr;
 use std::collections::HashMap;
 use glib::translate::*;
+use glib::wrapper;
 use SecretResult;
 use ffi;
 
