@@ -1,16 +1,15 @@
 use std::ptr;
 use glib::Error;
-use glib::ffi::{GList};
-use glib::object::{Wrapper};
-use glib::translate::{ToGlibPtr, FromGlibPtrContainer};
-use glib::glib_container::GlibContainer;
+use glib_sys::{GList};
+use glib::wrapper::{Wrapper};
+use glib::translate::{ToGlibPtr, FromGlibPtrContainer, GlibPtrDefault};
 use glib::types::StaticType;
 use secret_item::SecretItem;
 use secret_collection::SecretCollection;
 use ffi;
 use SecretResult;
 
-pub fn lock_object<W: Wrapper>(obj: &W) -> SecretResult<Vec<W>>{
+pub fn lock_object<W: Wrapper + StaticType + GlibPtrDefault>(obj: &W) -> SecretResult<Vec<W>>{
     debug_assert!(W::static_type() == SecretItem::static_type() || W::static_type() == SecretCollection::static_type(), "Can only lock items or collections");
     let mut err = ptr::null_mut();
     let mut res = ptr::null_mut();
@@ -32,7 +31,7 @@ pub fn lock_object<W: Wrapper>(obj: &W) -> SecretResult<Vec<W>>{
     }
 }
 
-pub fn unlock_object<W: Wrapper>(obj: &W) -> SecretResult<Vec<W>>{
+pub fn unlock_object<W: Wrapper + StaticType + GlibPtrDefault>(obj: &W) -> SecretResult<Vec<W>>{
     debug_assert!(W::static_type() == SecretItem::static_type() || W::static_type() == SecretCollection::static_type(), "Can only unlock items or collections");
     let mut err = ptr::null_mut();
     let mut res = ptr::null_mut();

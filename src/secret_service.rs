@@ -11,8 +11,7 @@ pub use secret_value::*;
 use std::ptr;
 use std::collections::HashMap;
 use glib::Error;
-use glib::glib_container::GlibContainer;
-use glib::object::{Ref, Wrapper, Object, Upcast};
+use glib::object::{Object};
 use glib::types::{StaticType, Type};
 use glib::translate::*;
 use SecretResult;
@@ -32,7 +31,13 @@ use ffi;
 /// prompt is necessary, then a SecretPrompt object is created by libsecret, 
 /// and passed to the secret_service_prompt() method. In this way it is handled
 /// automatically.
-pub struct SecretService(Ref);
+glib_wrapper! {
+    pub struct SecretService(Object<ffi::SecretService>);
+
+    match fn {
+        get_type => || ffi::secret_service_get_type(),
+    }
+}
 
 impl SecretService {
 
@@ -203,32 +208,6 @@ impl SecretService {
                 Err(Error::wrap(err))
             }
         }
-    }
-}
-
-unsafe impl Upcast<Object> for SecretService { }
-
-impl StaticType for SecretService {
-    fn static_type() -> Type{
-        unsafe {
-            from_glib(ffi::secret_service_get_type())
-        }
-    }
-}
-
-impl Wrapper for SecretService {
-    type GlibType = ffi::SecretService;
-
-    unsafe fn wrap(r: Ref) -> Self{
-        SecretService(r)
-    }
-
-    fn as_ref(&self) -> &Ref{
-        &self.0
-    }
-
-    fn unwrap(self) -> Ref{
-        self.0
     }
 }
 

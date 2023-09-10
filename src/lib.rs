@@ -9,7 +9,9 @@
 //! gnome project.
 
 extern crate libc;
+#[macro_use]
 extern crate glib;
+extern crate glib_sys;
 extern crate secret_sys;
 
 mod secret_service;
@@ -25,7 +27,7 @@ pub use self::secret_item::SecretItem;
 pub use self::secret_value::SecretValue;
 
 use glib::Error;
-use glib::object::Wrapper;
+use glib::wrapper::Wrapper;
 
 /// A Result which may contain an error from the SecretService backend.
 pub type SecretResult<T> = Result<T, Error>;

@@ -1,9 +1,8 @@
 use std::ptr;
 use glib::Error;
-use glib::object::{Object, Upcast, Wrapper, Ref};
+use glib::object::{Object};
 use glib::types::{StaticType, Type};
 use glib::translate::*;
-use glib::glib_container::GlibContainer;
 use secret_service::SecretService;
 use secret_item::SecretItem;
 use SecretResult;
@@ -17,7 +16,13 @@ use ffi;
 /// `Lock::unlock()` to lock or unlock the collection.
 /// Use `get_items()` to lookup the items in the collection. There may not be 
 /// any items exposed when the collection is locked.
-pub struct SecretCollection(Ref);
+glib_wrapper! {
+    pub struct SecretCollection(Object<ffi::SecretCollection>);
+
+    match fn {
+        get_type => || ffi::secret_collection_get_type(),
+    }
+}
 
 impl SecretCollection {
 
@@ -68,7 +73,7 @@ impl SecretCollection {
                 unsafe {
                     from_glib_full(ptr)
                 }
-              )
+            )
         } else {
             Err(Error::wrap(err))
         }
@@ -200,31 +205,6 @@ impl SecretCollection {
                 )
         };
         from_glib(gbool)
-    }
-}
-
-impl StaticType for SecretCollection {
-    fn static_type() -> Type{
-        unsafe {
-            from_glib(ffi::secret_collection_get_type())
-        }
-    }
-}
-
-unsafe impl Upcast<Object> for SecretCollection { }
-
-impl Wrapper for SecretCollection {
-    type GlibType = ffi::SecretCollection;
-    unsafe fn wrap(r: Ref) -> Self{
-        SecretCollection(r)
-    }
-
-    fn as_ref(&self) -> &Ref{
-        &self.0
-    }
-
-    fn unwrap(self) -> Ref{
-        self.0
     }
 }
 

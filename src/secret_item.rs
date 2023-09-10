@@ -1,8 +1,7 @@
 use std::ptr;
 use std::collections::HashMap;
 use glib::Error;
-use glib::glib_container::GlibContainer;
-use glib::object::{Wrapper, Ref, Object, Upcast};
+use glib::object::{Object};
 use glib::types::{StaticType, Type};
 use glib::translate::*;
 use secret_service::SecretService;
@@ -28,7 +27,13 @@ use Lock;
 /// attributes associated with an item.
 /// Items can be created with `create()` or `SecretService::store()`.
 ///
-pub struct SecretItem(Ref);
+glib_wrapper! {
+    pub struct SecretItem(Object<ffi::SecretItem>);
+
+    match fn {
+        get_type => || ffi::secret_item_get_type(),
+    }
+}
 
 impl SecretItem {
 
@@ -199,31 +204,6 @@ impl SecretItem {
             ffi::secret_item_get_locked(self.to_glib_none().0)
         };
         from_glib(gbool)
-    }
-}
-
-impl StaticType for SecretItem {
-    fn static_type() -> Type{
-        unsafe {
-            from_glib(ffi::secret_item_get_type())
-        }
-    }
-}
-
-unsafe impl Upcast<Object> for SecretItem { }
-
-impl Wrapper for SecretItem {
-    type GlibType = ffi::SecretItem;
-    unsafe fn wrap(r: Ref) -> Self{
-        SecretItem(r)
-    }
-
-    fn as_ref(&self) -> &Ref{
-        &self.0
-    }
-
-    fn unwrap(self) -> Ref{
-        self.0
     }
 }
 

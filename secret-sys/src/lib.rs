@@ -1,6 +1,5 @@
 #![allow(non_camel_case_types)]
 extern crate libc;
-extern crate glib;
 extern crate glib_sys;
 
 use libc::{c_uint, c_char, c_int, c_ulong, c_long, size_t};
