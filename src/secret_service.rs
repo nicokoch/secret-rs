@@ -117,9 +117,7 @@ impl SecretService {
             if err.is_null() {
                 Ok(Vec::from_glib_full(glist))
             } else {
-                Err(
-                    from_glib_full(err)
-                )
+                Err(from_glib_full(err))
             }
         }
     }
@@ -149,9 +147,7 @@ impl SecretService {
             if err.is_null() {
                 Ok(())
             } else {
-                Err(
-                    from_glib_full(err)
-                )
+                Err(from_glib_full(err))
             }
         }
     }
@@ -177,9 +173,7 @@ impl SecretService {
             if err.is_null() {
                 Ok(())
             } else {
-                Err(
-                    from_glib_full(err)
-                )
+                Err(from_glib_full(err))
             }
         }
     }
@@ -196,9 +190,7 @@ impl SecretService {
             if err.is_null() {
                 Ok(())
             } else {
-                Err(
-                    from_glib_full(err)
-                )
+                Err(from_glib_full(err))
             }
         }
     }
@@ -215,9 +207,7 @@ impl SecretService {
             if err.is_null() {
                 Ok(())
             } else {
-                Err(
-                    from_glib_full(err)
-                )
+                Err(from_glib_full(err))
             }
         }
     }

@@ -1,6 +1,6 @@
 use std::ptr;
 use glib::ffi::GList;
-use glib::translate::{ToGlibPtr, ToGlibContainerFromSlice, GlibPtrDefault};
+use glib::translate::{ToGlibPtr, GlibPtrDefault};
 use glib::translate::{FromGlibPtrFull, FromGlibPtrNone, FromGlibPtrContainer};
 use glib::translate::from_glib_full;
 use glib::translate::Stash;
@@ -20,8 +20,7 @@ where
     let mut err = ptr::null_mut();
     let mut res = ptr::null_mut();
     let arr = [obj];
-    let slice: (*mut GList, <&W as ToGlibContainerFromSlice<*mut GList>>::Storage) =
-        ToGlibContainerFromSlice::to_glib_none_from_slice(arr.as_ref());
+    let slice: Stash<'_, *mut GList, [&W]> = (&arr[..]).to_glib_none();
     unsafe {
         ffi::secret_service_lock_sync(
             ptr::null_mut(),

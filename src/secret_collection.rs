@@ -182,9 +182,7 @@ impl SecretCollection {
             if err.is_null() {
                 Ok(())
             } else {
-                Err(
-                    from_glib_full(err)
-                )
+                Err(from_glib_full(err))
             }
         }
     }
@@ -204,9 +202,7 @@ impl SecretCollection {
             if err.is_null() {
                 Ok(())
             } else {
-                Err(
-                    from_glib_full(err)
-                )
+                Err(from_glib_full(err))
             }
         }
     }
