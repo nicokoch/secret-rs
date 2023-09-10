@@ -1,8 +1,6 @@
 use std::ptr;
 use std::collections::HashMap;
 use glib::Error;
-use glib::object::{Object};
-use glib::types::{StaticType, Type};
 use glib::translate::*;
 use secret_service::SecretService;
 use secret_collection::SecretCollection;
