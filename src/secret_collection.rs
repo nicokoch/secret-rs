@@ -1,9 +1,6 @@
 use std::ptr;
-use glib::Error;
-use glib::object::{Object, Upcast, Wrapper, Ref};
-use glib::types::{StaticType, Type};
 use glib::translate::*;
-use glib::glib_container::GlibContainer;
+use glib::wrapper;
 use secret_service::SecretService;
 use secret_item::SecretItem;
 use SecretResult;
@@ -11,13 +8,19 @@ use util::{lock_object, unlock_object};
 use Lock;
 use ffi;
 
-/// SecretCollection represents a collection of secret items stored in the
-/// Secret Service.
-/// A collection can be in a locked or unlocked state. Use `Lock::lock()` or 
-/// `Lock::unlock()` to lock or unlock the collection.
-/// Use `get_items()` to lookup the items in the collection. There may not be 
-/// any items exposed when the collection is locked.
-pub struct SecretCollection(Ref);
+wrapper! {
+    /// SecretCollection represents a collection of secret items stored in the
+    /// Secret Service.
+    /// A collection can be in a locked or unlocked state. Use `Lock::lock()` or 
+    /// `Lock::unlock()` to lock or unlock the collection.
+    /// Use `get_items()` to lookup the items in the collection. There may not be 
+    /// any items exposed when the collection is locked.
+    pub struct SecretCollection(Object<ffi::SecretCollection, ffi::SecretCollectionClass>);
+
+    match fn {
+        type_ => || ffi::secret_collection_get_type(),
+    }
+}
 
 impl SecretCollection {
 
@@ -42,7 +45,11 @@ impl SecretCollection {
                 }
               )
         } else {
-            Err(Error::wrap(err))
+            Err(
+                unsafe {
+                    from_glib_full(err)
+                }
+            )
         }
     }
 
@@ -68,9 +75,13 @@ impl SecretCollection {
                 unsafe {
                     from_glib_full(ptr)
                 }
-              )
+            )
         } else {
-            Err(Error::wrap(err))
+            Err(
+                unsafe {
+                    from_glib_full(err)
+                }
+            )
         }
     }
 
@@ -88,7 +99,11 @@ impl SecretCollection {
         if err.is_null(){
             Ok(())
         } else {
-            Err(Error::wrap(err))
+            Err(
+                unsafe {
+                    from_glib_full(err)
+                }
+            )
         }
     }
 
@@ -167,7 +182,7 @@ impl SecretCollection {
             if err.is_null() {
                 Ok(())
             } else {
-                Err(Error::wrap(err))
+                Err(from_glib_full(err))
             }
         }
     }
@@ -187,7 +202,7 @@ impl SecretCollection {
             if err.is_null() {
                 Ok(())
             } else {
-                Err(Error::wrap(err))
+                Err(from_glib_full(err))
             }
         }
     }
@@ -199,32 +214,7 @@ impl SecretCollection {
                 self.to_glib_none().0
                 )
         };
-        from_glib(gbool)
-    }
-}
-
-impl StaticType for SecretCollection {
-    fn static_type() -> Type{
-        unsafe {
-            from_glib(ffi::secret_collection_get_type())
-        }
-    }
-}
-
-unsafe impl Upcast<Object> for SecretCollection { }
-
-impl Wrapper for SecretCollection {
-    type GlibType = ffi::SecretCollection;
-    unsafe fn wrap(r: Ref) -> Self{
-        SecretCollection(r)
-    }
-
-    fn as_ref(&self) -> &Ref{
-        &self.0
-    }
-
-    fn unwrap(self) -> Ref{
-        self.0
+        unsafe { from_glib(gbool) }
     }
 }
 
@@ -262,9 +252,9 @@ mod test {
 
     #[test]
     pub fn test_sc_static_type() {
-        match SecretCollection::static_type() {
-            Type::Other(_) => {},
-            _ => panic!("Expected Type::Other")
-        }
+        let type_ = SecretCollection::static_type();
+        assert!(type_.is_valid());
+        assert!(type_ > Type::OBJECT);
+        assert_eq!(type_.name(), "SecretCollection");
     }
 }

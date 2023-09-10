@@ -18,20 +18,20 @@ mod secret_item;
 mod secret_value;
 mod util;
 
-pub use self::secret_sys as ffi;
+use self::secret_sys as ffi;
 pub use self::secret_service::SecretService;
 pub use self::secret_collection::SecretCollection;
 pub use self::secret_item::SecretItem;
 pub use self::secret_value::SecretValue;
 
 use glib::Error;
-use glib::object::Wrapper;
+use glib::object::ObjectType;
 
 /// A Result which may contain an error from the SecretService backend.
 pub type SecretResult<T> = Result<T, Error>;
 
 /// This Trait is implemented by objects which can be locked and unlocked
-pub trait Lock<T: Wrapper> {
+pub trait Lock<T: ObjectType> {
 
     /// Lock the object.
     fn lock(&self) -> SecretResult<Vec<T>>;

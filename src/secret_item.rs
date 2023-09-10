@@ -1,10 +1,7 @@
 use std::ptr;
 use std::collections::HashMap;
-use glib::Error;
-use glib::glib_container::GlibContainer;
-use glib::object::{Wrapper, Ref, Object, Upcast};
-use glib::types::{StaticType, Type};
 use glib::translate::*;
+use glib::wrapper;
 use secret_service::SecretService;
 use secret_collection::SecretCollection;
 use secret_value::SecretValue;
@@ -13,22 +10,28 @@ use ffi;
 use util::{lock_object, unlock_object};
 use Lock;
 
-/// SecretItem represents a secret item stored in the Secret Service.
-/// Each item has a value, represented by a SecretValue, which can be retrieved
-/// by `get_secret()` or set by `set_secret()`. The item is only available when
-/// the item is not locked.
-/// Items can be locked or unlocked using the `Lock::lock()` or `Lock::unlock()`
-/// functions. The Lock trait is implemented by SecretItem. The Secret Service
-/// may not be able to unlock individual items, and may unlock an entire 
-/// collection when a single item is unlocked.
-/// Each item has a set of attributes, which are used to locate the item later.
-/// These are not stored or transferred in a secure manner. Each attribute has
-/// a string name and a string value. Use `SecretService::search()` to search 
-/// for items based on their attributes, and `set_attributes()` to change the 
-/// attributes associated with an item.
-/// Items can be created with `create()` or `SecretService::store()`.
-///
-pub struct SecretItem(Ref);
+wrapper! {
+    /// SecretItem represents a secret item stored in the Secret Service.
+    /// Each item has a value, represented by a SecretValue, which can be retrieved
+    /// by `get_secret()` or set by `set_secret()`. The item is only available when
+    /// the item is not locked.
+    /// Items can be locked or unlocked using the `Lock::lock()` or `Lock::unlock()`
+    /// functions. The Lock trait is implemented by SecretItem. The Secret Service
+    /// may not be able to unlock individual items, and may unlock an entire 
+    /// collection when a single item is unlocked.
+    /// Each item has a set of attributes, which are used to locate the item later.
+    /// These are not stored or transferred in a secure manner. Each attribute has
+    /// a string name and a string value. Use `SecretService::search()` to search 
+    /// for items based on their attributes, and `set_attributes()` to change the 
+    /// attributes associated with an item.
+    /// Items can be created with `create()` or `SecretService::store()`.
+    ///
+    pub struct SecretItem(Object<ffi::SecretItem, ffi::SecretItemClass>);
+
+    match fn {
+        type_ => || ffi::secret_item_get_type(),
+    }
+}
 
 impl SecretItem {
 
@@ -54,7 +57,7 @@ impl SecretItem {
             if err.is_null() { //TODO for all patterns like this: This if does not need to be in the unsafe block. Fix pls.
                 Ok(from_glib_full(item))
             } else {
-                Err(Error::wrap(err))
+                Err(from_glib_full(err))
             }
         }
     }
@@ -72,7 +75,11 @@ impl SecretItem {
         if err.is_null() {
             Ok(())
         } else {
-            Err(Error::wrap(err))
+            Err(
+                unsafe {
+                    from_glib_full(err)
+                }
+            )
         }
     }
 
@@ -129,7 +136,11 @@ impl SecretItem {
         if err.is_null() {
             Ok(())
         } else {
-            Err(Error::wrap(err))
+            Err(
+                unsafe {
+                    from_glib_full(err)
+                }
+            )
         }
     }
 
@@ -161,7 +172,7 @@ impl SecretItem {
             if err.is_null() {
                 Ok(())
             } else {
-                Err(Error::wrap(err))
+                Err(from_glib_full(err))
             }
         }
     }
@@ -188,7 +199,7 @@ impl SecretItem {
             if err.is_null() {
                 Ok(())
             } else {
-                Err(Error::wrap(err))
+                Err(from_glib_full(err))
             }
         }
     }
@@ -198,32 +209,7 @@ impl SecretItem {
         let gbool = unsafe {
             ffi::secret_item_get_locked(self.to_glib_none().0)
         };
-        from_glib(gbool)
-    }
-}
-
-impl StaticType for SecretItem {
-    fn static_type() -> Type{
-        unsafe {
-            from_glib(ffi::secret_item_get_type())
-        }
-    }
-}
-
-unsafe impl Upcast<Object> for SecretItem { }
-
-impl Wrapper for SecretItem {
-    type GlibType = ffi::SecretItem;
-    unsafe fn wrap(r: Ref) -> Self{
-        SecretItem(r)
-    }
-
-    fn as_ref(&self) -> &Ref{
-        &self.0
-    }
-
-    fn unwrap(self) -> Ref{
-        self.0
+        unsafe { from_glib(gbool) }
     }
 }
 

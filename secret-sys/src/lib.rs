@@ -2,8 +2,9 @@
 extern crate libc;
 extern crate glib;
 
-use libc::{c_uint, c_char, c_int, c_ulong, c_long};
-use glib::ffi::{GError, GType, GList, gboolean, gsize, gpointer, GHashTable};
+use libc::{c_uint, c_char, c_int, c_ulong, c_long, size_t};
+use glib::ffi::{GError, GType, GList, gboolean, gpointer, GHashTable};
+type gsize = size_t;
 
 //glib stuff not provided by glib-rs
 pub type gchar = c_char;
@@ -11,15 +12,18 @@ pub type gint = c_int;
 pub type guint = c_uint;
 pub type guint64 = c_ulong;
 pub type gssize = c_long;
-#[repr(C)] pub struct GCancellable;
+#[repr(C)] pub struct GCancellable { private: [u8; 0] }
 
 //libsecret
 
-#[repr(C)] pub struct SecretService;
-#[repr(C)] pub struct SecretSchema;
-#[repr(C)] pub struct SecretCollection;
-#[repr(C)] pub struct SecretItem;
-#[repr(C)] pub struct SecretValue;
+#[repr(C)] pub struct SecretService { private: [u8; 0] }
+#[repr(C)] pub struct SecretServiceClass { private: [u8; 0] }
+#[repr(C)] pub struct SecretSchema { private: [u8; 0] }
+#[repr(C)] pub struct SecretCollection { private: [u8; 0] }
+#[repr(C)] pub struct SecretCollectionClass { private: [u8; 0] }
+#[repr(C)] pub struct SecretItem { private: [u8; 0] }
+#[repr(C)] pub struct SecretItemClass { private: [u8; 0] }
+#[repr(C)] pub struct SecretValue { private: [u8; 0] }
 
 #[link(name="secret-1")]
 extern "C" {

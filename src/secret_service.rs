@@ -10,29 +10,32 @@ pub use secret_value::*;
 //=========================================================================
 use std::ptr;
 use std::collections::HashMap;
-use glib::Error;
-use glib::glib_container::GlibContainer;
-use glib::object::{Ref, Wrapper, Object, Upcast};
-use glib::types::{StaticType, Type};
 use glib::translate::*;
+use glib::wrapper;
 use SecretResult;
 use ffi;
 
-/// A SecretService object represents the Secret Service implementation which 
-/// runs as a D-Bus service.
-/// In order to securely transfer secrets to the Sercret Service, a session is 
-/// established. This will automatically be done when calling 
-/// `SecretService::get()`
-/// To search for items, use the `search()` method.
-/// Multiple collections can exist in the Secret Service, each of which 
-/// contains secret items. To access the list of Collections, use 
-/// `get_collections()`.
-/// Certain actions on the Secret Service require user prompting to complete, 
-/// such as creating a collection, or unlocking a collection. When such a 
-/// prompt is necessary, then a SecretPrompt object is created by libsecret, 
-/// and passed to the secret_service_prompt() method. In this way it is handled
-/// automatically.
-pub struct SecretService(Ref);
+wrapper! {
+    /// A SecretService object represents the Secret Service implementation which 
+    /// runs as a D-Bus service.
+    /// In order to securely transfer secrets to the Sercret Service, a session is 
+    /// established. This will automatically be done when calling 
+    /// `SecretService::get()`
+    /// To search for items, use the `search()` method.
+    /// Multiple collections can exist in the Secret Service, each of which 
+    /// contains secret items. To access the list of Collections, use 
+    /// `get_collections()`.
+    /// Certain actions on the Secret Service require user prompting to complete, 
+    /// such as creating a collection, or unlocking a collection. When such a 
+    /// prompt is necessary, then a SecretPrompt object is created by libsecret, 
+    /// and passed to the secret_service_prompt() method. In this way it is handled
+    /// automatically.
+    pub struct SecretService(Object<ffi::SecretService, ffi::SecretServiceClass>);
+
+    match fn {
+        type_ => || ffi::secret_service_get_type(),
+    }
+}
 
 impl SecretService {
 
@@ -52,7 +55,11 @@ impl SecretService {
         if err.is_null() {
             Ok(unsafe{from_glib_full(ptr)})
         } else {
-            Err(Error::wrap(err))
+            Err(
+                unsafe {
+                    from_glib_full(err)
+                }
+            )
         }
     }
 
@@ -110,7 +117,7 @@ impl SecretService {
             if err.is_null() {
                 Ok(Vec::from_glib_full(glist))
             } else {
-                Err(Error::wrap(err))
+                Err(from_glib_full(err))
             }
         }
     }
@@ -140,7 +147,7 @@ impl SecretService {
             if err.is_null() {
                 Ok(())
             } else {
-                Err(Error::wrap(err))
+                Err(from_glib_full(err))
             }
         }
     }
@@ -166,7 +173,7 @@ impl SecretService {
             if err.is_null() {
                 Ok(())
             } else {
-                Err(Error::wrap(err))
+                Err(from_glib_full(err))
             }
         }
     }
@@ -183,7 +190,7 @@ impl SecretService {
             if err.is_null() {
                 Ok(())
             } else {
-                Err(Error::wrap(err))
+                Err(from_glib_full(err))
             }
         }
     }
@@ -200,35 +207,9 @@ impl SecretService {
             if err.is_null() {
                 Ok(())
             } else {
-                Err(Error::wrap(err))
+                Err(from_glib_full(err))
             }
         }
-    }
-}
-
-unsafe impl Upcast<Object> for SecretService { }
-
-impl StaticType for SecretService {
-    fn static_type() -> Type{
-        unsafe {
-            from_glib(ffi::secret_service_get_type())
-        }
-    }
-}
-
-impl Wrapper for SecretService {
-    type GlibType = ffi::SecretService;
-
-    unsafe fn wrap(r: Ref) -> Self{
-        SecretService(r)
-    }
-
-    fn as_ref(&self) -> &Ref{
-        &self.0
-    }
-
-    fn unwrap(self) -> Ref{
-        self.0
     }
 }
 
@@ -267,10 +248,10 @@ mod test {
 
     #[test]
     pub fn test_ss_static_type() {
-        match SecretService::static_type() {
-            Type::Other(_) => {},
-            _ => panic!("Expected Type::Other")
-        }
+        let type_ = SecretService::static_type();
+        assert!(type_.is_valid());
+        assert!(type_ > Type::OBJECT);
+        assert_eq!(type_.name(), "SecretService");
     }
 
     #[test]
