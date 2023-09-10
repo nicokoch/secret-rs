@@ -3,7 +3,7 @@ use glib::Error;
 use glib_sys::{GList};
 use glib::object::ObjectType;
 use glib::translate::{ToGlibPtr, FromGlibPtrContainer, GlibPtrDefault};
-use glib::translate::ToGlibContainerFromSlice;
+use glib::translate::{from_glib_full, ToGlibContainerFromSlice};
 use glib::types::StaticType;
 use secret_item::SecretItem;
 use secret_collection::SecretCollection;
@@ -30,7 +30,11 @@ pub fn lock_object<'a, W: ObjectType + StaticType + GlibPtrDefault + ToGlibPtr<'
         //if err.is_null() {
         //    Ok(Vec::from_glib_full(res))
         //} else {
-            Err(Error::wrap(err))
+            Err(
+                unsafe {
+                    from_glib_full(err)
+                }
+            )
         //}
     }
 }
@@ -53,7 +57,11 @@ pub fn unlock_object<W: ObjectType + StaticType + GlibPtrDefault>(obj: &W) -> Se
         //if err.is_null() {
         //    Ok(Vec::from_glib_full(res))
         //} else {
-            Err(Error::wrap(err))
+            Err(
+                unsafe {
+                    from_glib_full(err)
+                }
+            )
         //}
     }
 }

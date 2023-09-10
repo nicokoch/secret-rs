@@ -58,7 +58,11 @@ impl SecretService {
         if err.is_null() {
             Ok(unsafe{from_glib_full(ptr)})
         } else {
-            Err(Error::wrap(err))
+            Err(
+                unsafe {
+                    from_glib_full(err)
+                }
+            )
         }
     }
 
@@ -116,7 +120,11 @@ impl SecretService {
             if err.is_null() {
                 Ok(Vec::from_glib_full(glist))
             } else {
-                Err(Error::wrap(err))
+                Err(
+                    unsafe {
+                        from_glib_full(err)
+                    }
+                )
             }
         }
     }
@@ -146,7 +154,11 @@ impl SecretService {
             if err.is_null() {
                 Ok(())
             } else {
-                Err(Error::wrap(err))
+                Err(
+                    unsafe {
+                        from_glib_full(err)
+                    }
+                )
             }
         }
     }
@@ -172,7 +184,11 @@ impl SecretService {
             if err.is_null() {
                 Ok(())
             } else {
-                Err(Error::wrap(err))
+                Err(
+                    unsafe {
+                        from_glib_full(err)
+                    }
+                )
             }
         }
     }
@@ -189,7 +205,11 @@ impl SecretService {
             if err.is_null() {
                 Ok(())
             } else {
-                Err(Error::wrap(err))
+                Err(
+                    unsafe {
+                        from_glib_full(err)
+                    }
+                )
             }
         }
     }
@@ -206,7 +226,11 @@ impl SecretService {
             if err.is_null() {
                 Ok(())
             } else {
-                Err(Error::wrap(err))
+                Err(
+                    unsafe {
+                        from_glib_full(err)
+                    }
+                )
             }
         }
     }

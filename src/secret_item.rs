@@ -60,7 +60,11 @@ impl SecretItem {
             if err.is_null() { //TODO for all patterns like this: This if does not need to be in the unsafe block. Fix pls.
                 Ok(from_glib_full(item))
             } else {
-                Err(Error::wrap(err))
+                Err(
+                    unsafe {
+                        from_glib_full(err)
+                    }
+                )
             }
         }
     }
@@ -78,7 +82,11 @@ impl SecretItem {
         if err.is_null() {
             Ok(())
         } else {
-            Err(Error::wrap(err))
+            Err(
+                unsafe {
+                    from_glib_full(err)
+                }
+            )
         }
     }
 
@@ -135,7 +143,11 @@ impl SecretItem {
         if err.is_null() {
             Ok(())
         } else {
-            Err(Error::wrap(err))
+            Err(
+                unsafe {
+                    from_glib_full(err)
+                }
+            )
         }
     }
 
@@ -167,7 +179,11 @@ impl SecretItem {
             if err.is_null() {
                 Ok(())
             } else {
-                Err(Error::wrap(err))
+                Err(
+                    unsafe {
+                        from_glib_full(err)
+                    }
+                )
             }
         }
     }
@@ -194,7 +210,11 @@ impl SecretItem {
             if err.is_null() {
                 Ok(())
             } else {
-                Err(Error::wrap(err))
+                Err(
+                    unsafe {
+                        from_glib_full(err)
+                    }
+                )
             }
         }
     }

@@ -48,7 +48,11 @@ impl SecretCollection {
                 }
               )
         } else {
-            Err(Error::wrap(err))
+            Err(
+                unsafe {
+                    from_glib_full(err)
+                }
+            )
         }
     }
 
@@ -76,7 +80,11 @@ impl SecretCollection {
                 }
             )
         } else {
-            Err(Error::wrap(err))
+            Err(
+                unsafe {
+                    from_glib_full(err)
+                }
+            )
         }
     }
 
@@ -94,7 +102,11 @@ impl SecretCollection {
         if err.is_null(){
             Ok(())
         } else {
-            Err(Error::wrap(err))
+            Err(
+                unsafe {
+                    from_glib_full(err)
+                }
+            )
         }
     }
 
@@ -173,7 +185,11 @@ impl SecretCollection {
             if err.is_null() {
                 Ok(())
             } else {
-                Err(Error::wrap(err))
+                Err(
+                    unsafe {
+                        from_glib_full(err)
+                    }
+                )
             }
         }
     }
@@ -193,7 +209,11 @@ impl SecretCollection {
             if err.is_null() {
                 Ok(())
             } else {
-                Err(Error::wrap(err))
+                Err(
+                    unsafe {
+                        from_glib_full(err)
+                    }
+                )
             }
         }
     }
