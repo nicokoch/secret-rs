@@ -7,6 +7,9 @@ use SecretResult;
 use util::{lock_object, unlock_object};
 use Lock;
 use ffi;
+use glib_sys as glib_ffi;  // FIXME workaround for bug in glib 0.3.1
+use std::mem;  // FIXME workaround for bug in glib 0.3.1
+use gobject_sys as gobject_ffi;  // FIXME workaround for bug in glib 0.3.1
 
 /// SecretCollection represents a collection of secret items stored in the
 /// Secret Service.
