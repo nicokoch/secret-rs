@@ -227,7 +227,7 @@ const SECRET_SEARCH_LOAD_SECRETS: i32       = 1 << 3;
 #[cfg(test)]
 mod test {
     use std::collections::HashMap;
-    // use glib::types::{StaticType, Type};
+    use glib::types::{StaticType, Type};
     use secret_value::SecretValue;
     use super::SecretService;
 
@@ -247,12 +247,11 @@ mod test {
     }
 
     #[test]
-    #[ignore = "glib 0.14.x no longer uses an enum Type"]
     pub fn test_ss_static_type() {
-        //match SecretService::static_type() {
-        //    Type::Other(_) => {},
-        //    _ => panic!("Expected Type::Other")
-        //}
+        let type_ = SecretService::static_type();
+        assert!(type_.is_valid());
+        assert!(type_ > Type::OBJECT);
+        assert_eq!(type_.name(), "SecretService");
     }
 
     #[test]

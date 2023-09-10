@@ -236,8 +236,8 @@ const SECRET_COLLECTION_LOAD_ITEMS: i32  = 1 << 1;
 
 #[cfg(test)]
 mod test {
-    // use glib::types::{StaticType, Type};
-    // use super::SecretCollection;
+    use glib::types::{StaticType, Type};
+    use super::SecretCollection;
 
     /*
     #[test]
@@ -251,11 +251,10 @@ mod test {
     } */
 
     #[test]
-    #[ignore = "glib 0.14.x no longer uses an enum Type"]
     pub fn test_sc_static_type() {
-        //match SecretCollection::static_type() {
-        //    Type::Other(_) => {},
-        //    _ => panic!("Expected Type::Other")
-        //}
+        let type_ = SecretCollection::static_type();
+        assert!(type_.is_valid());
+        assert!(type_ > Type::OBJECT);
+        assert_eq!(type_.name(), "SecretCollection");
     }
 }
