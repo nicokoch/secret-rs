@@ -1,6 +1,5 @@
 use std::ptr;
 use std::collections::HashMap;
-use glib::Error;
 use glib::translate::*;
 use secret_service::SecretService;
 use secret_collection::SecretCollection;
@@ -10,22 +9,22 @@ use ffi;
 use util::{lock_object, unlock_object};
 use Lock;
 
-/// SecretItem represents a secret item stored in the Secret Service.
-/// Each item has a value, represented by a SecretValue, which can be retrieved
-/// by `get_secret()` or set by `set_secret()`. The item is only available when
-/// the item is not locked.
-/// Items can be locked or unlocked using the `Lock::lock()` or `Lock::unlock()`
-/// functions. The Lock trait is implemented by SecretItem. The Secret Service
-/// may not be able to unlock individual items, and may unlock an entire 
-/// collection when a single item is unlocked.
-/// Each item has a set of attributes, which are used to locate the item later.
-/// These are not stored or transferred in a secure manner. Each attribute has
-/// a string name and a string value. Use `SecretService::search()` to search 
-/// for items based on their attributes, and `set_attributes()` to change the 
-/// attributes associated with an item.
-/// Items can be created with `create()` or `SecretService::store()`.
-///
 wrapper! {
+    /// SecretItem represents a secret item stored in the Secret Service.
+    /// Each item has a value, represented by a SecretValue, which can be retrieved
+    /// by `get_secret()` or set by `set_secret()`. The item is only available when
+    /// the item is not locked.
+    /// Items can be locked or unlocked using the `Lock::lock()` or `Lock::unlock()`
+    /// functions. The Lock trait is implemented by SecretItem. The Secret Service
+    /// may not be able to unlock individual items, and may unlock an entire 
+    /// collection when a single item is unlocked.
+    /// Each item has a set of attributes, which are used to locate the item later.
+    /// These are not stored or transferred in a secure manner. Each attribute has
+    /// a string name and a string value. Use `SecretService::search()` to search 
+    /// for items based on their attributes, and `set_attributes()` to change the 
+    /// attributes associated with an item.
+    /// Items can be created with `create()` or `SecretService::store()`.
+    ///
     pub struct SecretItem(Object<ffi::SecretItem, ffi::SecretItemClass>);
 
     match fn {
@@ -58,9 +57,7 @@ impl SecretItem {
                 Ok(from_glib_full(item))
             } else {
                 Err(
-                    unsafe {
-                        from_glib_full(err)
-                    }
+                    from_glib_full(err)
                 )
             }
         }
@@ -177,9 +174,7 @@ impl SecretItem {
                 Ok(())
             } else {
                 Err(
-                    unsafe {
-                        from_glib_full(err)
-                    }
+                    from_glib_full(err)
                 )
             }
         }
@@ -208,9 +203,7 @@ impl SecretItem {
                 Ok(())
             } else {
                 Err(
-                    unsafe {
-                        from_glib_full(err)
-                    }
+                    from_glib_full(err)
                 )
             }
         }

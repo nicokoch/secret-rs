@@ -10,26 +10,25 @@ pub use secret_value::*;
 //=========================================================================
 use std::ptr;
 use std::collections::HashMap;
-use glib::Error;
 use glib::translate::*;
 use SecretResult;
 use ffi;
 
-/// A SecretService object represents the Secret Service implementation which 
-/// runs as a D-Bus service.
-/// In order to securely transfer secrets to the Sercret Service, a session is 
-/// established. This will automatically be done when calling 
-/// `SecretService::get()`
-/// To search for items, use the `search()` method.
-/// Multiple collections can exist in the Secret Service, each of which 
-/// contains secret items. To access the list of Collections, use 
-/// `get_collections()`.
-/// Certain actions on the Secret Service require user prompting to complete, 
-/// such as creating a collection, or unlocking a collection. When such a 
-/// prompt is necessary, then a SecretPrompt object is created by libsecret, 
-/// and passed to the secret_service_prompt() method. In this way it is handled
-/// automatically.
 wrapper! {
+    /// A SecretService object represents the Secret Service implementation which 
+    /// runs as a D-Bus service.
+    /// In order to securely transfer secrets to the Sercret Service, a session is 
+    /// established. This will automatically be done when calling 
+    /// `SecretService::get()`
+    /// To search for items, use the `search()` method.
+    /// Multiple collections can exist in the Secret Service, each of which 
+    /// contains secret items. To access the list of Collections, use 
+    /// `get_collections()`.
+    /// Certain actions on the Secret Service require user prompting to complete, 
+    /// such as creating a collection, or unlocking a collection. When such a 
+    /// prompt is necessary, then a SecretPrompt object is created by libsecret, 
+    /// and passed to the secret_service_prompt() method. In this way it is handled
+    /// automatically.
     pub struct SecretService(Object<ffi::SecretService, ffi::SecretServiceClass>);
 
     match fn {
@@ -118,9 +117,7 @@ impl SecretService {
                 Ok(Vec::from_glib_full(glist))
             } else {
                 Err(
-                    unsafe {
-                        from_glib_full(err)
-                    }
+                    from_glib_full(err)
                 )
             }
         }
@@ -152,9 +149,7 @@ impl SecretService {
                 Ok(())
             } else {
                 Err(
-                    unsafe {
-                        from_glib_full(err)
-                    }
+                    from_glib_full(err)
                 )
             }
         }
@@ -182,9 +177,7 @@ impl SecretService {
                 Ok(())
             } else {
                 Err(
-                    unsafe {
-                        from_glib_full(err)
-                    }
+                    from_glib_full(err)
                 )
             }
         }
@@ -203,9 +196,7 @@ impl SecretService {
                 Ok(())
             } else {
                 Err(
-                    unsafe {
-                        from_glib_full(err)
-                    }
+                    from_glib_full(err)
                 )
             }
         }
@@ -224,9 +215,7 @@ impl SecretService {
                 Ok(())
             } else {
                 Err(
-                    unsafe {
-                        from_glib_full(err)
-                    }
+                    from_glib_full(err)
                 )
             }
         }
@@ -247,7 +236,7 @@ const SECRET_SEARCH_LOAD_SECRETS: i32       = 1 << 3;
 #[cfg(test)]
 mod test {
     use std::collections::HashMap;
-    use glib::types::{StaticType, Type};
+    // use glib::types::{StaticType, Type};
     use secret_value::SecretValue;
     use super::SecretService;
 

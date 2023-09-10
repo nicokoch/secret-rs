@@ -1,6 +1,5 @@
 use std::ptr;
-use glib::Error;
-use glib_sys::{GList};
+use glib_sys::GList;
 use glib::object::ObjectType;
 use glib::translate::{ToGlibPtr, FromGlibPtrContainer, GlibPtrDefault};
 use glib::translate::{from_glib_full, ToGlibContainerFromSlice};
@@ -31,9 +30,7 @@ pub fn lock_object<'a, W: ObjectType + StaticType + GlibPtrDefault + ToGlibPtr<'
         //    Ok(Vec::from_glib_full(res))
         //} else {
             Err(
-                unsafe {
-                    from_glib_full(err)
-                }
+                from_glib_full(err)
             )
         //}
     }
@@ -58,9 +55,7 @@ pub fn unlock_object<W: ObjectType + StaticType + GlibPtrDefault>(obj: &W) -> Se
         //    Ok(Vec::from_glib_full(res))
         //} else {
             Err(
-                unsafe {
-                    from_glib_full(err)
-                }
+                from_glib_full(err)
             )
         //}
     }

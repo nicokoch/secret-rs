@@ -1,5 +1,4 @@
 use std::ptr;
-use glib::Error;
 use glib::translate::*;
 use secret_service::SecretService;
 use secret_item::SecretItem;
@@ -8,13 +7,13 @@ use util::{lock_object, unlock_object};
 use Lock;
 use ffi;
 
-/// SecretCollection represents a collection of secret items stored in the
-/// Secret Service.
-/// A collection can be in a locked or unlocked state. Use `Lock::lock()` or 
-/// `Lock::unlock()` to lock or unlock the collection.
-/// Use `get_items()` to lookup the items in the collection. There may not be 
-/// any items exposed when the collection is locked.
 wrapper! {
+    /// SecretCollection represents a collection of secret items stored in the
+    /// Secret Service.
+    /// A collection can be in a locked or unlocked state. Use `Lock::lock()` or 
+    /// `Lock::unlock()` to lock or unlock the collection.
+    /// Use `get_items()` to lookup the items in the collection. There may not be 
+    /// any items exposed when the collection is locked.
     pub struct SecretCollection(Object<ffi::SecretCollection, ffi::SecretCollectionClass>);
 
     match fn {
@@ -183,9 +182,7 @@ impl SecretCollection {
                 Ok(())
             } else {
                 Err(
-                    unsafe {
-                        from_glib_full(err)
-                    }
+                    from_glib_full(err)
                 )
             }
         }
@@ -207,9 +204,7 @@ impl SecretCollection {
                 Ok(())
             } else {
                 Err(
-                    unsafe {
-                        from_glib_full(err)
-                    }
+                    from_glib_full(err)
                 )
             }
         }
@@ -244,8 +239,8 @@ const SECRET_COLLECTION_LOAD_ITEMS: i32  = 1 << 1;
 
 #[cfg(test)]
 mod test {
-    use glib::types::{StaticType, Type};
-    use super::SecretCollection;
+    // use glib::types::{StaticType, Type};
+    // use super::SecretCollection;
 
     /*
     #[test]
