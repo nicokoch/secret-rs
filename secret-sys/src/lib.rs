@@ -1,9 +1,9 @@
 #![allow(non_camel_case_types)]
 extern crate libc;
-extern crate glib_sys;
+extern crate glib;
 
 use libc::{c_uint, c_char, c_int, c_ulong, c_long, size_t};
-use glib_sys::{GError, GType, GList, gboolean, gpointer, GHashTable};
+use glib::ffi::{GError, GType, GList, gboolean, gpointer, GHashTable};
 type gsize = size_t;
 
 //glib stuff not provided by glib-rs

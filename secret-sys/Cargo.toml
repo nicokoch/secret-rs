@@ -10,7 +10,7 @@ license = "MIT"
 
 [dependencies]
 libc = "*"
-glib-sys = "*"
+glib = "*"
 
 [build-dependencies]
 pkg-config = "0.3"

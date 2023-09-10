@@ -10,7 +10,6 @@
 
 extern crate libc;
 extern crate glib;
-extern crate glib_sys;
 extern crate secret_sys;
 
 mod secret_service;
